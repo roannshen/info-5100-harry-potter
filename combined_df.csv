@@ -1,0 +1,154 @@
+,Chapter_ID,Dialogue_ID,Place_ID,Character_ID,Incantation,Victim,Caster,House
+0,7,160,4,43,finite,unspecified target,Garrick Ollivander,Ravenclaw
+1,9,186,71,26,pack,unspecified target,Molly Weasley,Gryffindor
+2,10,213,42,2,pack,unspecified target,Ron Weasley,Gryffindor
+3,10,226,42,3,oculus reparo,Hermione,Hermione Granger,Gryffindor
+5,16,393,59,3,alohomora,unspecified target,Hermione Granger,Gryffindor
+6,16,394,59,2,alohomora,unspecified target,Ron Weasley,Gryffindor
+7,17,421,26,59,wingardium leviosa,unspecified target,Filius Flitwick,Ravenclaw
+8,17,426,26,3,wingardium leviosa,unspecified target,Hermione Granger,Gryffindor
+9,18,457,34,2,wingardium leviosa,unspecified target,Ron Weasley,Gryffindor
+10,21,550,39,2,pack,unspecified target,Ron Weasley,Gryffindor
+11,27,739,39,3,petrificus totalus,unspecified target,Hermione Granger,Gryffindor
+12,27,746,59,3,alohomora,unspecified target,Hermione Granger,Gryffindor
+13,27,778,64,3,lumos,unspecified target,Hermione Granger,Gryffindor
+14,27,791,64,2,alohomora,unspecified target,Ron Weasley,Gryffindor
+15,39,1047,1,3,oculus reparo,unspecified target,Hermione Granger,Gryffindor
+16,39,1048,1,1,finite,unspecified target,Harry Potter,Gryffindor
+17,45,1178,30,28,peskipiksi pesternomi,unspecified target,Gilderoy Lockhart,Ravenclaw
+18,45,1184,30,3,immobulus,unspecified target,Hermione Granger,Gryffindor
+19,48,1276,61,7,vera verto,unspecified target,Minerva McGonagall,Gryffindor
+20,48,1277,61,2,vera verto,unspecified target,Ron Weasley,Gryffindor
+21,49,1321,52,3,finite,unspecified target,Hermione Granger,Gryffindor
+22,50,1327,52,28,brackium emendo,unspecified target,Gilderoy Lockhart,Ravenclaw
+23,51,1383,36,6,expelliarmus,unspecified target,Severus Snape,Slytherin
+24,51,1400,36,1,rictusempra,unspecified target,Harry Potter,Gryffindor
+25,52,1402,36,12,serpensortia,unspecified target,Draco Malfoy,Slytherin
+26,52,1404,36,28,alarte ascendare,unspecified target,Gilderoy Lockhart,Ravenclaw
+27,52,1406,36,6,vipera evanesca,unspecified target,Severus Snape,Slytherin
+28,54,1460,46,1,wingardium leviosa,unspecified target,Harry Potter,Gryffindor
+29,57,1560,60,24,arania exumai,unspecified target,Tom Riddle,Slytherin
+30,61,1658,35,1,arania exumai,unspecified target,Harry Potter,Gryffindor
+31,61,1662,35,1,arania exumai,unspecified target,Harry Potter,Gryffindor
+33,64,1740,25,28,obliviate,unspecified target,Gilderoy Lockhart,Ravenclaw
+34,71,1872,8,1,lumos,unspecified target,Harry Potter,Gryffindor
+36,80,2127,30,11,riddikulus,unspecified target,Remus Lupin,Gryffindor
+37,80,2128,30,136,riddikulus,unspecified target,All,
+38,80,2129,30,11,riddikulus,unspecified target,Remus Lupin,Gryffindor
+39,80,2130,30,136,riddikulus,unspecified target,All,
+40,80,2141,30,10,riddikulus,unspecified target,Neville Longbottom,Gryffindor
+41,80,2143,30,2,riddikulus,unspecified target,Ron Weasley,Gryffindor
+42,80,2145,30,78,riddikulus,unspecified target,Parvati Patil,Gryffindor
+43,80,2146,30,11,riddikulus,unspecified target,Remus Lupin,Gryffindor
+44,84,2210,51,4,arresto momentum,unspecified target,Albus Dumbledore,Gryffindor
+45,88,2337,30,11,expecto patronum,Ron,Remus Lupin,Gryffindor
+46,88,2338,30,1,expecto patronum,Ron,Harry Potter,Gryffindor
+47,88,2340,30,1,expecto patronum,Ron,Harry Potter,Gryffindor
+48,88,2348,30,1,expecto patronum,Ron,Harry Potter,Gryffindor
+49,89,2383,28,1,nox,unspecified target,Harry Potter,Gryffindor
+50,93,2494,20,11,expelliarmus,unspecified target,Remus Lupin,Gryffindor
+51,94,2512,20,6,expelliarmus,unspecified target,Severus Snape,Slytherin
+52,94,2526,20,1,expelliarmus,unspecified target,Harry Potter,Gryffindor
+53,95,2580,67,1,expelliarmus,unspecified target,Harry Potter,Gryffindor
+54,96,2591,37,1,expecto patronum,Ron,Harry Potter,Gryffindor
+55,99,2683,67,11,immobulus,unspecified target,Remus Lupin,Gryffindor
+56,100,2710,37,1,expecto patronum,Ron,Harry Potter,Gryffindor
+57,100,2714,37,3,bombarda,unspecified target,Hermione Granger,Gryffindor
+59,105,2797,72,16,pack,Ron,Arthur Weasley,Gryffindor
+60,107,2846,42,2,pack,unspecified target,Ron Weasley,Gryffindor
+61,109,2896,30,2,imperio,unspecified target,Ron Weasley,Gryffindor
+62,109,2903,30,13,imperio,unspecified target,Alastor Moody,
+63,116,3107,39,14,pack,unspecified target,Fred Weasley,Gryffindor
+65,118,3149,36,1,pack,unspecified target,Harry Potter,Gryffindor
+66,131,3517,11,1,lumos,unspecified target,Harry Potter,Gryffindor
+67,131,3518,11,1,expecto patronum,Ron,Harry Potter,Gryffindor
+68,131,3521,11,1,expecto patronum,Ron,Harry Potter,Gryffindor
+69,132,3537,8,1,lumos,unspecified target,Harry Potter,Gryffindor
+70,132,3573,8,11,expecto patronum,Ron,Remus Lupin,Gryffindor
+71,140,3836,30,3,finite,unspecified target,Hermione Granger,Gryffindor
+72,141,3874,39,3,imperio,unspecified target,Hermione Granger,Gryffindor
+74,144,3983,55,12,finite,unspecified target,Draco Malfoy,Slytherin
+75,144,3989,55,50,impedimenta,unspecified target,Rolanda Hooch,
+76,145,4035,55,10,expelliarmus,unspecified target,Neville Longbottom,Gryffindor
+77,145,4038,55,10,expelliarmus,unspecified target,Neville Longbottom,Gryffindor
+81,149,4203,49,18,expelliarmus,unspecified target,Sirius Black,Gryffindor
+82,149,4204,49,42,impedimenta,unspecified target,James Potter,Gryffindor
+83,149,4212,49,42,levicorpus,unspecified target,James Potter,Gryffindor
+84,149,4216,49,18,locomotor,unspecified target,Sirius Black,Gryffindor
+85,150,4296,36,19,finite,unspecified target,George Weasley,Gryffindor
+86,150,4297,36,14,accio,unspecified target,Fred Weasley,Gryffindor
+87,150,4298,36,19,accio,unspecified target,George Weasley,Gryffindor
+88,151,4306,30,15,accio,unspecified target,Dolores Umbridge,Slytherin
+91,151,4339,35,15,incarcerous,unspecified target,Dolores Umbridge,Slytherin
+92,151,4348,35,10,expelliarmus,unspecified target,Neville Longbottom,Gryffindor
+93,152,4391,70,1,alohomora,unspecified target,Harry Potter,Gryffindor
+94,152,4435,70,3,colloportus,unspecified target,Hermione Granger,Gryffindor
+95,152,4442,70,10,expelliarmus,unspecified target,Neville Longbottom,Gryffindor
+96,152,4445,70,129,impedimenta,unspecified target,Ghosts,
+97,152,4474,70,22,crucio,unspecified target,Bellatrix Lestrange,Slytherin
+98,153,4487,70,1,protego,unspecified target,Harry Potter,Gryffindor
+99,154,4498,70,1,crucio,unspecified target,Harry Potter,Gryffindor
+100,154,4499,70,22,crucio,unspecified target,Bellatrix Lestrange,Slytherin
+101,155,4512,70,9,avada kedavra,unspecified target,Voldemort,Slytherin
+102,155,4534,70,4,portus,unspecified target,Albus Dumbledore,Gryffindor
+104,156,4632,36,25,pack,unspecified target,Luna Lovegood,Ravenclaw
+105,160,4700,18,4,lumos,unspecified target,Albus Dumbledore,Gryffindor
+107,162,4847,42,12,petrificus totalus,unspecified target,Draco Malfoy,Slytherin
+108,162,4872,42,25,episkey,unspecified target,Luna Lovegood,Ravenclaw
+109,165,4938,41,1,finite,unspecified target,Harry Potter,Gryffindor
+110,167,5078,61,100,pack,unspecified target,Leanne,Hufflepuff
+111,170,5177,39,3,oppugno,unspecified target,Hermione Granger,Gryffindor
+112,176,5422,56,1,sectumsempra,unspecified target,Harry Potter,Gryffindor
+113,180,5595,73,1,accio,unspecified target,Harry Potter,Gryffindor
+114,180,5625,73,4,aguamenti,unspecified target,Albus Dumbledore,Gryffindor
+115,181,5674,23,6,avada kedavra,unspecified target,Severus Snape,Slytherin
+116,182,5682,40,1,impedimenta,unspecified target,Harry Potter,Gryffindor
+117,182,5686,40,1,sectumsempra,unspecified target,Harry Potter,Gryffindor
+118,184,5724,17,95,pack,unspecified target,Mrs. Granger,
+119,184,5729,17,3,obliviate,unspecified target,Hermione Granger,Gryffindor
+120,185,5766,13,9,avada kedavra,unspecified target,Voldemort,Slytherin
+125,191,6017,7,3,pack,unspecified target,Hermione Granger,Gryffindor
+126,191,6020,7,1,stupefy,unspecified target,Harry Potter,Gryffindor
+127,191,6021,7,3,petrificus totalus,unspecified target,Hermione Granger,Gryffindor
+128,191,6031,7,3,obliviate,unspecified target,Hermione Granger,Gryffindor
+129,191,6045,7,3,homenum revelio,unspecified target,Hermione Granger,Gryffindor
+130,191,6048,7,1,lumos,unspecified target,Harry Potter,Gryffindor
+131,193,6098,7,3,expelliarmus,unspecified target,Hermione Granger,Gryffindor
+132,194,6153,70,3,finite,Ron,Hermione Granger,Gryffindor
+133,194,6156,70,2,finite,unspecified target,Ron Weasley,Gryffindor
+134,194,6166,70,1,accio,unspecified target,Harry Potter,Gryffindor
+136,194,6197,70,1,stupefy,unspecified target,Harry Potter,Gryffindor
+137,194,6198,70,1,expecto patronum,Ron,Harry Potter,Gryffindor
+138,194,6199,70,3,relashio,unspecified target,Hermione Granger,Gryffindor
+139,195,6212,74,1,accio,unspecified target,Harry Potter,Gryffindor
+140,195,6220,74,3,protego,unspecified target,Hermione Granger,Gryffindor
+141,195,6224,74,3,muffliato,unspecified target,Hermione Granger,Gryffindor
+142,195,6246,74,1,dissendium,unspecified target,Harry Potter,Gryffindor
+143,195,6247,74,3,incendio,unspecified target,Hermione Granger,Gryffindor
+144,195,6248,74,1,expulso,unspecified target,Harry Potter,Gryffindor
+145,195,6249,74,3,confringo,unspecified target,Hermione Granger,Gryffindor
+147,198,6352,74,1,protego,unspecified target,Harry Potter,Gryffindor
+148,199,6382,9,3,lumos,unspecified target,Hermione Granger,Gryffindor
+149,200,6412,9,1,lumos,unspecified target,Harry Potter,Gryffindor
+150,200,6417,9,3,confringo,unspecified target,Hermione Granger,Gryffindor
+151,201,6459,68,1,accio,unspecified target,Harry Potter,Gryffindor
+152,201,6460,68,1,diffindo,unspecified target,Harry Potter,Gryffindor
+153,202,6537,68,2,finite,Hermione,Ron Weasley,Gryffindor
+154,202,6538,68,1,engorgio,unspecified target,Harry Potter,Gryffindor
+155,202,6540,68,1,reducio,unspecified target,Harry Potter,Gryffindor
+156,207,6720,13,1,stupefy,unspecified target,Harry Potter,Gryffindor
+157,207,6722,13,1,stupefy,unspecified target,Harry Potter,Gryffindor
+158,212,6850,2,1,imperio,unspecified target,Harry Potter,Gryffindor
+159,212,6869,2,2,imperio,unspecified target,Ron Weasley,Gryffindor
+160,212,6880,2,1,lumos,unspecified target,Harry Potter,Gryffindor
+161,212,6881,2,2,lumos,unspecified target,Ron Weasley,Gryffindor
+162,212,6882,2,3,lumos,unspecified target,Hermione Granger,Gryffindor
+163,214,6906,2,3,relashio,unspecified target,Hermione Granger,Gryffindor
+164,215,6940,21,1,expecto patronum,Ron,Harry Potter,Gryffindor
+166,219,7046,66,59,finite,unspecified target,Filius Flitwick,Ravenclaw
+167,219,7048,66,166,protego,unspecified target,Professors,
+168,223,7160,55,99,avada kedavra,unspecified target,Gregory Goyle,Slytherin
+169,223,7161,55,1,expelliarmus,unspecified target,Harry Potter,Gryffindor
+170,225,7273,48,6,expecto patronum,Ron,Severus Snape,Slytherin
+172,231,7396,66,1,confringo,unspecified target,Harry Potter,Gryffindor
+173,232,7406,66,1,confringo,unspecified target,Harry Potter,Gryffindor
