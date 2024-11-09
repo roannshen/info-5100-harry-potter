@@ -1,0 +1,22 @@
+cruciatus_curse_data_with_success
+Caster,Victim,Success
+Bellatrix Lestrange,Frank Longbottom,Successful
+Bellatrix Lestrange,Alice Longbottom,Successful
+Bellatrix Lestrange,Neville Longbottom,Successful
+Bellatrix Lestrange,Hermoine Granger,Successful
+Lord Voldemort,Bertha Jorkins,Successful
+Lord Voldemort,Harry Potter,Successful
+Lord Voldemort,Avery II,Successful
+Lord Voldemort,Peter Pettigrew,Successful
+Lord Voldemort,Garrick Ollivander,Successful
+Harry Potter,Bartemius Crouch Jnr,Successful
+Harry Potter,Viktor Krum,Successful
+Draco Malfoy,Thorfinn Rowie,Successful
+Draco Malfoy,Antonin Dolohov,Successful
+Harry Potter,Amycus Carrow,Successful
+Harry Potter,Bellatrix Lestrange,Unsuccessful
+Harry Potter,Severus Snape,Unsuccessful
+Bellatrix Lestrange,Harry Potter,Unsuccessful
+Draco Malfoy,Harry Potter,Unsuccessful
+Lord Voldemort,Harry Potter,Unsuccessful
+Dolores Umbridge,Harry Potter,Unsuccessful
