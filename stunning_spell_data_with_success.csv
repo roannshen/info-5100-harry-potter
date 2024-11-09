@@ -1,0 +1,48 @@
+Caster,Victim,Success
+Peter Pettigrew,Crookshanks,Successful
+Peter Pettigrew,Bartemius Crouch Junior,Successful
+Harry Potter,Acromantula,Successful
+Harry Potter,Viktor Krum,Successful
+Harry Potter,Crabbe Snr,Successful
+Harry Potter,Walden Macnair,Successful
+Harry Potter,Death Eaters,Successful
+Harry Potter,Thorfinn Rowle,Successful
+Harry Potter,Mugglewaitress,Successful
+Dolores Umbridge,Corban Yaxley,Successful
+Dolores Umbridge,Lucius Malfoy,Successful
+Dolores Umbridge,Fenrir Greyback,Successful
+Dolores Umbridge,Gringottsgoblins,Successful
+Dolores Umbridge,Acromantula,Successful
+Dolores Umbridge,Death Eater,Successful
+Dolores Umbridge,Cedric Diggory,Successful
+Dolores Umbridge,Bartemius Crouch Junior,Successful
+Dolores Umbridge,Fleur Delacour,Successful
+Albus Dumbledore,Molly Weasley,Successful
+Dolores Umbridge,Minerva McGonagall,Successful
+Neville Longbottom,Nigel Wolpert,Successful
+Hermione Granger,Death Eater,Successful
+Hermione Granger,Mafalda Hopkirk,Successful
+Hermione Granger,Gringottsgoblins,Successful
+Hermione Granger,Gregory Goyle,Successful
+Ron Weasley,Abeggar,Successful
+Ron Weasley,Gringottsgoblins,Successful
+Ron Weasley,Acromantula,Successful
+Ron Weasley,Death Eater,Successful
+Ron Weasley,Luna Lovegood,Successful
+Ron Weasley,Nymphadora Tonks,Successful
+Ron Weasley,Death Eaters,Successful
+Severus Snape,Dirk Cresswell,Successful
+Bellatrix Lestrange,Snatchers,Successful
+Bellatrix Lestrange,Luna Lovegood,Successful
+Bellatrix Lestrange,Fred Weasley,Successful
+Bellatrix Lestrange,Dean Thomas,Successful
+Bellatrix Lestrange,Aberforth Dumbledore,Successful
+Bellatrix Lestrange,Constance Pickering,Successful
+Bellatrix Lestrange,Death Eater,Unsuccessful
+Severus Snape,Death Eater,Unsuccessful
+Severus Snape,Vincent Crabbe,Unsuccessful
+Neville Longbottom,"Neville attempted to stun them in theBrain Room, but due to his nose having been broken byAntonin Dolohov, he didn't say the incantation correctly.",Unsuccessful
+Neville Longbottom,"Neville attempted to stun them in theDeath Chamber, but due to his nose having been broken byAntonin Dolohov, he didn't say the incantation correctly.",Unsuccessful
+Dolores Umbridge,Centaur,Unsuccessful
+Dolores Umbridge,Xenophilius Lovegood,Unsuccessful
+Hermione Granger,Daniel Page,Unsuccessful
