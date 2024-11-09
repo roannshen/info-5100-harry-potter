@@ -1,0 +1,8 @@
+,Name,Damage,Range,Cooldown,Duration,CD OOC
+5,Avada Kedavra,10000000,3000.0,90.0,0.0,1.0
+9,Confringo,25,3000.0,10.0,5.0,30.0
+10,Crucio,88,3000.0,20.0,20.0,60.0
+15,Expelliarmus,20,3000.0,10.0,0.0,30.0
+18,Imperio,0,3000.0,30.0,20.0,1.0
+19,Incendio,50,500.0,8.0,5.0,24.0
+22,Petrificus Totalus,250,550.0,1.25,0.0,1.0

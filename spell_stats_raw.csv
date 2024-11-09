@@ -1,0 +1,34 @@
+Name,Damage,Cooldown,Duration,Duration (beasts),Range,CD OOC,DamageObject,PhysicsImpulseSuccess,PhysicsImpulseFailed,SpellTypeID,ImpactType,SizeLimit,AllowNonObjectInfoActors,Duration,DurationCharacter,DurationPlayer,ChargeTime,ChargedMaxTime,ChannelingMinTime,Animate,Inanimate,Plant,Dead,Water,UpgradedMechanics,PlayObjectImpactEffects,LimitedCountObject,LimitedCountCharacter,PlayerShieldBreaker,EnemyShieldBreaker,CastNoise,ImpactNoise,ProjectileSpeed,ProjectileGravity,BeastCapture
+Accio,0,8,0.5,2,3000,24,0,0,0,Accio,SpellDefault,XXL,1,0,0.5,0,0,0,0.5,1,1,1,1,0,0,0,0,0,,None,SmallNoise,MediumNoise,8000,0,1
+Alohomora,0,0.5,0,0,3000,1,0,0,0,Alohomora,SpellDefault,XXL,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,,None,NoNoise,NoNoise,0,0,0
+Ancient Magic,250,0,0,0,5000,1,0,0,0,FinisherAMBossKiller,SpellDefault,XXL,0,0,0,0,0,0,0,1,1,0,1,0,0,1,0,0,,None,LargeNoise,LargeNoise,0,0,0
+Ancient Magic Throw,40,0,0,0,3000,1,0,0,0,Oppugno,SpellDefault,XXL,1,0,0,0,1,0,0.5,0,1,1,1,0,0,0,0,0,,TypeC_Breaker,SmallNoise,MediumNoise,100000,0,0
+Arresto Momentum,0,15,15,5,3000,45,0,0,0,ArrestoMomentum,SpellDefault,XXL,1,60,15,3,0,0,0,1,1,1,1,0,0,0,3,3,,None,SmallNoise,MediumNoise,8000,0,1
+Avada Kedavra,10000000,90,0,0,3000,1,0,0,0,AvadaKedavra,SpellDamageLarge,XXL,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,None,MediumNoise,MediumNoise,8000,0,0
+Basic Cast,3,0,0,0,3000,1,50,11000,5000,Stupefy,SpellDamage,XXL,0,0,0,0,0,0,0,1,1,1,1,0,0,1,0,0,,None,SmallNoise,MediumNoise,12000,0,0
+Basic Cast Heavy (4th hit),23,0,0,0,3000,1,65,13000,5000,StupefyHeavy,SpellDamage,XXL,0,,,,,,,1,1,1,1,0,0,1,0,0,,None,SmallNoise,MediumNoise,12000,0,0
+Bombarda,35,15,0,0,3000,45,150,0,0,Expulso,SpellDamageLarge,XXL,0,0,0,0,3,3600,0,1,1,1,1,0,0,1,0,0,,None,MediumNoise,LargeNoise,8000,0,0
+Confringo,25,10,5,0,3000,30,150,0,0,Confringo,SpellDamageLarge,XXL,0,0,5,0,3,3600,0,1,1,1,1,0,0,1,0,0,,None,MediumNoise,LargeNoise,8000,0,0
+Crucio,88,20,20,0,3000,60,0,0,0,Crucio,SpellDefault,XXL,,20,20,20,,,,1,0,0,0,0,0,0,0,3,,None,MediumNoise,MediumNoise,8000,0,0
+Depulso,40,10,0,0,3000,30,0,0,0,Depulso,SpellDamageLarge,XXL,1,0,0,0,2,3600,0,1,1,1,1,0,0,0,0,0,,None,SmallNoise,MediumNoise,8000,0,0
+Descendo,11,10,2,2,3000,30,0,0,0,Descendo,SpellDefault,XXL,0,0,2,0,0,0,0,1,1,1,1,0,0,0,0,0,,None,SmallNoise,MediumNoise,8000,0,0
+Diffindo,45,15,0,0,3000,45,55,11000,5000,Diffindo,SpellDamage,XXL,0,0,20,20,0,0,0,1,1,1,1,0,0,0,0,0,,None,MediumNoise,MediumNoise,4000,0,0
+Disillusionment,0,0.5,0,0,0,1,0,0,0,Disillusionment,,XXL,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,,None,NoNoise,NoNoise,0,0,0
+Expelliarmus,20,10,0,0,3000,30,0,10000,5000,Expelliarmus,SpellDamage,XXL,0,0,0,0,0.5,5,0,1,1,0,0,0,0,0,0,0,,None,MediumNoise,MediumNoise,8000,0,0
+Flipendo,0,5,0,0,3000,15,0,0,0,Flipendo,SpellDefault,XXL,1,0,0,0,0.5,5,0,1,1,1,1,0,0,0,0,0,,None,SmallNoise,MediumNoise,8000,0,1
+Glacius,0,10,10,5,3000,30,0,0,0,Glacius,Ice,XXL,1,60,10,3,2,3600,0,1,1,1,1,1,0,0,3,3,,None,SmallNoise,MediumNoise,8000,0,1
+Imperio,0,30,20,0,3000,1,0,0,0,Imperius,SpellDefault,XXL,0,20,20,3,0,0,0,1,0,0,0,0,0,0,0,3,,TypeC_Breaker,MediumNoise,MediumNoise,8000,0,0
+Incendio,50,8,5,0,500,24,0,0,0,Incendio,Fire,XXL,0,0,5,0,0,5,0.1,1,1,1,1,1,0,1,0,0,,None,MediumNoise,MediumNoise,3000,0,0
+Levioso,0,8,8,3.5,3000,24,0,0,0,Levioso,SpellDefault,XXL,1,60,8,3,2,3600,0,1,1,1,0,0,0,0,3,3,,None,SmallNoise,MediumNoise,8000,0,1
+Lumos,0,0.5,0,0,0,1,0,0,0,Lumos,,XXL,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,,None,NoNoise,NoNoise,0,0,0
+Petrificus Totalus,250,1.25,,,550,1,,,,StealthTakedown,SpellDamage,XXL,,,,,,,,1,0,1,0,0,0,,,,1,TypeC_Breaker,NoNoise,SmallNoise,0,0,0
+Protego,0,0,0,0,100,1,0,0,0,Protego,SpellDefault,XXL,0,2,0,0,0,0,0.01,1,1,1,1,0,0,1,0,0,,None,NoNoise,MediumNoise,0,0,0
+Protego AoE (talent),15,0,0,0,400,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Protego Reflect (talent),30,0,0,0,3500,1,250,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Reparo,0,0.5,0,0,3000,1,0,0,0,Reparo,SpellDefault,XXL,0,0,0,0,2,3600,0,0,1,0,0,0,0,0,0,0,,None,NoNoise,MediumNoise,800,-300,0
+Revelio,0,1,10,10,7500,1,0,0,0,Revelio,,XXL,1,10,10,10,0,0,0,1,1,1,1,0,0,0,0,0,,None,NoNoise,NoNoise,0,0,0
+Transformation,0,20,15,0,3000,60,0,0,0,TransformationOverland,SpellDefault,M,0,60,15,3,0,0,0,1,1,1,0,0,0,0,3,3,,None,SmallNoise,MediumNoise,8000,0,0
+Wingardium Leviosa,250,0.5,5,5,1000,1,0,0,0,Wingardium,SpellDefault,XXL,1,9999999,5,3,0,0,0.5,0,1,1,1,0,0,0,,,,None,SmallNoise,SmallNoise,5000,0,1
+Chinese Chomping Cabbage,20,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Mandrake Scream,2,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Venomous Tentacula,15,,,,3000,,50,,,,,,,,,,,,,,,,,,,,,,,,,,,,
