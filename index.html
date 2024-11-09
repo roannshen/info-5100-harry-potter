@@ -1,0 +1,45 @@
+<html>
+    <head>
+        <script src="https://d3js.org/d3.v7.min.js"></script>
+        <link href="https://fonts.cdnfonts.com/css/harry-p" rel="stylesheet">
+
+        <style>
+            body {
+                font-family: sans-serif;
+            }
+
+            h1 {
+                font-family: 'Harry P', sans-serif;
+                font-weight: 400;
+                font-size: 39pt;
+                text-align: center;
+                margin: 30px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Deep Dive into the Dangers of the Harry Potter Universe</h1>
+
+        <!-- Node graph -->
+
+        <!-- Bar graph -->
+
+        <!-- Spider graph -->
+        <div>
+            <svg id="spell-graph" height="600" width="1050"></svg>
+
+            <script>
+                const graph = d3.select('svg#spell-graph');
+                const height = graph.attr('height');
+                const width = graph.attr('width');
+                const margins = {"top": 10, "right": 10, "bottom": 50, "left": 50};
+                const chartWidth = width - margins.left - margins.right;
+                const chartHeight = height - margins.top - margins.bottom;
+
+                d3.csv('spell_stats_data.csv').then((data) => {
+                    console.log(data)
+                })
+            </script>
+        </div>
+    </body>
+</html>
