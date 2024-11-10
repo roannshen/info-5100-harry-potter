@@ -1,5 +1,8 @@
+memory_spell_data_with_success_fixed
 Caster,Victim,Success
-Peter Pettigrew,"Jacob's sibling",Successful
+Peter Pettigrew,Jacob's sibling,Successful
+Hermione Granger,Mrs Granger,Successful
+Hermione Granger,Mr Granger,Successful
 Hermione Granger,Antonin Dolohov,Successful
 Hermione Granger,Thorfinn Rowle,Successful
 Hermione Granger,Muggle waitress,Successful

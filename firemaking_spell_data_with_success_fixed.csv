@@ -1,10 +1,13 @@
+firemaking_spell_data_with_success_fixed
 Caster,Victim,Success
 Albus Dumbledore,Object,Successful
 Albus Dumbledore,Object,Successful
+Severus Snape,Object,Successful
 Severus Snape,Object,Successful
 Peter Pettigrew,Object,Successful
 Dolores Umbridge,Object,Successful
 Hermione Granger,Object,Successful
 Hermione Granger,Object,Successful
+Hermione Granger,Object,Successful
+Lord Voldemort,Object,Successful
 Harry Potter,Object,Successful
-Harry Potter,Delphini,Successful
