@@ -3,11 +3,11 @@
 1,Bellatrix Lestrange,Alice Longbottom,Successful,Crucio,Slytherin,
 2,Bellatrix Lestrange,Neville Longbottom,Successful,Crucio,Slytherin,Gryffindor
 3,Bellatrix Lestrange,Hermoine Granger,Successful,Crucio,Slytherin,
-4,Lord Voldemort,Bertha Jorkins,Successful,Crucio,,
-5,Lord Voldemort,Harry Potter,Successful,Crucio,,Gryffindor
-6,Lord Voldemort,Avery II,Successful,Crucio,,
-7,Lord Voldemort,Peter Pettigrew,Successful,Crucio,,Gryffindor
-8,Lord Voldemort,Garrick Ollivander,Successful,Crucio,,Ravenclaw
+4,Lord Voldemort,Bertha Jorkins,Successful,Crucio,Slytherin,
+5,Lord Voldemort,Harry Potter,Successful,Crucio,Slytherin,Gryffindor
+6,Lord Voldemort,Avery II,Successful,Crucio,Slytherin,
+7,Lord Voldemort,Peter Pettigrew,Successful,Crucio,Slytherin,Gryffindor
+8,Lord Voldemort,Garrick Ollivander,Successful,Crucio,Slytherin,Ravenclaw
 9,Harry Potter,Bartemius Crouch Jnr,Successful,Crucio,Gryffindor,
 10,Harry Potter,Viktor Krum,Successful,Crucio,Gryffindor,Durmstrang Institute
 11,Draco Malfoy,Thorfinn Rowie,Successful,Crucio,Slytherin,
@@ -17,7 +17,7 @@
 15,Harry Potter,Severus Snape,Unsuccessful,Crucio,Gryffindor,Slytherin
 16,Bellatrix Lestrange,Harry Potter,Unsuccessful,Crucio,Slytherin,Gryffindor
 17,Draco Malfoy,Harry Potter,Unsuccessful,Crucio,Slytherin,Gryffindor
-18,Lord Voldemort,Harry Potter,Unsuccessful,Crucio,,Gryffindor
+18,Lord Voldemort,Harry Potter,Unsuccessful,Crucio,Slytherin,Gryffindor
 19,Dolores Umbridge,Harry Potter,Unsuccessful,Crucio,Slytherin,Gryffindor
 20,Ron Weasley,Muggle,Successful,Confundo,Gryffindor,
 21,Hermione Granger,Cormac Mclaggen,Successful,Confundo,Gryffindor,
@@ -38,18 +38,18 @@
 36,Harry Potter,Severus Snape,Successful,Expelliarmus,Gryffindor,Slytherin
 37,Harry Potter,Peter Pettigrew,Successful,Expelliarmus,Gryffindor,Gryffindor
 38,Harry Potter,Acromantula,Successful,Expelliarmus,Gryffindor,
-39,Harry Potter,Lord Voldemort,Successful,Expelliarmus,Gryffindor,
+39,Harry Potter,Lord Voldemort,Successful,Expelliarmus,Gryffindor,Slytherin
 40,Harry Potter,Lucius Malfoy,Successful,Expelliarmus,Gryffindor,Slytherin
 41,Harry Potter,Stan Shunpike,Successful,Expelliarmus,Gryffindor,
 42,Harry Potter,Gregory Goyle,Successful,Expelliarmus,Gryffindor,Slytherin
-43,Harry Potter,Lord Voldemort,Successful,Expelliarmus,Gryffindor,
+43,Harry Potter,Lord Voldemort,Successful,Expelliarmus,Gryffindor,Slytherin
 44,Harry Potter,Draco Malfoy,Successful,Expelliarmus,Gryffindor,Slytherin
 45,Hermione Granger,Mundungus Fletcher,Successful,Expelliarmus,Gryffindor,
 46,Ron Weasley,Snatcher,Successful,Expelliarmus,Gryffindor,
 47,Ron Weasley,Bellatrix Lestrange,Successful,Expelliarmus,Gryffindor,Slytherin
 48,Neville Longbottom,Death Eater,Successful,Expelliarmus,Gryffindor,
 49,Neville Longbottom,Harry Potter,Successful,Expelliarmus,Gryffindor,Gryffindor
-50,Lord Voldemort,Neville Longbottom,Successful,Expelliarmus,,Gryffindor
+50,Lord Voldemort,Neville Longbottom,Successful,Expelliarmus,Slytherin,Gryffindor
 51,Albus Dumbledore,Object,Successful,Incendio,Gryffindor,
 52,Albus Dumbledore,Object,Successful,Incendio,Gryffindor,
 53,Severus Snape,Object,Successful,Incendio,Slytherin,
@@ -59,38 +59,38 @@
 57,Hermione Granger,Object,Successful,Incendio,Gryffindor,
 58,Hermione Granger,Object,Successful,Incendio,Gryffindor,
 59,Hermione Granger,Object,Successful,Incendio,Gryffindor,
-60,Lord Voldemort,Object,Successful,Incendio,,
+60,Lord Voldemort,Object,Successful,Incendio,Slytherin,
 61,Harry Potter,Object,Successful,Incendio,Gryffindor,
-62,Lord Voldemort,Harry Potter,Successful,Imperio,,Gryffindor
-63,Lord Voldemort,Harry Potter,Unsuccessful,Imperio,,Gryffindor
+62,Lord Voldemort,Harry Potter,Successful,Imperio,Slytherin,Gryffindor
+63,Lord Voldemort,Harry Potter,Unsuccessful,Imperio,Slytherin,Gryffindor
 64,Draco Malfoy,Madam Rosmerta,Successful,Imperio,Slytherin,
 65,Harry Potter,Bogrod,Successful,Imperio,Gryffindor,
 66,Harry Potter,Travers,Successful,Imperio,Gryffindor,
-67,Lord Voldemort,Thomas Riddle Sir,Successful,Avada Kedavra,,
-68,Lord Voldemort,Thomas Riddle,Successful,Avada Kedavra,,
-69,Lord Voldemort,Mary Riddle,Successful,Avada Kedavra,,
-70,Lord Voldemort,James Potter,Successful,Avada Kedavra,,Gryffindor
-71,Lord Voldemort,Lily Potter,Successful,Avada Kedavra,,Gryffindor
-72,Lord Voldemort,Harry Potter,Unsuccessful,Avada Kedavra,,Gryffindor
-73,Lord Voldemort,Harry Potter,Unsuccessful,Avada Kedavra,,Gryffindor
-74,Lord Voldemort,Harry Potter,Unsuccessful,Avada Kedavra,,Gryffindor
-75,Lord Voldemort,Harry Potter,Unsuccessful,Avada Kedavra,,Gryffindor
-76,Lord Voldemort,Bertha Jorkins,Successful,Avada Kedavra,,
-77,Lord Voldemort,Frank Bryce,Successful,Avada Kedavra,,
-78,Lord Voldemort,Fawkes,Unsuccessful,Avada Kedavra,,
-79,Lord Voldemort,Charity Burbage,Successful,Avada Kedavra,,
-80,Lord Voldemort,Alastor Moody,Successful,Avada Kedavra,,
-81,Lord Voldemort,Unnamed German speaking Muggle family,Successful,Avada Kedavra,,
-82,Lord Voldemort,Unnamed German speaking Muggle family,Successful,Avada Kedavra,,
-83,Lord Voldemort,Unnamed German speaking Muggle family,Successful,Avada Kedavra,,
-84,Lord Voldemort,Mykew Gregorovitch,Successful,Avada Kedavra,,
-85,Lord Voldemort,Gellert Grindelwald,Successful,Avada Kedavra,,Durmstrang Institute
-86,Lord Voldemort,Unnamed goblin,Successful,Avada Kedavra,,
-87,Lord Voldemort,Griphook,Successful,Avada Kedavra,,
-88,Lord Voldemort,Death Eater,Successful,Avada Kedavra,,
-89,Lord Voldemort,Gringotts guards,Successful,Avada Kedavra,,
-90,Lord Voldemort,Goblins,Successful,Avada Kedavra,,
-91,Lord Voldemort,Death Eater,Successful,Avada Kedavra,,
+67,Lord Voldemort,Thomas Riddle Sir,Successful,Avada Kedavra,Slytherin,
+68,Lord Voldemort,Thomas Riddle,Successful,Avada Kedavra,Slytherin,
+69,Lord Voldemort,Mary Riddle,Successful,Avada Kedavra,Slytherin,
+70,Lord Voldemort,James Potter,Successful,Avada Kedavra,Slytherin,Gryffindor
+71,Lord Voldemort,Lily Potter,Successful,Avada Kedavra,Slytherin,Gryffindor
+72,Lord Voldemort,Harry Potter,Unsuccessful,Avada Kedavra,Slytherin,Gryffindor
+73,Lord Voldemort,Harry Potter,Unsuccessful,Avada Kedavra,Slytherin,Gryffindor
+74,Lord Voldemort,Harry Potter,Unsuccessful,Avada Kedavra,Slytherin,Gryffindor
+75,Lord Voldemort,Harry Potter,Unsuccessful,Avada Kedavra,Slytherin,Gryffindor
+76,Lord Voldemort,Bertha Jorkins,Successful,Avada Kedavra,Slytherin,
+77,Lord Voldemort,Frank Bryce,Successful,Avada Kedavra,Slytherin,
+78,Lord Voldemort,Fawkes,Unsuccessful,Avada Kedavra,Slytherin,
+79,Lord Voldemort,Charity Burbage,Successful,Avada Kedavra,Slytherin,
+80,Lord Voldemort,Alastor Moody,Successful,Avada Kedavra,Slytherin,
+81,Lord Voldemort,Unnamed German speaking Muggle family,Successful,Avada Kedavra,Slytherin,
+82,Lord Voldemort,Unnamed German speaking Muggle family,Successful,Avada Kedavra,Slytherin,
+83,Lord Voldemort,Unnamed German speaking Muggle family,Successful,Avada Kedavra,Slytherin,
+84,Lord Voldemort,Mykew Gregorovitch,Successful,Avada Kedavra,Slytherin,
+85,Lord Voldemort,Gellert Grindelwald,Successful,Avada Kedavra,Slytherin,Durmstrang Institute
+86,Lord Voldemort,Unnamed goblin,Successful,Avada Kedavra,Slytherin,
+87,Lord Voldemort,Griphook,Successful,Avada Kedavra,Slytherin,
+88,Lord Voldemort,Death Eater,Successful,Avada Kedavra,Slytherin,
+89,Lord Voldemort,Gringotts guards,Successful,Avada Kedavra,Slytherin,
+90,Lord Voldemort,Goblins,Successful,Avada Kedavra,Slytherin,
+91,Lord Voldemort,Death Eater,Successful,Avada Kedavra,Slytherin,
 92,Peter Pettigrew,Cedric Diggory,Successful,Avada Kedavra,Gryffindor,Hufflepuff
 93,Bellatrix Lestrange,Fox,Successful,Avada Kedavra,Slytherin,
 94,Severus Snape,Albus Dumbledore,Successful,Avada Kedavra,Slytherin,Gryffindor
@@ -164,7 +164,7 @@
 162,Harry Potter,Fenrir Greyback,Successful,Petrificus Totalus,Gryffindor,
 163,Albus Dumbledore,Parvati Patil,Successful,Petrificus Totalus,Gryffindor,Gryffindor
 164,Tom Riddle,Neville Longbottom,Successful,Petrificus Totalus,Slytherin,Gryffindor
-165,Lord Voldemort,Dark Mark,Successful,Morsmordre,,
+165,Lord Voldemort,Dark Mark,Successful,Morsmordre,Slytherin,
 166,Bellatrix Lestrange,Dark Mark,Successful,Morsmordre,Slytherin,
 167,Peter Pettigrew,Dark Mark,Successful,Morsmordre,Gryffindor,
 168,Harry Potter,Stag,Successful,Expecto Patronum,Gryffindor,
