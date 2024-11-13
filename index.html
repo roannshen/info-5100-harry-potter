@@ -26,9 +26,26 @@
 
         <!-- Spider graph -->
         <div>
+            <svg id="node-graph" height="600" width="600"></svg>
             <svg id="spell-graph" height="600" width="1050"></svg>
 
             <script>
+                // node graph
+                const nodeGraph = d3.select('svg#node-graph');
+
+                const nodeLayer = d3.select('#node-graph').append('g');
+                const nodeWidth = d3.select('#node-graph').attr('width');
+                const nodeHeight = d3.select('#node-graph').attr('height');
+
+                const requestNodeData = async () => {
+                    const megafile = await d3.csv('megafile.csv');
+                    console.log(megafile);
+
+                };
+
+                requestNodeData();
+
+                //spell graph
                 const graph = d3.select('svg#spell-graph');
                 const height = graph.attr('height');
                 const width = graph.attr('width');
@@ -39,6 +56,7 @@
                 d3.csv('spell_stats_data.csv').then((data) => {
                     console.log(data)
                 })
+
             </script>
         </div>
     </body>
