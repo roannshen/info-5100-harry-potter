@@ -109,7 +109,7 @@
                 barSvg.append("g")
                     .attr("transform", `translate(0,${barHeight})`)
                     .call(d3.axisBottom(x))
-                    .attr("class", "axis") // Add the 'axis' class
+                    .attr("class", "axis") 
                     .selectAll("text")
                     .attr("transform", "rotate(-45)")
                     .style("text-anchor", "end");
@@ -121,7 +121,7 @@
                 // Add axis labels
                 barSvg.append("text")
                     .attr("x", barWidth / 2)
-                    .attr("y", barHeight + 80) // Moved down further
+                    .attr("y", barHeight + 80)
                     .attr("text-anchor", "middle")
                     .attr("class", "axis-label")
                     .text("Spell Name");
