@@ -6,6 +6,12 @@
         <style>
             body {
                 font-family: sans-serif;
+                cursor: url('HP_Wand.svg'), url('HP_Wand.png'), auto;
+                background-image: url('HP_Back.png');
+                background-size: cover; 
+                background-repeat: no-repeat;
+                background-position: center;
+
             }
 
             h1 {
@@ -14,7 +20,23 @@
                 font-size: 39pt;
                 text-align: center;
                 margin: 30px;
+                color: white;
             }
+
+            .axis text {
+            fill: white; 
+             }
+
+       
+            .axis path,
+            .axis line {
+                stroke: white; 
+            }
+
+            .axis-label {
+                fill: white; 
+            }
+
         </style>
     </head>
     <body>
@@ -87,17 +109,21 @@
                 barSvg.append("g")
                     .attr("transform", `translate(0,${barHeight})`)
                     .call(d3.axisBottom(x))
+                    .attr("class", "axis") // Add the 'axis' class
                     .selectAll("text")
                     .attr("transform", "rotate(-45)")
                     .style("text-anchor", "end");
 
-                barSvg.append("g").call(d3.axisLeft(y));
+
+                barSvg.append("g").call(d3.axisLeft(y))
+                    .attr("class", "axis");
 
                 // Add axis labels
                 barSvg.append("text")
                     .attr("x", barWidth / 2)
                     .attr("y", barHeight + 80) // Moved down further
                     .attr("text-anchor", "middle")
+                    .attr("class", "axis-label")
                     .text("Spell Name");
 
                 barSvg.append("text")
@@ -105,6 +131,7 @@
                     .attr("x", -barHeight / 2)
                     .attr("y", -margin.left + 20)
                     .attr("text-anchor", "middle")
+                    .attr("class", "axis-label")
                     .text("Spell Usage");
             };
 
