@@ -22,7 +22,97 @@
 
         <!-- Node graph -->
 
-        <!-- Bar graph -->
+        <!-- Bar Graph -->
+        <svg id="bar-graph" height="600" width="600"></svg>
+        <script>
+            // Load the CSV file
+            const requestData = async function() {
+                const spells = await d3.csv("megafile.csv");
+
+                // Spell Colors
+                const spellColors = {
+                    "Avada Kedavra": "#28A745",
+                    "Confringo": "#FF4500",
+                    "Incendio": "#FF6347",
+                    "Morsmordre": "#6EBB97",
+                    "Sectumsempra": "#8B0000",
+                    "Stupefy": "#E8913D",
+                    "Crucio": "#48493E",
+                    "Imperio": "#FBD748",
+                    "Confundo": "#834F99",
+                    "Expelliarmus": "#DA3832",
+                    "Petrificus Totalus": "#4782B4",
+                    "Obliviate": "#F5DEB3",
+                    "Expecto Patronum": "#8CCBF0"
+                };
+
+                const barWidth = 600;
+                const barHeight = 600;
+                const margin = { top: 20, right: 30, bottom: 100, left: 60 }; 
+
+                // Bar Chart Dimensions
+                const barSvg = d3.select("#bar-graph")
+                    .attr("width", barWidth + margin.left + margin.right)
+                    .attr("height", barHeight + margin.top + margin.bottom)
+                    .append("g")
+                    .attr("transform", `translate(${margin.left},${margin.top})`);
+
+                // Calculate spell usage
+                const spellUsage = d3.rollup(spells, v => v.length, d => d.spell_name);
+                const spellData = Array.from(spellUsage, ([spell, count]) => ({ spell, count }));
+
+                // Scales for the bar chart
+                const x = d3.scaleBand()
+                    .domain(spellData.map(d => d.spell))
+                    .range([0, barWidth])
+                    .padding(0.1);
+                const y = d3.scaleLinear()
+                    .domain([0, d3.max(spellData, d => d.count)])
+                    .nice()
+                    .range([barHeight, 0]);
+
+                // Add bars to the bar chart
+                barSvg.append("g")
+                    .selectAll("rect")
+                    .data(spellData)
+                    .enter().append("rect")
+                    .attr("x", d => x(d.spell))
+                    .attr("y", d => y(d.count))
+                    .attr("width", x.bandwidth())
+                    .attr("height", d => barHeight - y(d.count))
+                    .attr("fill", d => spellColors[d.spell] ); 
+
+
+                // Add X and Y axes
+                barSvg.append("g")
+                    .attr("transform", `translate(0,${barHeight})`)
+                    .call(d3.axisBottom(x))
+                    .selectAll("text")
+                    .attr("transform", "rotate(-45)")
+                    .style("text-anchor", "end");
+
+                barSvg.append("g").call(d3.axisLeft(y));
+
+                // Add axis labels
+                barSvg.append("text")
+                    .attr("x", barWidth / 2)
+                    .attr("y", barHeight + 80) // Moved down further
+                    .attr("text-anchor", "middle")
+                    .text("Spell Name");
+
+                barSvg.append("text")
+                    .attr("transform", "rotate(-90)")
+                    .attr("x", -barHeight / 2)
+                    .attr("y", -margin.left + 20)
+                    .attr("text-anchor", "middle")
+                    .text("Spell Usage");
+            };
+
+            requestData();
+        </script>
+
+
+
 
         <!-- Spider graph -->
         <div>
