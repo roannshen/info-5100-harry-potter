@@ -55,7 +55,12 @@
 
                 const requestNodeData = async () => {
                     const megafile = await d3.csv('megafile.csv');
-                    console.log(megafile);
+                    //console.log(megafile);
+                    const finalizedNodes = await d3.csv('finalized_nodes.csv');
+                    var nodes = finalizedNodes;
+                    console.log(nodes)
+
+                    
 
                 };
 
