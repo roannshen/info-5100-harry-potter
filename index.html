@@ -125,7 +125,8 @@
                     .attr("cy", d => d.y);
 
                 label.attr("x", d => d.x + 10)
-                     .attr("y", d => d.y);
+                     .attr("y", d => d.y)
+                     .attr("stroke", "white");
             });
 
             simulation.force("link").links(links);
