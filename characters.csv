@@ -7,7 +7,7 @@ Character_ID,Character_Name,Species,Gender,House,Patronus,Wand (Wood),Wand (Core
 6,Severus Snape,Human,Male,Slytherin,Doe,,
 7,Minerva McGonagall,Human,Female,Gryffindor,Cat,Fir,Dragon Heartstring
 8,Horace Slughorn,Human,Male,Slytherin,,Cedar,Dragon Heartstring
-9,Voldemort,Human,Male,Slytherin,,Yew,Phoenix Feather
+9,Lord Voldemort,Human,Male,Slytherin,,Yew,Phoenix Feather
 10,Neville Longbottom,Human,Male,Gryffindor,,Cherry,Unicorn Hair
 11,Remus Lupin,Werewolf,Male,Gryffindor,Wolf,Cypress,Unicorn Hair
 12,Draco Malfoy,Human,Male,Slytherin,,Hawthorn,Unicorn Hair
@@ -22,7 +22,7 @@ Character_ID,Character_Name,Species,Gender,House,Patronus,Wand (Wood),Wand (Core
 21,Vernon Dursley,Human,Male,,,,
 22,Bellatrix Lestrange,Human,Female,Slytherin,,Walnut,Dragon Heartstring
 23,Lucius Malfoy,Human,Male,Slytherin,,Elm,Dragon Heartstring
-24,Tom Riddle,Human,Male,Slytherin,,Yew,Phoenix Feather
+24,Lord Voldemort,Human,Male,Slytherin,,Yew,Phoenix Feather
 25,Luna Lovegood,Human,Female,Ravenclaw,Hare,,
 26,Molly Weasley,Human,Female,Gryffindor,,,
 27,Dobby,House Elf,Male,,,,
@@ -161,7 +161,7 @@ Character_ID,Character_Name,Species,Gender,House,Patronus,Wand (Wood),Wand (Core
 160,Pixie,,,,,,
 161,Student,,,,,,
 162,Waiter,,,,,,
-163,Boy 2,,,,,,
+163,Dark Mark,,,,,,
 164,Crowd,,,,,,
 165,Gryffindors,,,,,,
 166,Professors,,,,,,
