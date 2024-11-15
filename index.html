@@ -239,8 +239,11 @@
         .style("left", `${event.pageX + 20}px`)
         .style("visibility", "visible");
 
-    // Highlight links, nodes, and traveling lines only for casters
+    // Change cursor for casters
     if (d.isCentral) {
+        d3.select("body")
+            .style("cursor", "url('HP_WandH.png'), auto");
+
         // Highlight links connected to this caster
         link.attr("stroke-opacity", l => (l.source.id === d.id || l.target.id === d.id ? 1 : 0.1));
 
@@ -253,6 +256,9 @@
         // Adjust traveling line opacity
         travelingLine.style("visibility", l => (l.source.id === d.id ? "visible" : "hidden"))
             .attr("stroke-opacity", l => (l.source.id === d.id ? 1 : 0.1));
+    } else {
+        d3.select("body")
+            .style("cursor", "url('HP_OnlyWand.png'), auto");
     }
 })
 .on("mousemove", (event) => {
@@ -261,14 +267,19 @@
         .style("left", `${event.pageX + 20}px`);
 })
 .on("mouseout", () => {
-    // Reset everything on mouseout
+    // Reset tooltip
     tooltip.style("visibility", "hidden");
+
+    // Reset all link, node, and traveling line opacities
     link.attr("stroke-opacity", 0.6);
     node.selectAll("circle, image").attr("opacity", 1);
-
-    // Reset traveling line visibility and opacity
     travelingLine.style("visibility", "hidden").attr("stroke-opacity", 1);
+
+    // Reset cursor to default
+    d3.select("body")
+        .style("cursor", "url('HP_OnlyWand.png'), auto");
 });
+
 
 
     
