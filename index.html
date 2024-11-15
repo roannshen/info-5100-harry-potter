@@ -54,7 +54,7 @@
     <style>
         body {
             margin: 0;
-            overflow: hidden;
+            /* overflow: hidden; */
         }
         .tooltip {
             position: absolute;
@@ -409,7 +409,11 @@ function animateSpells() {
 
         <!-- Spider graph -->
         <!-- <div> -->
+        <div>
             <svg id="spider-graph" height="600" width="600"></svg>
+            
+        </div>
+            
             <script>
                 const graph = d3.select('svg#spider-graph');
                 const height = graph.attr('height');
@@ -433,7 +437,6 @@ function animateSpells() {
                             'CD OOC': Number(spells[i]['CD OOC'])
                         });
                     }
-
 
                     console.log(data);
 
