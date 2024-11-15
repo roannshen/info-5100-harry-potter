@@ -70,72 +70,7 @@
 </head>
 <body>
     <svg id="graph" width="1200" height="800"></svg>
-<script>
-    const spellColors = {
-        "Avada Kedavra": "#28A745",
-        "Confringo": "#FF4500",
-        "Incendio": "#FF6347",
-        "Morsmordre": "#6EBB97",
-        "Sectumsempra": "#8B0000",
-        "Stupefy": "#E8913D",
-        "Crucio": "#48493E",
-        "Imperio": "#FBD748",
-        "Confundo": "#834F99",
-        "Expelliarmus": "#DA3832",
-        "Petrificus Totalus": "#4782B4",
-        "Obliviate": "#F5DEB3",
-        "Expecto patronum": "#8CCBF0"
-    };
-
-    const casterImages = {
-        "Bellatrix Lestrange": "character_node_svg/lestrange.svg",
-        "Lord Voldemort": "character_node_svg/voldemort.svg",
-        "Harry Potter": "character_node_svg/potter.svg",
-        "Hermione Granger": "character_node_svg/granger.svg",
-        "Neville Longbottom": "character_node_svg/longbottom.svg",
-        "Severus Snape": "character_node_svg/snape.svg",
-        "Draco Malfoy": "character_node_svg/malfoy.svg",
-        "Dolores Umbridge": "character_node_svg/umbridge.svg",
-        "Peter Pettigrew": "character_node_svg/pettigrew.svg",
-        "Ron Weasley": "character_node_svg/weasley.svg",
-        "Albus Dumbledore": "character_node_svg/dumbledore.svg",
-        "Dark Mark": "character_node_svg/dark_mark.png",
-        "Unnamed Character": "character_node_svg/unknown.svg" // Adding an image for unnamed character
-    };
-
-    const svg = d3.select("svg#graph");
-    const graphWidth = +svg.attr("width");
-    const graphHeight = +svg.attr("height");
-    const imageNodeRadius = 250;
-    const circleNodeRadius = 400;
-
-    Promise.all([
-        d3.csv("megafile.csv"), // Main data file
-        d3.csv("characters.csv") // List of valid character names
-    ]).then(([data, characters]) => {
-        const validCharacters = new Set(characters.map(d => d.Character_Name));
-
-        const castersSet = new Set(data.map(d => d.caster));
-
-        const nodes = [];
-        const nodeMap = new Map();
-        const links = [];
-
-        data.forEach(d => {
-            const { caster, victim, spell_name } = d;
-
-            const sourceNode = caster;
-            let targetNode
-
-            if (victim === "Dark Mark") {
-                targetNode = "Dark Mark";
-            } else {
-                targetNode = validCharacters.has(victim) ? victim : "Unnamed Character";
-            }
-          
-            <svg id="graph" width="800" height="800" margin-top: 20px;"></svg>
     <script>
-        // Define spell colors
         const spellColors = {
             "Avada Kedavra": "#28A745",
             "Confringo": "#FF4500",
@@ -151,223 +86,196 @@
             "Obliviate": "#F5DEB3",
             "Expecto patronum": "#8CCBF0"
         };
-
-        // Create SVG and dimensions
+    
+        const casterImages = {
+            "Bellatrix Lestrange": "character_node_svg/lestrange.svg",
+            "Lord Voldemort": "character_node_svg/voldemort.svg",
+            "Harry Potter": "character_node_svg/potter.svg",
+            "Hermione Granger": "character_node_svg/granger.svg",
+            "Neville Longbottom": "character_node_svg/longbottom.svg",
+            "Severus Snape": "character_node_svg/snape.svg",
+            "Draco Malfoy": "character_node_svg/malfoy.svg",
+            "Dolores Umbridge": "character_node_svg/umbridge.svg",
+            "Peter Pettigrew": "character_node_svg/pettigrew.svg",
+            "Ron Weasley": "character_node_svg/weasley.svg",
+            "Albus Dumbledore": "character_node_svg/dumbledore.svg",
+            "Dark Mark": "character_node_svg/dark_mark.png", // Specific image for Dark Mark
+            "Unnamed Character": "character_node_svg/unknown.svg" // Specific image for Unnamed Character
+        };
+    
         const svg = d3.select("svg#graph");
         const graphWidth = +svg.attr("width");
         const graphHeight = +svg.attr("height");
-
-        const simulation = d3.forceSimulation()
-            .force("link", d3.forceLink().id(d => d.id))
-            .force("charge", d3.forceManyBody().strength(-300))
-            .force("center", d3.forceCenter(graphWidth / 2, graphHeight / 2));
-
-        // Load the CSV file
-        d3.csv("megafile.csv").then(data => {
-            // Prepare nodes and links
-            const nodes = Array.from(new Set(data.flatMap(d => [d.caster, d.victim]))).map(id => ({ id }));
-            const links = data.map(d => ({
-                source: d.caster,
-                target: d.victim,
-                spell: d.spell_name
-            }));
-
-            // Draw links
+        const imageNodeRadius = 250;
+        const circleNodeRadius = 400;
+    
+        Promise.all([
+            d3.csv("megafile.csv"), // Main data file
+            d3.csv("characters.csv") // List of valid character names
+        ]).then(([data, characters]) => {
+            const validCharacters = new Set(characters.map(d => d.Character_Name));
+    
+            const castersSet = new Set(data.map(d => d.caster));
+    
+            const nodes = [];
+            const nodeMap = new Map();
+            const links = [];
+    
+            data.forEach(d => {
+                const { caster, victim, spell_name } = d;
+    
+                const sourceNode = caster;
+                let targetNode;
+    
+                // Separate "Dark Mark" as a distinct node
+                if (victim === "Dark Mark") {
+                    targetNode = "Dark Mark";
+                } else {
+                    targetNode = validCharacters.has(victim) ? victim : "Unnamed Character";
+                }
+    
+                if (!nodeMap.has(sourceNode)) {
+                    nodeMap.set(sourceNode, { id: sourceNode, isCentral: true });
+                    nodes.push(nodeMap.get(sourceNode));
+                }
+    
+                if (!nodeMap.has(targetNode)) {
+                    nodeMap.set(targetNode, { id: targetNode, isCentral: castersSet.has(targetNode) });
+                    nodes.push(nodeMap.get(targetNode));
+                }
+    
+                links.push({
+                    source: sourceNode,
+                    target: targetNode,
+                    spell: spell_name
+                });
+            });
+    
             const link = svg.append("g")
-                .attr("stroke", "#999")
-                .attr("stroke-opacity", 0.6)
+                .attr("class", "links")
+                .selectAll("path")
+                .data(links)
+                .join("path")
+                .attr("stroke", d => spellColors[d.spell] || "#999")
+                .attr("stroke-width", 2)
+                .attr("fill", "none");
+    
+            const travelingLine = svg.append("g")
+                .attr("class", "traveling-lines")
                 .selectAll("line")
                 .data(links)
                 .join("line")
-                .attr("stroke", d => spellColors[d.spell] || "#999")
-                .attr("stroke-width", 2);
-
-            // Draw nodes
+                .attr("stroke", d => {
+                    const baseColor = d3.color(spellColors[d.spell] || "#999");
+                    if (baseColor) {
+                        baseColor.r = Math.min(255, baseColor.r + 50);
+                        baseColor.g = Math.min(255, baseColor.g + 50);
+                        baseColor.b = Math.min(255, baseColor.b + 50);
+                    }
+                    return baseColor;
+                })
+                .attr("stroke-width", 3)
+                .attr("x1", -10)
+                .attr("y1", 0)
+                .attr("x2", 10)
+                .attr("y2", 0)
+                .style("visibility", "hidden");
+    
             const node = svg.append("g")
-                .attr("stroke", "#fff")
-                .attr("stroke-width", 1.5)
-                .selectAll("circle")
+                .attr("class", "nodes")
+                .selectAll("g")
                 .data(nodes)
-                .join("circle")
-                .attr("r", 6)
-                .attr("fill", "#69b3a2")
-                .call(drag(simulation));
-
-            // Add labels
-            const label = svg.append("g")
-                .selectAll("text")
-                .data(nodes)
-                .join("text")
-                .text(d => d.id)
-                .attr("x", 8)
-                .attr("y", "0.31em")
-                .style("font-size", "10px");
-
-            // Update positions on each tick
-            simulation.nodes(nodes).on("tick", () => {
-                link.attr("x1", d => d.source.x)
-                    .attr("y1", d => d.source.y)
-                    .attr("x2", d => d.target.x)
-                    .attr("y2", d => d.target.y);
-
-                node.attr("cx", d => d.x)
-                    .attr("cy", d => d.y);
-
-                label.attr("x", d => d.x + 10)
-                     .attr("y", d => d.y)
-                     .attr("stroke", "white");
-            });
-
-            if (!nodeMap.has(sourceNode)) {
-                nodeMap.set(sourceNode, { id: sourceNode, isCentral: true });
-                nodes.push(nodeMap.get(sourceNode));
-            }
-
-            if (!nodeMap.has(targetNode)) {
-                nodeMap.set(targetNode, { id: targetNode, isCentral: castersSet.has(targetNode) });
-                nodes.push(nodeMap.get(targetNode));
-            }
-
-            links.push({
-                source: sourceNode,
-                target: targetNode,
-                spell: spell_name
-            });
-        });
-
-        const link = svg.append("g")
-            .attr("class", "links")
-            .selectAll("path")
-            .data(links)
-            .join("path")
-            .attr("stroke", d => spellColors[d.spell] || "#999")
-            .attr("stroke-width", 2)
-            .attr("fill", "none");
-
-        const travelingLine = svg.append("g")
-            .attr("class", "traveling-lines")
-            .selectAll("line")
-            .data(links)
-            .join("line")
-            .attr("stroke", d => {
-                const baseColor = d3.color(spellColors[d.spell] || "#999");
-                if (baseColor) {
-                    baseColor.r = Math.min(255, baseColor.r + 50);
-                    baseColor.g = Math.min(255, baseColor.g + 50);
-                    baseColor.b = Math.min(255, baseColor.b + 50);
-                }
-                return baseColor;
-            })
-            .attr("stroke-width", 3)
-            .attr("x1", -10)
-            .attr("y1", 0)
-            .attr("x2", 10)
-            .attr("y2", 0)
-            .style("visibility", "hidden");
-
-        const node = svg.append("g")
-            .attr("class", "nodes")
-            .selectAll("g")
-            .data(nodes)
-            .join("g")
-            .each(function (d) {
-                const nodeGroup = d3.select(this);
-                if (casterImages[d.id]) {
-                    // If there is an image for this node (including Dark Mark and Unnamed Character)
-                    nodeGroup.append("image")
-                        .attr("xlink:href", casterImages[d.id])
-                        .attr("width", 60)
-                        .attr("height", 60)
-                        .attr("x", -30)
-                        .attr("y", -30);
-                } else {
-                    nodeGroup.append("circle")
-                        .attr("r", d.id === "Unnamed Character" ? 20 : 10)
-                        .attr("fill", "#D5C7FF")
-                        .attr("stroke", "#fff")
-                        .attr("stroke-width", 1.5);
-                }
-            });
-
-        const simulation = d3.forceSimulation(nodes)
-            .force("radial-image", d3.forceRadial(d => d.isCentral ? imageNodeRadius : circleNodeRadius, graphWidth / 2, graphHeight / 2).strength(1))
-            .force("collide", d3.forceCollide().radius(d => (d.id === "Unnamed Character" ? 40 : 25)).iterations(2))
-            .force("link", d3.forceLink(links).id(d => d.id).distance(150))
-            .force("charge", d3.forceManyBody().strength(-300))
-            .force("center", d3.forceCenter(graphWidth / 2, graphHeight / 2))
-            .on("tick", () => {
-                link.attr("d", d => {
-                    const dx = d.target.x - d.source.x;
-                    const dy = d.target.y - d.source.y;
-                    const dr = Math.sqrt(dx * dx + dy * dy);
-                    return `M${d.source.x},${d.source.y}A${dr},${dr} 0 0,1 ${d.target.x},${d.target.y}`;
+                .join("g")
+                .each(function (d) {
+                    const nodeGroup = d3.select(this);
+                    if (casterImages[d.id]) {
+                        // If there is an image for this node
+                        nodeGroup.append("image")
+                            .attr("xlink:href", casterImages[d.id])
+                            .attr("width", 60)
+                            .attr("height", 60)
+                            .attr("x", -30)
+                            .attr("y", -30);
+                    } else {
+                        nodeGroup.append("circle")
+                            .attr("r", d.id === "Unnamed Character" ? 20 : 10)
+                            .attr("fill", "#D5C7FF")
+                            .attr("stroke", "#fff")
+                            .attr("stroke-width", 1.5);
+                    }
                 });
-
-                node.attr("transform", d => `translate(${d.x},${d.y})`);
-            });
-
-        simulation.force("link").links(links);
-
-        // Tooltip for showing character names
-        const tooltip = d3.select("body")
-            .append("div")
-            .attr("class", "tooltip");
-
-            node.on("mouseover", (event, d) => {
+    
+            const simulation = d3.forceSimulation(nodes)
+                .force("radial-image", d3.forceRadial(d => d.isCentral ? imageNodeRadius : circleNodeRadius, graphWidth / 2, graphHeight / 2).strength(1))
+                .force("collide", d3.forceCollide().radius(d => (d.id === "Unnamed Character" ? 40 : 25)).iterations(2))
+                .force("link", d3.forceLink(links).id(d => d.id).distance(150))
+                .force("charge", d3.forceManyBody().strength(-300))
+                .force("center", d3.forceCenter(graphWidth / 2, graphHeight / 2))
+                .on("tick", () => {
+                    link.attr("d", d => {
+                        const dx = d.target.x - d.source.x;
+                        const dy = d.target.y - d.source.y;
+                        const dr = Math.sqrt(dx * dx + dy * dy);
+                        return `M${d.source.x},${d.source.y}A${dr},${dr} 0 0,1 ${d.target.x},${d.target.y}`;
+                    });
+    
+                    node.attr("transform", d => `translate(${d.x},${d.y})`);
+                });
+    
+            simulation.force("link").links(links);
+    
+            // Tooltip for showing character names
+            const tooltip = d3.select("body")
+                .append("div")
+                .attr("class", "tooltip");
+    
+                node.on("mouseover", (event, d) => {
+    // Always show the tooltip for all nodes (casters and victims)
     tooltip.html(d.id)
         .style("top", `${event.pageY - 20}px`)
         .style("left", `${event.pageX + 20}px`)
         .style("visibility", "visible");
 
-    // Highlight only for casters
+    // Highlight links and connected nodes only for casters
     if (d.isCentral) {
         // Highlight links connected to this caster
         link.attr("stroke-opacity", l => (l.source.id === d.id || l.target.id === d.id ? 1 : 0.1));
 
         // Highlight directly connected nodes
         node.selectAll("circle, image")
-            .attr("opacity", n => (n.id === d.id || links.some(l => l.source.id === d.id && l.target.id === n.id)) ? 1 : 0.3);
-
-        // Adjust traveling line opacity
-        travelingLine.attr("stroke-opacity", l => (l.source.id === d.id ? 1 : 0.1));
+            .attr("opacity", n => {
+                return (n.id === d.id || links.some(l => (l.source.id === d.id && l.target.id === n.id) || (l.target.id === d.id && l.source.id === n.id))) ? 1 : 0.3;
+            });
     }
 })
 .on("mousemove", (event) => {
+    // Update tooltip position
     tooltip.style("top", `${event.pageY - 20}px`)
         .style("left", `${event.pageX + 20}px`);
 })
 .on("mouseout", () => {
-    // Reset tooltip
+    // Reset everything on mouseout
     tooltip.style("visibility", "hidden");
-
-    // Reset all link, node, and traveling line opacities
     link.attr("stroke-opacity", 0.6);
     node.selectAll("circle, image").attr("opacity", 1);
-    travelingLine.attr("stroke-opacity", 1);
 });
 
-
-        function animateSpells() {
-            travelingLine
-                .style("visibility", "visible")
-                .attr("transform", d => `translate(${d.source.x},${d.source.y})`)
-                .transition()
-                .duration(1500)
-                .ease(d3.easeLinear)
-                .attrTween("transform", function (d) {
-                    const path = link.filter(l => l === d).node();
-                    const length = path.getTotalLength();
-                    return t => {
-                        const point = path.getPointAtLength(t * length);
-                       
-
-
-// Calculate the tangent angle at the current point
-const nextPoint = path.getPointAtLength((t * length) + 1); // Small offset for tangent
-const angle = Math.atan2(nextPoint.y - point.y, nextPoint.x - point.x) * (180 / Math.PI);
-
-// Transform the line to the current position and rotate to match the tangent
-return `translate(${point.x},${point.y}) rotate(${angle})`;
+    
+            function animateSpells() {
+                travelingLine
+                    .style("visibility", "visible")
+                    .attr("transform", d => `translate(${d.source.x},${d.source.y})`)
+                    .transition()
+                    .duration(1500)
+                    .ease(d3.easeLinear)
+                    .attrTween("transform", function (d) {
+                        const path = link.filter(l => l === d).node();
+                        const length = path.getTotalLength();
+                        return t => {
+                            const point = path.getPointAtLength(t * length);
+                            const nextPoint = path.getPointAtLength((t * length) + 1);
+                            const angle = Math.atan2(nextPoint.y - point.y, nextPoint.x - point.x) * (180 / Math.PI);
+                            return `translate(${point.x},${point.y}) rotate(${angle})`;
                         };
                     })
                     .on("end", function () {
@@ -377,8 +285,8 @@ return `translate(${point.x},${point.y}) rotate(${angle})`;
     
             setInterval(animateSpells, 2000);
         });
-    </script>
-    
+    </script>    
+
 
          </div>
 
