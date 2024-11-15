@@ -100,7 +100,6 @@
             "Ron Weasley": "character_node_svg/weasley.svg",
             "Albus Dumbledore": "character_node_svg/dumbledore.svg",
             "Dark Mark": "character_node_svg/dark_mark.png", // Specific image for Dark Mark
-            "Unnamed Character": "character_node_svg/unknown.svg" // Specific image for Unnamed Character
         };
     
         const svg = d3.select("svg#graph");
@@ -183,29 +182,31 @@
                 .attr("y2", 0)
                 .style("visibility", "hidden");
     
-            const node = svg.append("g")
-                .attr("class", "nodes")
-                .selectAll("g")
-                .data(nodes)
-                .join("g")
-                .each(function (d) {
-                    const nodeGroup = d3.select(this);
-                    if (casterImages[d.id]) {
-                        // If there is an image for this node
-                        nodeGroup.append("image")
-                            .attr("xlink:href", casterImages[d.id])
-                            .attr("width", 60)
-                            .attr("height", 60)
-                            .attr("x", -30)
-                            .attr("y", -30);
-                    } else {
-                        nodeGroup.append("circle")
-                            .attr("r", 5)
-                            .attr("fill", "#D5C7FF")
-                            .attr("stroke", "#fff")
-                            .attr("stroke-width", 1.5);
-                    }
-                });
+                const node = svg.append("g")
+    .attr("class", "nodes")
+    .selectAll("g")
+    .data(nodes)
+    .join("g")
+    .each(function (d) {
+        const nodeGroup = d3.select(this);
+        if (casterImages[d.id]) {
+            // If there is an image for this node
+            nodeGroup.append("image")
+                .attr("xlink:href", casterImages[d.id])
+                .attr("width", 60)
+                .attr("height", 60)
+                .attr("x", -30)
+                .attr("y", -30);
+        } else {
+            nodeGroup.append("image")
+                .attr("xlink:href", "character_node_svg/unnamed_3.svg")
+                .attr("width", 35)
+                .attr("height", 35)
+                .attr("x", -15)
+                .attr("y", -15);
+        }
+    });
+
     
             const simulation = d3.forceSimulation(nodes)
                 .force("radial-image", d3.forceRadial(d => d.isCentral ? imageNodeRadius : circleNodeRadius, graphWidth / 2, graphHeight / 2).strength(1))
