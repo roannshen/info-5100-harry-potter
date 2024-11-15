@@ -194,13 +194,13 @@
                         // If there is an image for this node
                         nodeGroup.append("image")
                             .attr("xlink:href", casterImages[d.id])
-                            .attr("width", 80)
-                            .attr("height", 80)
+                            .attr("width", 60)
+                            .attr("height", 60)
                             .attr("x", -30)
                             .attr("y", -30);
                     } else {
                         nodeGroup.append("circle")
-                            .attr("r", d.id === "Unnamed Character" ? 20 : 10)
+                            .attr("r", 5)
                             .attr("fill", "#D5C7FF")
                             .attr("stroke", "#fff")
                             .attr("stroke-width", 1.5);
