@@ -11,7 +11,7 @@
                 background-size: cover; 
                 background-repeat: no-repeat;
                 background-position: center;
-
+                height: 100%;
             }
 
             h1 {
@@ -106,8 +106,10 @@
         const svg = d3.select("svg#graph");
         const graphWidth = +svg.attr("width");
         const graphHeight = +svg.attr("height");
-        const imageNodeRadius = 250;
-        const circleNodeRadius = 400;
+        //const imageNodeRadius = 250;
+        //const circleNodeRadius = 400;
+        const imageNodeRadius = 200;
+        const circleNodeRadius = 300;
     
         Promise.all([
             d3.csv("megafile.csv"), // Main data file
