@@ -498,7 +498,8 @@ function resetCurvePaths() {
                         .on('change', handleCheckboxChange)
                         .style('accent-color', d => spellColors[d])
                         .style('height', '25px')
-                        .style('width', '25px');
+                        .style('width', '25px')
+                        .style('cursor', "url('HP_WandH.png'), auto");
 
                     checkboxes.append('label')
                         .attr('for', d => d)
@@ -511,10 +512,12 @@ function resetCurvePaths() {
                         .style('text-align', 'center')
                         .style('padding', '5px 10px')
                         .style('border-radius', '3px')
-                        .style('background-color', d => spellColors[d]);
+                        .style('background-color', d => spellColors[d])
+                        .style('cursor', "url('HP_WandH.png'), auto");
                 }
 
                 function handleCheckboxChange(event) {
+                    d3.select("body").style("cursor", "url('HP_WandH.png'), auto");
                     const spellName = event.target.value;
 
                     if (event.target.checked) {
