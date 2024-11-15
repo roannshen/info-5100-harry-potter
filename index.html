@@ -133,7 +133,8 @@
             "Peter Pettigrew": "character_node_svg/pettigrew.svg",
             "Ron Weasley": "character_node_svg/weasley.svg",
             "Albus Dumbledore": "character_node_svg/dumbledore.svg",
-            "Dark Mark": "character_node_svg/dark_mark.gif", // Specific image for Dark Mark
+            "Dark Mark": "character_node_svg/dark_mark.gif",
+            "Unnamed Character": "character_node_svg/unknown_1.svg"
         };
     
         const svg = d3.select("svg#graph");
@@ -468,53 +469,50 @@ function resetCurvePaths() {
                 }
 
                 function createCheckboxes(spellNames) {
-                    const checkboxesContainer = d3.select('#checkboxes-container');
-                    checkboxesContainer.selectAll('*').remove(); 
+    const checkboxesContainer = d3.select('#checkboxes-container');
+    checkboxesContainer.selectAll('*').remove();
 
-                    // checkboxesContainer.append('div')
-                    //                     .attr('class', 'section-title')
-                    //                     .style('text-align', 'center')
-                    //                     .style('font-size', '18px')
-                    //                     .style('font-weight', 'bold')
-                    //                     .style('margin-bottom', '15px')
-                    //                     .style('color', "white")
-                    //                     .style('justify-text', 'left')
-                    //                     .text('Spell Stats');
+    const checkboxes = checkboxesContainer.selectAll('div')
+        .data(spellNames)
+        .enter()
+        .append('div')
+        .attr('class', 'checkbox-item')
+        .style('padding', '10px 15px')
+        .style('display', 'flex')
+        .style('align-items', 'center');
 
-                    const checkboxes = checkboxesContainer.selectAll('div')
-                        .data(spellNames)
-                        .enter()
-                        .append('div')
-                        .attr('class', 'checkbox-item')
-                        .style('padding', '10px 15px')
-                        .style('display', 'flex')
-                        .style('align-items', 'center');
+    checkboxes.append('input')
+        .attr('type', 'checkbox')
+        .attr('id', d => d)
+        .attr('value', d => d)
+        .property('checked', (d, i) => i === 0 || i === 1)
+        .on('change', handleCheckboxChange)
+        .style('accent-color', d => spellColors[d])
+        .style('height', '25px')
+        .style('width', '25px')
+        .style('cursor', "url('HP_WandH.png'), auto");
 
-                    checkboxes.append('input')
-                        .attr('type', 'checkbox')
-                        .attr('id', d => d)
-                        .attr('value', d => d)
-                        .property('checked', (d, i) => i === 0 || i === 1) 
-                        .on('change', handleCheckboxChange)
-                        .style('accent-color', d => spellColors[d])
-                        .style('height', '25px')
-                        .style('width', '25px')
-                        .style('cursor', "url('HP_WandH.png'), auto");
-
-                    checkboxes.append('label')
-                        .attr('for', d => d)
-                        .text(d => d)
-                        .style('color', 'black')
-                        .style('font-family', 'serif')
-                        .style('align-text', 'center')
-                        .style('margin-left', '10px')
-                        .style('font-size', '14pt')
-                        .style('text-align', 'center')
-                        .style('padding', '5px 10px')
-                        .style('border-radius', '3px')
-                        .style('background-color', d => spellColors[d])
-                        .style('cursor', "url('HP_WandH.png'), auto");
-                }
+    checkboxes.append('label')
+    .attr('for', d => d)
+        .text(d => d)
+        .style('color', 'white') // Text color on top of the image
+        .style('font-family', 'serif')
+        .style('font-size', '14pt')
+        .style('padding', '10px 20px') // Adjust padding for better fit
+        .style('width', '150px') // Set width to match the image
+        .style('height', '50px') // Set height to match the image
+        .style('text-align', 'center')
+        .style('line-height', '30px') // Vertically center the text
+        .style('display', 'flex')
+        .style('align-items', 'center')
+        .style('justify-content', 'center')
+        .style('border-radius', '5px') // Adjust border radius if needed
+        .style('background-image', d => `url('text.svg')`) // Set background image
+        .style('background-size', 'contain') // Contain the image within the label
+        .style('background-repeat', 'no-repeat') // Prevent repetition
+        .style('background-position', 'center') // Center the image
+        .style('cursor', "url('HP_WandH.png'), auto");
+}
 
                 function handleCheckboxChange(event) {
                     d3.select("body").style("cursor", "url('HP_WandH.png'), auto");
