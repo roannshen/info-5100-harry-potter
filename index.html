@@ -93,6 +93,7 @@
 
         #checkboxes-container {
             margin-left: 20px;
+            margin-right: 50px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -161,7 +162,7 @@
     </style>
 </head>
 <body>
-<div id="graphs-container" style="display: flex; flex-wrap: wrap; gap: 200px;">
+<div id="graphs-container" style="display: flex; gap: 200px;">
     <!-- Node Graph Section with Legend -->
     <div id="legend-graph" style="display: flex; gap: 20px; flex: 1; min-width: 600px;">
         <!-- Legend Section -->
@@ -185,16 +186,29 @@
         </div>
 
         <!-- Node Graph -->
-        <div id="node-graph" style="flex: 1;">
+        <div id="node-graph" style="flex: 1; padding-left: 2.5em;">
             <svg id="graph" width="1000" height="800"></svg>
         </div>
     </div>
 
-    <!-- Bar Graph Section -->
-    <div id="bar-graph-container" style="flex: 1; min-width: 600px;">
-        <svg id="bar-graph" height="600" width="600"></svg>
+    <!-- Container for Spider Graph and Bar Graph -->
+    <div id="right-graphs-container" style="display: flex; flex-direction: column; gap: 20px; flex: 1; min-width: 600px;">
+        <!-- Spider Graph Section -->
+        <div class="spider-section">
+            <h2 id="spider-stats">Spell Stats</h2>
+            <div class="spider-container">
+                <svg id="spider-graph" height="400" width="600"></svg>
+                <div id="checkboxes-container"></div>
+            </div>
+        </div>
+
+        <!-- Bar Graph Section -->
+        <div id="bar-graph-container" style="min-width: 600px;">
+            <svg id="bar-graph" height="600" width="600"></svg>
+        </div>
     </div>
 </div>
+    
 
     <script>
         const spellColors = {
@@ -232,8 +246,6 @@
         const svg = d3.select("svg#graph");
         const graphWidth = +svg.attr("width");
         const graphHeight = +svg.attr("height");
-        //const imageNodeRadius = 250;
-        //const circleNodeRadius = 400;
         const imageNodeRadius = 200;
         const circleNodeRadius = 300;
     
@@ -441,7 +453,7 @@ function resetCurvePaths() {
          </div>
 
         <!-- Bar Graph -->
-        <div class="stacked-graphs">
+        <!-- <div class="stacked-graphs"> -->
         <!-- <svg id="bar-graph" height="600" width="600"></svg> -->
         <script>
             // Load the CSV file
@@ -539,14 +551,14 @@ function resetCurvePaths() {
         </script>
 
         <!-- Spider graph -->
-        <div class="spider-section">
+        <!-- <div class="spider-section">
             <h2 id="spider-stats">Spell Stats</h2>
             <div class="spider-container"><svg id="spider-graph" height="600" width="600"></svg>
                 <div id="checkboxes-container"></div>
             
             </div>
-        </div>
-        </div>
+        </div> -->
+        <!-- </div> -->
             
             <script>
                 const maxSelected = 8;
@@ -562,50 +574,50 @@ function resetCurvePaths() {
                 }
 
                 function createCheckboxes(spellNames) {
-    const checkboxesContainer = d3.select('#checkboxes-container');
-    checkboxesContainer.selectAll('*').remove();
+                    const checkboxesContainer = d3.select('#checkboxes-container');
+                    checkboxesContainer.selectAll('*').remove();
 
-    const checkboxes = checkboxesContainer.selectAll('div')
-        .data(spellNames)
-        .enter()
-        .append('div')
-        .attr('class', 'checkbox-item')
-        .style('padding', '10px 15px')
-        .style('display', 'flex')
-        .style('align-items', 'center');
+                    const checkboxes = checkboxesContainer.selectAll('div')
+                        .data(spellNames)
+                        .enter()
+                        .append('div')
+                        .attr('class', 'checkbox-item')
+                        .style('padding', '10px 15px')
+                        .style('display', 'flex')
+                        .style('align-items', 'center');
 
-    checkboxes.append('input')
-        .attr('type', 'checkbox')
-        .attr('id', d => d)
-        .attr('value', d => d)
-        .property('checked', (d, i) => i === 0 || i === 1)
-        .on('change', handleCheckboxChange)
-        .style('accent-color', d => spellColors[d])
-        .style('height', '25px')
-        .style('width', '25px')
-        .style('cursor', "url('HP_WandH.png'), auto");
+                    checkboxes.append('input')
+                        .attr('type', 'checkbox')
+                        .attr('id', d => d)
+                        .attr('value', d => d)
+                        .property('checked', (d, i) => i === 0 || i === 1)
+                        .on('change', handleCheckboxChange)
+                        .style('accent-color', d => spellColors[d])
+                        .style('height', '25px')
+                        .style('width', '25px')
+                        .style('cursor', "url('HP_WandH.png'), auto");
 
-    checkboxes.append('label')
-    .attr('for', d => d)
-        .text(d => d)
-        .style('color', 'white') // Text color on top of the image
-        .style('font-family', 'serif')
-        .style('font-size', '14pt')
-        .style('padding', '10px 20px') // Adjust padding for better fit
-        .style('width', '150px') // Set width to match the image
-        .style('height', '50px') // Set height to match the image
-        .style('text-align', 'center')
-        .style('line-height', '30px') // Vertically center the text
-        .style('display', 'flex')
-        .style('align-items', 'center')
-        .style('justify-content', 'center')
-        .style('border-radius', '5px') // Adjust border radius if needed
-        .style('background-image', d => `url('text.svg')`) // Set background image
-        .style('background-size', 'contain') // Contain the image within the label
-        .style('background-repeat', 'no-repeat') // Prevent repetition
-        .style('background-position', 'center') // Center the image
-        .style('cursor', "url('HP_WandH.png'), auto");
-}
+                        checkboxes.append('label')
+                        .attr('for', d => d)
+                            .text(d => d)
+                            .style('color', 'white') // Text color on top of the image
+                            .style('font-family', 'serif')
+                            .style('font-size', '10pt')
+                            // .style('padding', '10px 10px') // Adjust padding for better fit
+                            .style('width', '100px') // Set width to match the image
+                            .style('height', '50px') // Set height to match the image
+                            .style('text-align', 'center')
+                            .style('line-height', '30px') // Vertically center the text
+                            .style('display', 'flex')
+                            .style('align-items', 'center')
+                            .style('justify-content', 'center')
+                            .style('border-radius', '5px') // Adjust border radius if needed
+                            .style('background-image', d => `url('text.svg')`) // Set background image
+                            .style('background-size', 'contain') // Contain the image within the label
+                            .style('background-repeat', 'no-repeat') // Prevent repetition
+                            .style('background-position', 'center') // Center the image
+                            .style('cursor', "url('HP_WandH.png'), auto");
+                    }
 
                 function handleCheckboxChange(event) {
                     d3.select("body").style("cursor", "url('HP_WandH.png'), auto");
@@ -658,13 +670,13 @@ function resetCurvePaths() {
                         }
                     }
 
-                    let width = 600;
-                    let height = 600;
+                    let width = 400;
+                    let height = 400;
                     let svg = d3.select('svg#spider-graph');
 
                     let radialScale = d3.scaleLinear()
                         .domain([0, 1])
-                        .range([0, 250]);
+                        .range([0, 125]);
                     let ticks = [.2, .4, .6, .8, 1.0];
 
                     // Remove any existing circles, labels, lines, and paths
@@ -675,6 +687,7 @@ function resetCurvePaths() {
                     svg.selectAll("path").remove();
 
                     // Draw circles for the radial grid
+                    // outer location
                     svg.selectAll("circle")
                         .data(ticks)
                         .enter()
