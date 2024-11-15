@@ -239,7 +239,7 @@
         .style("left", `${event.pageX + 20}px`)
         .style("visibility", "visible");
 
-    // Highlight links and connected nodes only for casters
+    // Highlight links, nodes, and traveling lines only for casters
     if (d.isCentral) {
         // Highlight links connected to this caster
         link.attr("stroke-opacity", l => (l.source.id === d.id || l.target.id === d.id ? 1 : 0.1));
@@ -249,6 +249,10 @@
             .attr("opacity", n => {
                 return (n.id === d.id || links.some(l => (l.source.id === d.id && l.target.id === n.id) || (l.target.id === d.id && l.source.id === n.id))) ? 1 : 0.3;
             });
+
+        // Adjust traveling line opacity
+        travelingLine.style("visibility", l => (l.source.id === d.id ? "visible" : "hidden"))
+            .attr("stroke-opacity", l => (l.source.id === d.id ? 1 : 0.1));
     }
 })
 .on("mousemove", (event) => {
@@ -261,30 +265,35 @@
     tooltip.style("visibility", "hidden");
     link.attr("stroke-opacity", 0.6);
     node.selectAll("circle, image").attr("opacity", 1);
+
+    // Reset traveling line visibility and opacity
+    travelingLine.style("visibility", "hidden").attr("stroke-opacity", 1);
 });
 
+
     
-            function animateSpells() {
-                travelingLine
-                    .style("visibility", "visible")
-                    .attr("transform", d => `translate(${d.source.x},${d.source.y})`)
-                    .transition()
-                    .duration(1500)
-                    .ease(d3.easeLinear)
-                    .attrTween("transform", function (d) {
-                        const path = link.filter(l => l === d).node();
-                        const length = path.getTotalLength();
-                        return t => {
-                            const point = path.getPointAtLength(t * length);
-                            const nextPoint = path.getPointAtLength((t * length) + 1);
-                            const angle = Math.atan2(nextPoint.y - point.y, nextPoint.x - point.x) * (180 / Math.PI);
-                            return `translate(${point.x},${point.y}) rotate(${angle})`;
-                        };
-                    })
-                    .on("end", function () {
-                        d3.select(this).style("visibility", "hidden");
-                    });
-            }
+function animateSpells() {
+    travelingLine
+        .style("visibility", "visible")
+        .attr("transform", d => `translate(${d.source.x},${d.source.y})`)
+        .transition()
+        .duration(1500)
+        .ease(d3.easeLinear)
+        .attrTween("transform", function (d) {
+            const path = link.filter(l => l === d).node();
+            const length = path.getTotalLength();
+            return t => {
+                const point = path.getPointAtLength(t * length);
+                const nextPoint = path.getPointAtLength((t * length) + 1);
+                const angle = Math.atan2(nextPoint.y - point.y, nextPoint.x - point.x) * (180 / Math.PI);
+                return `translate(${point.x},${point.y}) rotate(${angle})`;
+            };
+        })
+        .on("end", function () {
+            d3.select(this).style("visibility", "hidden");
+        });
+}
+
     
             setInterval(animateSpells, 2000);
         });
