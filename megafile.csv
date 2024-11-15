@@ -94,7 +94,7 @@
 92,Peter Pettigrew,Cedric Diggory,Successful,Avada Kedavra,Gryffindor,Hufflepuff
 93,Bellatrix Lestrange,Fox,Successful,Avada Kedavra,Slytherin,
 94,Severus Snape,Albus Dumbledore,Successful,Avada Kedavra,Slytherin,Gryffindor
-95,Bellatrix Lestrange,Severus Snape,Successful,Avada Kedavra,Slytherin,Slytherin
+95,Bellatrix Lestrange,Sirius Black,Successful,Avada Kedavra,Slytherin,Gryffindor
 96,Bellatrix Lestrange,Ginny Weasley,Unsuccessful,Avada Kedavra,Slytherin,Gryffindor
 97,Peter Pettigrew,Jacob's sibling,Successful,Obliviate,Gryffindor,
 98,Hermione Granger,Mrs Granger,Successful,Obliviate,Gryffindor,
@@ -173,3 +173,4 @@
 171,Albus Dumbledore,Phoenix,Successful,Expecto Patronum,Gryffindor,
 172,Severus Snape,Doe,Successful,Expecto Patronum,Slytherin,
 173,Dolores Umbridge,Cat,Successful,Expecto Patronum,Slytherin,
+174,Lord Voldemort,Severus Snape,Successful,Avada Kedavra,Slytherin,Slytherin

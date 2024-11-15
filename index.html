@@ -14,7 +14,7 @@
                 background-size: cover; 
                 background-repeat: no-repeat;
                 background-position: center;
-
+                height: 100%;
             }
 
             h1 {
@@ -120,7 +120,7 @@
             "Obliviate": "#F5DEB3",
             "Expecto patronum": "#8CCBF0"
         };
-    
+
         const casterImages = {
             "Bellatrix Lestrange": "character_node_svg/lestrange.svg",
             "Lord Voldemort": "character_node_svg/voldemort.svg",
@@ -133,15 +133,16 @@
             "Peter Pettigrew": "character_node_svg/pettigrew.svg",
             "Ron Weasley": "character_node_svg/weasley.svg",
             "Albus Dumbledore": "character_node_svg/dumbledore.svg",
-            "Dark Mark": "character_node_svg/dark_mark.png", // Specific image for Dark Mark
-            "Unnamed Character": "character_node_svg/unknown.svg" // Specific image for Unnamed Character
+            "Dark Mark": "character_node_svg/dark_mark.gif", // Specific image for Dark Mark
         };
     
         const svg = d3.select("svg#graph");
         const graphWidth = +svg.attr("width");
         const graphHeight = +svg.attr("height");
-        const imageNodeRadius = 250;
-        const circleNodeRadius = 400;
+        //const imageNodeRadius = 250;
+        //const circleNodeRadius = 400;
+        const imageNodeRadius = 200;
+        const circleNodeRadius = 300;
     
         Promise.all([
             d3.csv("megafile.csv"), // Main data file
@@ -215,29 +216,31 @@
                 .attr("y2", 0)
                 .style("visibility", "hidden");
     
-            const node = svg.append("g")
-                .attr("class", "nodes")
-                .selectAll("g")
-                .data(nodes)
-                .join("g")
-                .each(function (d) {
-                    const nodeGroup = d3.select(this);
-                    if (casterImages[d.id]) {
-                        // If there is an image for this node
-                        nodeGroup.append("image")
-                            .attr("xlink:href", casterImages[d.id])
-                            .attr("width", 80)
-                            .attr("height", 80)
-                            .attr("x", -30)
-                            .attr("y", -30);
-                    } else {
-                        nodeGroup.append("circle")
-                            .attr("r", d.id === "Unnamed Character" ? 20 : 10)
-                            .attr("fill", "#D5C7FF")
-                            .attr("stroke", "#fff")
-                            .attr("stroke-width", 1.5);
-                    }
-                });
+                const node = svg.append("g")
+    .attr("class", "nodes")
+    .selectAll("g")
+    .data(nodes)
+    .join("g")
+    .each(function (d) {
+        const nodeGroup = d3.select(this);
+        if (casterImages[d.id]) {
+            // If there is an image for this node
+            nodeGroup.append("image")
+                .attr("xlink:href", casterImages[d.id])
+                .attr("width", 60)
+                .attr("height", 60)
+                .attr("x", -30)
+                .attr("y", -30);
+        } else {
+            nodeGroup.append("image")
+                .attr("xlink:href", "character_node_svg/unnamed_3.svg")
+                .attr("width", 35)
+                .attr("height", 35)
+                .attr("x", -15)
+                .attr("y", -15);
+        }
+    });
+
     
             const simulation = d3.forceSimulation(nodes)
                 .force("radial-image", d3.forceRadial(d => d.isCentral ? imageNodeRadius : circleNodeRadius, graphWidth / 2, graphHeight / 2).strength(1))
@@ -273,69 +276,59 @@
         .style("left", `${event.pageX + 20}px`)
         .style("visibility", "visible");
 
-    // Change cursor for casters
     if (d.isCentral) {
-        d3.select("body")
-            .style("cursor", "url('HP_WandH.png'), auto");
+        d3.select("body").style("cursor", "url('HP_WandH.png'), auto");
 
         // Highlight links connected to this caster
         link.attr("stroke-opacity", l => (l.source.id === d.id || l.target.id === d.id ? 1 : 0.1));
 
         // Highlight directly connected nodes
-        node.selectAll("circle, image")
-            .attr("opacity", n => {
-                return (n.id === d.id || links.some(l => (l.source.id === d.id && l.target.id === n.id) || (l.target.id === d.id && l.source.id === n.id))) ? 1 : 0.3;
-            });
+        node.selectAll("circle, image").attr("opacity", n => {
+            return (n.id === d.id || links.some(l => (l.source.id === d.id && l.target.id === n.id) || (l.target.id === d.id && l.source.id === n.id))) ? 1 : 0.3;
+        });
 
-        // Adjust traveling line opacity
-        travelingLine.style("visibility", l => (l.source.id === d.id ? "visible" : "hidden"))
-            .attr("stroke-opacity", l => (l.source.id === d.id ? 1 : 0.1));
+        // Animate curve paths for this caster (both outgoing and incoming)
+        animateCurvePaths(d.id);
     } else {
-        d3.select("body")
-            .style("cursor", "url('HP_OnlyWand.png'), auto");
+        d3.select("body").style("cursor", "url('HP_OnlyWand.png'), auto");
     }
 })
 .on("mousemove", (event) => {
-    // Update tooltip position
-    tooltip.style("top", `${event.pageY - 20}px`)
-        .style("left", `${event.pageX + 20}px`);
+    tooltip.style("top", `${event.pageY - 20}px`).style("left", `${event.pageX + 20}px`);
 })
 .on("mouseout", () => {
-    // Reset tooltip
     tooltip.style("visibility", "hidden");
-
-    // Reset all link, node, and traveling line opacities
     link.attr("stroke-opacity", 0.6);
     node.selectAll("circle, image").attr("opacity", 1);
-    travelingLine.style("visibility", "hidden").attr("stroke-opacity", 1);
-
-    // Reset cursor to default
-    d3.select("body")
-        .style("cursor", "url('HP_OnlyWand.png'), auto");
+    resetCurvePaths();
+    d3.select("body").style("cursor", "url('HP_OnlyWand.png'), auto");
 });
 
-    
-function animateSpells() {
-    travelingLine
-        .style("visibility", "visible")
-        .attr("transform", d => `translate(${d.source.x},${d.source.y})`)
-        .transition()
-        .duration(1500)
-        .ease(d3.easeLinear)
-        .attrTween("transform", function (d) {
-            const path = link.filter(l => l === d).node();
-            const length = path.getTotalLength();
-            return t => {
-                const point = path.getPointAtLength(t * length);
-                const nextPoint = path.getPointAtLength((t * length) + 1);
-                const angle = Math.atan2(nextPoint.y - point.y, nextPoint.x - point.x) * (180 / Math.PI);
-                return `translate(${point.x},${point.y}) rotate(${angle})`;
-            };
-        })
-        .on("end", function () {
-            d3.select(this).style("visibility", "hidden");
-        });
+// Function to animate the curve paths (both outgoing and incoming)
+function animateCurvePaths(casterId) {
+    // Filter links where the caster is the source or the target
+    const casterLinks = links.filter(l => l.source.id === casterId || l.target.id === casterId);
+
+    casterLinks.forEach(linkData => {
+        const path = link.filter(d => d === linkData); // Select the specific path
+        const pathElement = path.node();
+        const length = pathElement.getTotalLength();
+
+        // Set up the stroke-dasharray and stroke-dashoffset for animation
+        path.attr("stroke-dasharray", `${length} ${length}`)
+            .attr("stroke-dashoffset", length)
+            .transition()
+            .duration(1500)
+            .ease(d3.easeLinear)
+            .attr("stroke-dashoffset", 0);
+    });
 }
+
+// Function to reset all curve paths
+function resetCurvePaths() {
+    link.attr("stroke-dasharray", null).attr("stroke-dashoffset", null);
+}
+
 
     
             setInterval(animateSpells, 2000);

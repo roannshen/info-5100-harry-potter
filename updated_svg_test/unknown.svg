@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 20 20">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+      }
+
+      .cls-2 {
+        fill: url(#linear-gradient-2);
+      }
+
+      .cls-3 {
+        fill: url(#linear-gradient);
+      }
+
+      .cls-4 {
+        fill: #f3bd52;
+      }
+    </style>
+    <linearGradient id="linear-gradient" x1="6.58" y1="6.51" x2="13.42" y2="6.51" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#6a2b1a"/>
+      <stop offset=".32" stop-color="#582011"/>
+      <stop offset=".64" stop-color="#47190f"/>
+      <stop offset=".9" stop-color="#231e16"/>
+      <stop offset="1" stop-color="#1a1712"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-2" x1="3.57" y1="14.27" x2="16.43" y2="14.27" xlink:href="#linear-gradient"/>
+  </defs>
+  <g id="Layer_1-2" data-name="Layer 1">
+    <g>
+      <path class="cls-4" d="M20,9.5c0,3.44-1.92,6.46-4.81,8.12-1.51.88-3.29,1.38-5.19,1.38-2.21,0-4.25-.68-5.9-1.84C1.61,15.45,0,12.65,0,9.5,0,4.26,4.48,0,10,0s10,4.26,10,9.5Z"/>
+      <ellipse class="cls-3" cx="10" cy="6.51" rx="3.42" ry="3.26"/>
+      <path class="cls-1" d="M15.19,17.63c-1.15,1.43-3.13,2.37-5.38,2.37-2.49,0-4.64-1.15-5.71-2.82,1.65,1.15,3.69,1.84,5.9,1.84,1.9,0,3.68-.5,5.19-1.38Z"/>
+      <path class="cls-2" d="M16.43,14.77c0,1.05-.38,2.04-1.05,2.86-1.51.88-3.29,1.38-5.19,1.38-2.21,0-4.25-.68-5.9-1.84-.46-.72-.72-1.54-.72-2.41,0-2.89,2.88-5.23,6.43-5.23s6.43,2.34,6.43,5.23Z"/>
+    </g>
+  </g>
+</svg>
