@@ -2,10 +2,13 @@
     <head>
         <script src="https://d3js.org/d3.v7.min.js"></script>
         <link href="https://fonts.cdnfonts.com/css/harry-p" rel="stylesheet">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Baskervville:ital@0;1&display=swap" rel="stylesheet">
 
         <style>
             body {
-                font-family: sans-serif;
+                font-family: "Baskervville", serif;
                 cursor: url('HP_OnlyWand.png'), auto;
                 background-image: url('HP_Back.png');
                 background-size: cover; 
@@ -37,6 +40,24 @@
                 fill: white; 
             }
 
+            .spider-container {
+                display: flex;
+            }
+
+            .checkboxes-container {
+                cursor: url('HP_OnlyWand.png'), auto;
+                color: white;
+                font-size: 14pt;
+            }
+
+            .checkboxes-container p {
+                color: white;
+                font-size: 14pt;
+            }
+
+            input, label {
+                cursor: url('HP_OnlyWand.png'), auto;
+            }
         </style>
     </head>
     <body>
@@ -50,10 +71,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://d3js.org/d3.v7.min.js"></script>
-    <title>Network Graph</title>
+    <title>Harry Potter Network Graph</title>
     <style>
         body {
             margin: 0;
+            background-attachment: fixed;
             /* overflow: hidden; */
         }
         .tooltip {
@@ -65,6 +87,18 @@
             box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
             font-size: 12px;
             visibility: hidden;
+        }
+
+        #checkboxes-container {
+            margin-left: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        #spider-stats {
+            color: white;
+            margin-left: 35px;
         }
     </style>
 </head>
@@ -280,8 +314,6 @@
         .style("cursor", "url('HP_OnlyWand.png'), auto");
 });
 
-
-
     
 function animateSpells() {
     travelingLine
@@ -408,76 +440,166 @@ function animateSpells() {
         </script>
 
         <!-- Spider graph -->
-        <!-- <div> -->
-        <div>
-            <svg id="spider-graph" height="600" width="600"></svg>
+        <div class="spider-section">
+            <h2 id="spider-stats">Spell Stats</h2>
+            <div class="spider-container"><svg id="spider-graph" height="600" width="600"></svg>
+                <div id="checkboxes-container"></div>
             
+            </div>
         </div>
             
             <script>
-                const graph = d3.select('svg#spider-graph');
-                const height = graph.attr('height');
-                const width = graph.attr('width');
+                const maxSelected = 8;
+                let selectedSpells = ['Avada Kedavra', 'Confringo'];
+                const spellsNames = ['Avada Kedavra', 'Confringo', 'Crucio', 'Imperio', 'Incendio', 'Expelliarmus', 'Petrificus Totalus']// filterSpellsByCharacter(character);
 
-                d3.csv('norm_spell_stats.csv').then((spells) => {
-                    console.log(spells)
 
-                    let data = []
-                    let features = ["Damage", "Range", "Cooldown", "Duration", "CD OOC"];
-                    //generate the data
-                    for (var i = 0; i < spells.length; i++){
-                        var point = {}
-                        //each feature will be a random number from 1-9
-                        features.forEach(f => point[f] = 1 + Math.random() * 8);
-                        data.push({
-                            'Damage': Number(spells[i]['Damage']),
-                            'Range': Number(spells[i]['Range']),
-                            'Cooldown': Number(spells[i]['Cooldown']),
-                            'Duration': Number(spells[i]['Duration']),
-                            'CD OOC': Number(spells[i]['CD OOC'])
-                        });
+                // Function to filter spells by character
+                // TODO: IMPORT d3.csv("megafile.csv") FOR THE spellData data
+                
+                function filterSpellsByCharacter(character) {
+                    return spellData.filter(spell => spell.caster === character).map(spell => spell.spell_name);
+                }
+
+                function createCheckboxes(spellNames) {
+                    const checkboxesContainer = d3.select('#checkboxes-container');
+                    checkboxesContainer.selectAll('*').remove(); 
+
+                    // checkboxesContainer.append('div')
+                    //                     .attr('class', 'section-title')
+                    //                     .style('text-align', 'center')
+                    //                     .style('font-size', '18px')
+                    //                     .style('font-weight', 'bold')
+                    //                     .style('margin-bottom', '15px')
+                    //                     .style('color', "white")
+                    //                     .style('justify-text', 'left')
+                    //                     .text('Spell Stats');
+
+                    const checkboxes = checkboxesContainer.selectAll('div')
+                        .data(spellNames)
+                        .enter()
+                        .append('div')
+                        .attr('class', 'checkbox-item')
+                        .style('padding', '10px 15px')
+                        .style('display', 'flex')
+                        .style('align-items', 'center');
+
+                    checkboxes.append('input')
+                        .attr('type', 'checkbox')
+                        .attr('id', d => d)
+                        .attr('value', d => d)
+                        .property('checked', (d, i) => i === 0 || i === 1) 
+                        .on('change', handleCheckboxChange)
+                        .style('accent-color', d => spellColors[d])
+                        .style('height', '25px')
+                        .style('width', '25px');
+
+                    checkboxes.append('label')
+                        .attr('for', d => d)
+                        .text(d => d)
+                        .style('color', 'black')
+                        .style('font-family', 'serif')
+                        .style('align-text', 'center')
+                        .style('margin-left', '10px')
+                        .style('font-size', '14pt')
+                        .style('text-align', 'center')
+                        .style('padding', '5px 10px')
+                        .style('border-radius', '3px')
+                        .style('background-color', d => spellColors[d]);
+                }
+
+                function handleCheckboxChange(event) {
+                    const spellName = event.target.value;
+
+                    if (event.target.checked) {
+                        if (selectedSpells.length < maxSelected) {
+                            event.target.checked = true;
+                            selectedSpells.push(spellName);
+                        } else {
+                        event.target.checked = false;
+                        alert("You can select up to 3 spells only.");
+                        }
+                    } else {
+                        selectedSpells = selectedSpells.filter(spell => spell !== spellName);
                     }
 
-                    console.log(data);
+                    drawSpiderChart(selectedSpells);
+                }
+
+                function updateSpiderChart(selectedSpells) {
+                    const filteredStats = selectedSpells.map(spell => ({
+                        spell: spell,
+                        stats: spellStats[spell]
+                }));
+
+                d3.select('#spider-chart').selectAll('*').remove();
+                    drawSpiderChart(selectedSpells);
+                }
+
+            createCheckboxes(spellsNames);
+
+            function drawSpiderChart(spellsList) {
+                d3.csv('norm_spell_stats.csv').then((spells) => {
+                    // Cite: We used https://yangdanny97.github.io/blog/2019/03/01/D3-Spider-Chart to learn how to graph spider graphs
+                    let data = [];
+                    let features = ["Damage", "Range", "Cooldown", "Duration", "CD OOC"];
+                    
+                    // Filter the data based on the selected spells
+                    for (let i = 0; i < spells.length; i++) {
+                        if (spellsList.includes(spells[i]['Name'])) {
+                            data.push({
+                                'Name': spells[i]['Name'],
+                                'Damage': Number(spells[i]['Damage']),
+                                'Range': Number(spells[i]['Range']),
+                                'Cooldown': Number(spells[i]['Cooldown']),
+                                'Duration': Number(spells[i]['Duration']),
+                                'CD OOC': Number(spells[i]['CD OOC'])
+                            });
+                        }
+                    }
 
                     let width = 600;
                     let height = 600;
-                    let svg = d3.select("body").append("svg")
-                        .attr("width", width)
-                        .attr("height", height);
+                    let svg = d3.select('svg#spider-graph');
 
-                        let radialScale = d3.scaleLinear()
+                    let radialScale = d3.scaleLinear()
                         .domain([0, 1])
                         .range([0, 250]);
                     let ticks = [.2, .4, .6, .8, 1.0];
 
+                    // Remove any existing circles, labels, lines, and paths
+                    svg.selectAll("circle").remove();
+                    svg.selectAll(".ticklabel").remove();
+                    svg.selectAll("line").remove();
+                    svg.selectAll(".axislabel").remove();
+                    svg.selectAll("path").remove();
+
+                    // Draw circles for the radial grid
                     svg.selectAll("circle")
                         .data(ticks)
-                        .join(
-                            enter => enter.append("circle")
-                                .attr("cx", width / 2)
-                                .attr("cy", height / 2)
-                                .attr("fill", "none")
-                                .attr("stroke", "gray")
-                                .attr("r", d => radialScale(d))
-                        );
+                        .enter()
+                        .append("circle")
+                        .attr("cx", width / 2)
+                        .attr("cy", height / 2)
+                        .attr("fill", "none")
+                        .attr("stroke", "gray")
+                        .attr("r", d => radialScale(d));
 
-                        svg.selectAll(".ticklabel")
+                    // Draw axis labels
+                    svg.selectAll(".ticklabel")
                         .data(ticks)
-                        .join(
-                            enter => enter.append("text")
-                                .attr("class", "ticklabel")
-                                .attr("x", width / 2 + 5)
-                                .attr("y", d => height / 2 - radialScale(d))
-                                .text(d => d.toString())
-                                .style("fill", "white")
-                        );
+                        .enter()
+                        .append("text")
+                        .attr("x", width / 2 + 5)
+                        .attr("y", d => height / 2 - radialScale(d))
+                        .text(d => d.toString())
+                        .style("fill", "white");
 
-                        function angleToCoordinate(angle, value){
+                    function angleToCoordinate(angle, value) {
                         let x = Math.cos(angle) * radialScale(value);
                         let y = Math.sin(angle) * radialScale(value);
-                        return {"x": width / 2 + x, "y": height / 2 - y};
-                    }   
+                        return { "x": width / 2 + x, "y": height / 2 - y };
+                    }
 
                     let featureData = features.map((f, i) => {
                         let angle = (Math.PI / 2) + (2 * Math.PI * i / features.length);
@@ -489,37 +611,34 @@ function animateSpells() {
                         };
                     });
 
-                    // draw axis line
                     svg.selectAll("line")
                         .data(featureData)
-                        .join(
-                            enter => enter.append("line")
-                                .attr("x1", width / 2)
-                                .attr("y1", height / 2)
-                                .attr("x2", d => d.line_coord.x)
-                                .attr("y2", d => d.line_coord.y)
-                                .attr("stroke","black")
-                        );
+                        .enter()
+                        .append("line")
+                        .attr("x1", width / 2)
+                        .attr("y1", height / 2)
+                        .attr("x2", d => d.line_coord.x)
+                        .attr("y2", d => d.line_coord.y)
+                        .attr("stroke", "white");
 
-                    // draw axis label
                     svg.selectAll(".axislabel")
                         .data(featureData)
-                        .join(
-                            enter => enter.append("text")
-                                .attr("x", d => d.label_coord.x)
-                                .attr("y", d => d.label_coord.y)
-                                .text(d => d.name)
-                                .style("fill", "white")
-                        );
+                        .enter()
+                        .append("text")
+                        .attr("x", d => d.label_coord.x)
+                        .attr("y", d => d.label_coord.y)
+                        .text(d => d.name)
+                        .style("fill", "white");
 
-                        let line = d3.line()
+                    let line = d3.line()
                         .x(d => d.x)
                         .y(d => d.y);
-                    let colors = ["#28A745", "#FF4500", "#48493E", "#DA3832", "#FBD748", "#FF6347", "#4782B4"];
 
-                    function getPathCoordinates(data_point){
+                    // let colors = ["#28A745", "#FF4500", "#48493E", "#DA3832", "#FBD748", "#FF6347", "#4782B4"];
+
+                    function getPathCoordinates(data_point) {
                         let coordinates = [];
-                        for (var i = 0; i < features.length; i++){
+                        for (let i = 0; i < features.length; i++) {
                             let ft_name = features[i];
                             let angle = (Math.PI / 2) + (2 * Math.PI * i / features.length);
                             coordinates.push(angleToCoordinate(angle, data_point[ft_name]));
@@ -527,21 +646,26 @@ function animateSpells() {
                         return coordinates;
                     }
 
-                    svg.selectAll("path")
-                        .data(data)
-                        .join(
-                            enter => enter.append("path")
-                                .datum(d => getPathCoordinates(d))
-                                .attr("d", line)
-                                .attr("stroke-width", 3)
-                                .attr("stroke", (_, i) => colors[i])
-                                .attr("fill", (_, i) => colors[i])
-                                .attr("stroke-opacity", 1)
-                                .attr("opacity", 0.5)
-                        );
+                    // Properly join data for paths and handle enter, update, and exit
+                    const paths = svg.selectAll("path")
+                        .data(data, d => d.Name);
 
-                })
+                    paths.exit().remove(); // Remove paths that are no longer in the data
 
+                    paths.enter()
+                        .append("path")
+                        .merge(paths)
+                        .attr("d", d => line(getPathCoordinates(d)))
+                        .attr("stroke-width", 3)
+                        .attr("stroke", d => spellColors[d['Name']])
+                        .attr("fill", d => spellColors[d['Name']])
+                        .attr("stroke-opacity", 1)
+                        .attr("opacity", 0.5);
+                });
+            }
+
+            
+    drawSpiderChart(selectedSpells)
 
             </script>
         <!-- </div> -->
