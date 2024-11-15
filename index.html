@@ -45,6 +45,7 @@
                 display: flex;
             }
 
+
             .checkboxes-container {
                 cursor: url('HP_OnlyWand.png'), auto;
                 color: white;
@@ -116,10 +117,27 @@
     }
 
     #legend-container h3 {
-        font-size: 18pt;
+        /* font-size: 18pt; */
+        font-size: 16pt;
         text-align: center;
         margin-bottom: 10px;
+        margin-top: 10px;
         color: white;
+    }
+    
+    .node-graph {
+        float: right;
+    }
+
+    /* .stacked-graphs {
+        width: 33.4%;
+    } */
+
+    .legend-graph {
+        display: flex;
+        /* flex-direction: row; */
+        justify-content: space-between;
+        width: 66.6%;
     }
 
     .legend-items {
@@ -132,7 +150,7 @@
         display: flex;
         align-items: center;
         gap: 10px;
-        font-size: 12pt;
+        font-size: 10pt;
     }
 
     .legend-color {
@@ -143,27 +161,41 @@
     </style>
 </head>
 <body>
-    <!-- Legend Section -->
-<div id="legend-container">
-    <h3>Legend: Spell Colors</h3>
-    <div class="legend-items">
-        <div class="legend-item" style="color: #28A745;"><span class="legend-color" style="background-color: #28A745;"></span>Avada Kedavra</div>
-        <div class="legend-item" style="color: #FF4500;"><span class="legend-color" style="background-color: #FF4500;"></span>Confringo</div>
-        <div class="legend-item" style="color: #FF6347;"><span class="legend-color" style="background-color: #FF6347;"></span>Incendio</div>
-        <div class="legend-item" style="color: #6EBB97;"><span class="legend-color" style="background-color: #6EBB97;"></span>Morsmordre</div>
-        <div class="legend-item" style="color: #8B0000;"><span class="legend-color" style="background-color: #8B0000;"></span>Sectumsempra</div>
-        <div class="legend-item" style="color: #E8913D;"><span class="legend-color" style="background-color: #E8913D;"></span>Stupefy</div>
-        <div class="legend-item" style="color: #ffffff;"><span class="legend-color" style="background-color: #48493E;"></span>Crucio</div>
-        <div class="legend-item" style="color: #FBD748;"><span class="legend-color" style="background-color: #FBD748;"></span>Imperio</div>
-        <div class="legend-item" style="color: #834F99;"><span class="legend-color" style="background-color: #834F99;"></span>Confundo</div>
-        <div class="legend-item" style="color: #DA3832;"><span class="legend-color" style="background-color: #DA3832;"></span>Expelliarmus</div>
-        <div class="legend-item" style="color: #4782B4;"><span class="legend-color" style="background-color: #4782B4;"></span>Petrificus Totalus</div>
-        <div class="legend-item" style="color: #c18ef7;"><span class="legend-color" style="background-color: #F5DEB3;"></span>Obliviate</div>
-        <div class="legend-item" style="color: #8CCBF0;"><span class="legend-color" style="background-color: #8CCBF0;"></span>Expecto Patronum</div>
+<div id="graphs-container" style="display: flex; flex-wrap: wrap; gap: 200px;">
+    <!-- Node Graph Section with Legend -->
+    <div id="legend-graph" style="display: flex; gap: 20px; flex: 1; min-width: 600px;">
+        <!-- Legend Section -->
+        <div id="legend-container" style="flex: 0 0 auto; width: 125px;">
+            <h3>Legend: Spell Colors</h3>
+            <div class="legend-items">
+                <div class="legend-item" style="color: #28A745;"><span class="legend-color" style="background-color: #28A745;"></span>Avada Kedavra</div>
+                <div class="legend-item" style="color: #FF4500;"><span class="legend-color" style="background-color: #FF4500;"></span>Confringo</div>
+                <div class="legend-item" style="color: #FF6347;"><span class="legend-color" style="background-color: #FF6347;"></span>Incendio</div>
+                <div class="legend-item" style="color: #6EBB97;"><span class="legend-color" style="background-color: #6EBB97;"></span>Morsmordre</div>
+                <div class="legend-item" style="color: #8B0000;"><span class="legend-color" style="background-color: #8B0000;"></span>Sectumsempra</div>
+                <div class="legend-item" style="color: #E8913D;"><span class="legend-color" style="background-color: #E8913D;"></span>Stupefy</div>
+                <div class="legend-item" style="color: #ffffff;"><span class="legend-color" style="background-color: #48493E;"></span>Crucio</div>
+                <div class="legend-item" style="color: #FBD748;"><span class="legend-color" style="background-color: #FBD748;"></span>Imperio</div>
+                <div class="legend-item" style="color: #834F99;"><span class="legend-color" style="background-color: #834F99;"></span>Confundo</div>
+                <div class="legend-item" style="color: #DA3832;"><span class="legend-color" style="background-color: #DA3832;"></span>Expelliarmus</div>
+                <div class="legend-item" style="color: #4782B4;"><span class="legend-color" style="background-color: #4782B4;"></span>Petrificus Totalus</div>
+                <div class="legend-item" style="color: #c18ef7;"><span class="legend-color" style="background-color: #F5DEB3;"></span>Obliviate</div>
+                <div class="legend-item" style="color: #8CCBF0;"><span class="legend-color" style="background-color: #8CCBF0;"></span>Expecto Patronum</div>
+            </div>
+        </div>
+
+        <!-- Node Graph -->
+        <div id="node-graph" style="flex: 1;">
+            <svg id="graph" width="1000" height="800"></svg>
+        </div>
+    </div>
+
+    <!-- Bar Graph Section -->
+    <div id="bar-graph-container" style="flex: 1; min-width: 600px;">
+        <svg id="bar-graph" height="600" width="600"></svg>
     </div>
 </div>
 
-    <svg id="graph" width="1200" height="800"></svg>
     <script>
         const spellColors = {
             "Avada Kedavra": "#28A745",
@@ -409,7 +441,8 @@ function resetCurvePaths() {
          </div>
 
         <!-- Bar Graph -->
-        <svg id="bar-graph" height="600" width="600"></svg>
+        <div class="stacked-graphs">
+        <!-- <svg id="bar-graph" height="600" width="600"></svg> -->
         <script>
             // Load the CSV file
             const requestData = async function() {
@@ -432,8 +465,11 @@ function resetCurvePaths() {
                     "Expecto Patronum": "#8CCBF0"
                 };
 
-                const barWidth = 600;
-                const barHeight = 600;
+                // const bSvg = d3.select("svg#bar-graph");
+                // const barWidth = bSvg.attr("width");
+                // const barHeight = bSvg.attr('height');
+                const barWidth = 550;
+                const barHeight = 250;
                 const margin = { top: 20, right: 30, bottom: 100, left: 60 }; 
 
                 // Bar Chart Dimensions
@@ -509,6 +545,7 @@ function resetCurvePaths() {
                 <div id="checkboxes-container"></div>
             
             </div>
+        </div>
         </div>
             
             <script>
