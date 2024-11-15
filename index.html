@@ -132,6 +132,91 @@
             } else {
                 targetNode = validCharacters.has(victim) ? victim : "Unnamed Character";
             }
+          
+            <svg id="graph" width="800" height="800" margin-top: 20px;"></svg>
+    <script>
+        // Define spell colors
+        const spellColors = {
+            "Avada Kedavra": "#28A745",
+            "Confringo": "#FF4500",
+            "Incendio": "#FF6347",
+            "Morsmordre": "#6EBB97",
+            "Sectumsempra": "#8B0000",
+            "Stupefy": "#E8913D",
+            "Crucio": "#48493E",
+            "Imperio": "#FBD748",
+            "Confundo": "#834F99",
+            "Expelliarmus": "#DA3832",
+            "Petrificus Totalus": "#4782B4",
+            "Obliviate": "#F5DEB3",
+            "Expecto patronum": "#8CCBF0"
+        };
+
+        // Create SVG and dimensions
+        const svg = d3.select("svg#graph");
+        const graphWidth = +svg.attr("width");
+        const graphHeight = +svg.attr("height");
+
+        const simulation = d3.forceSimulation()
+            .force("link", d3.forceLink().id(d => d.id))
+            .force("charge", d3.forceManyBody().strength(-300))
+            .force("center", d3.forceCenter(graphWidth / 2, graphHeight / 2));
+
+        // Load the CSV file
+        d3.csv("megafile.csv").then(data => {
+            // Prepare nodes and links
+            const nodes = Array.from(new Set(data.flatMap(d => [d.caster, d.victim]))).map(id => ({ id }));
+            const links = data.map(d => ({
+                source: d.caster,
+                target: d.victim,
+                spell: d.spell_name
+            }));
+
+            // Draw links
+            const link = svg.append("g")
+                .attr("stroke", "#999")
+                .attr("stroke-opacity", 0.6)
+                .selectAll("line")
+                .data(links)
+                .join("line")
+                .attr("stroke", d => spellColors[d.spell] || "#999")
+                .attr("stroke-width", 2);
+
+            // Draw nodes
+            const node = svg.append("g")
+                .attr("stroke", "#fff")
+                .attr("stroke-width", 1.5)
+                .selectAll("circle")
+                .data(nodes)
+                .join("circle")
+                .attr("r", 6)
+                .attr("fill", "#69b3a2")
+                .call(drag(simulation));
+
+            // Add labels
+            const label = svg.append("g")
+                .selectAll("text")
+                .data(nodes)
+                .join("text")
+                .text(d => d.id)
+                .attr("x", 8)
+                .attr("y", "0.31em")
+                .style("font-size", "10px");
+
+            // Update positions on each tick
+            simulation.nodes(nodes).on("tick", () => {
+                link.attr("x1", d => d.source.x)
+                    .attr("y1", d => d.source.y)
+                    .attr("x2", d => d.target.x)
+                    .attr("y2", d => d.target.y);
+
+                node.attr("cx", d => d.x)
+                    .attr("cy", d => d.y);
+
+                label.attr("x", d => d.x + 10)
+                     .attr("y", d => d.y)
+                     .attr("stroke", "white");
+            });
 
             if (!nodeMap.has(sourceNode)) {
                 nodeMap.set(sourceNode, { id: sourceNode, isCentral: true });
