@@ -258,7 +258,8 @@
         "Peter Pettigrew": "character_node_svg/pettigrew.svg",
         "Ron Weasley": "character_node_svg/weasley.svg",
         "Albus Dumbledore": "character_node_svg/dumbledore.svg",
-        "Unnamed Character": "character_node_svg/unknown.svg"
+        "Unnamed Character": "character_node_svg/unknown.svg",
+        "Otter": "character_node_svg/otter.gif"
     };
 
     const svg = d3.select("svg#graph");
@@ -279,7 +280,13 @@
         // Process data into nodes and links
         data.forEach(({ caster, victim, spell_name }) => {
             const sourceNode = caster;
-            const targetNode = victim === "Dark Mark" ? "Dark Mark" : validCharacters.has(victim) ? victim : "Unnamed Character";
+            let targetNode = victim === "Dark Mark"
+                ? "Dark Mark"
+                : victim in casterImages
+                ? victim
+                : validCharacters.has(victim)
+                ? victim
+                : "Unnamed Character";
 
             if (!nodeMap.has(sourceNode)) {
                 nodeMap.set(sourceNode, { id: sourceNode, isCentral: true });
@@ -450,7 +457,7 @@
     
 
 <div id="dark-mark-container">
-    <img src="character_node_svg/dark_mark2.gif" alt="Dark Mark" style="position: absolute; top: 0px; left: 0px; width: 440px; height: 236px; opacity: 0.9;">
+    <img src="character_node_svg/dark_mark2.gif" alt="Dark Mark" style="position: absolute; top: 0px; left: 0px; width: 440px; height: 236px; opacity: 0.9; filter: blur(4px);">
 </div>
 
 
