@@ -1,11 +1,14 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
     <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://d3js.org/d3.v7.min.js"></script>
+        <title>Harry Potter Network Graph</title>
         <link href="https://fonts.cdnfonts.com/css/harry-p" rel="stylesheet">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Baskervville:ital@0;1&display=swap" rel="stylesheet">
-
         <style>
             body {
                 font-family: "Baskervville", serif;
@@ -15,6 +18,9 @@
                 background-repeat: no-repeat;
                 background-position: center;
                 height: 100%;
+                color: white;
+                margin: 0;
+                background-attachment: fixed;
             }
 
             h1 {
@@ -27,24 +33,18 @@
             }
 
             .axis text {
-            font-family: "Baskervville", serif;
-            fill: white; 
-             }
+                font-family: "Baskervville", serif;
+                fill: white;
+            }
 
-       
             .axis path,
             .axis line {
                 stroke: white; 
             }
 
             .axis-label {
-                fill: white; 
+                fill: white;
             }
-
-            .spider-container {
-                display: flex;
-            }
-
 
             .checkboxes-container {
                 cursor: url('HP_OnlyWand.png'), auto;
@@ -60,139 +60,159 @@
             input, label {
                 cursor: url('HP_OnlyWand.png'), auto;
             }
+
+            .tooltip {
+                position: absolute;
+                background: #f9f9f9;
+                border: 1px solid #ccc;
+                padding: 5px;
+                border-radius: 5px;
+                box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+                font-size: 12px;
+                visibility: hidden;
+                color: black;
+            }
+
+            #legend-container {
+                position: fixed; 
+                top: 10px; 
+                right: 10px; 
+                background-color: rgba(0, 0, 0, 0.7);
+                border-radius: 10px;
+                padding: 15px;
+                max-width: 200px;
+                max-height: 400px; 
+                overflow-y: auto; 
+                z-index: 100; 
+                color: white;
+                font-family: "Baskervville", serif;
+            }
+
+            #legend-container h3 {
+                font-size: 14pt;
+                text-align: center;
+                margin-bottom: 10px;
+            }
+
+            .legend-items {
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .legend-item {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                font-size: 10pt;
+            }
+
+            .legend-color {
+                width: 20px;
+                height: 20px;
+                border-radius: 5px;
+            }
+
+            #spider-container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
+                gap: 10px;
+            }
+
+            #checkboxes-container {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+                justify-items: center;
+                align-items: start;
+                width: 100%;
+                z-index: 1;
+            }
+
+            .checkbox-item {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+
+            #bar-graph-container {
+                width: 400px;
+                height: 400px;
+            }
+
+            .spider-section {
+                position: relative;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .snitch-checkbox {
+                position: relative;
+                cursor: pointer;
+                appearance: none;
+                width: 30px;
+                height: 30px;
+                border: 2px solid rgb(222, 220, 208);
+                border-radius: 4px;
+            }
+
+            .snitch-checkbox::before {
+                content: '';
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 70px;
+                height: 70px;
+                transform: translate(-50%, -50%);
+                background: url('character_node_svg/snitch.gif') no-repeat center center;
+                background-size: contain;
+                opacity: 0;
+                transition: opacity 0.2s ease-in-out;
+                z-index: 10;
+            }
+
+            .snitch-checkbox:checked::before {
+                opacity: 1; /* Show the Snitch GIF when checked */
+            }
+
         </style>
     </head>
-    <body>
-        <h1>Deep Dive into the Dangers of the Harry Potter Universe</h1>
-
-        <!-- Node graph -->
-         <div>
-            <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-    <title>Harry Potter Network Graph</title>
-    <style>
-        body {
-            margin: 0;
-            background-attachment: fixed;
-            /* overflow: hidden; */
-        }
-        .tooltip {
-            position: absolute;
-            background: #f9f9f9;
-            border: 1px solid #ccc;
-            padding: 5px;
-            border-radius: 5px;
-            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
-            font-size: 12px;
-            visibility: hidden;
-        }
-
-        #checkboxes-container {
-            margin-left: 20px;
-            margin-right: 50px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        #spider-stats {
-            color: white;
-            margin-left: 35px;
-        }
-
-        #legend-container {
-        position: absolute;
-        margin: 30px;
-        padding: 15px;
-        background-color: rgba(0, 0, 0, 0.5);
-        border-radius: 10px;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-        max-width: 300px;
-        color: white;
-        font-family: "Baskervville", serif;
-        text-align: left;
-    }
-
-    #legend-container h3 {
-        /* font-size: 18pt; */
-        font-size: 16pt;
-        text-align: center;
-        margin-bottom: 10px;
-        margin-top: 10px;
-        color: white;
-    }
-    
-    .node-graph {
-        float: right;
-    }
-
-    /* .stacked-graphs {
-        width: 33.4%;
-    } */
-
-    .legend-graph {
-        display: flex;
-        /* flex-direction: row; */
-        justify-content: space-between;
-        width: 66.6%;
-    }
-
-    .legend-items {
-        display: flex;
-        flex-direction: column;
-        gap: 5px;
-    }
-
-    .legend-item {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        font-size: 10pt;
-    }
-
-    .legend-color {
-        width: 20px;
-        height: 20px;
-        border-radius: 5px;
-    }
-    </style>
-</head>
 <body>
-<div id="graphs-container" style="display: flex; gap: 200px;">
-    <!-- Node Graph Section with Legend -->
-    <div id="legend-graph" style="display: flex; gap: 20px; flex: 1; min-width: 600px;">
+        <h1>Deep Dive into the Dangers of the Harry Potter Universe</h1>
         <!-- Legend Section -->
-        <div id="legend-container" style="flex: 0 0 auto; width: 125px;">
+        <div id="legend-container" style="flex: 0 0 auto;">
             <h3>Legend: Spell Colors</h3>
             <div class="legend-items">
-                <div class="legend-item" style="color: #28A745;"><span class="legend-color" style="background-color: #28A745;"></span>Avada Kedavra</div>
-                <div class="legend-item" style="color: #FF4500;"><span class="legend-color" style="background-color: #FF4500;"></span>Confringo</div>
-                <div class="legend-item" style="color: #FF6347;"><span class="legend-color" style="background-color: #FF6347;"></span>Incendio</div>
-                <div class="legend-item" style="color: #6EBB97;"><span class="legend-color" style="background-color: #6EBB97;"></span>Morsmordre</div>
-                <div class="legend-item" style="color: #8B0000;"><span class="legend-color" style="background-color: #8B0000;"></span>Sectumsempra</div>
-                <div class="legend-item" style="color: #E8913D;"><span class="legend-color" style="background-color: #E8913D;"></span>Stupefy</div>
-                <div class="legend-item" style="color: #ffffff;"><span class="legend-color" style="background-color: #48493E;"></span>Crucio</div>
-                <div class="legend-item" style="color: #FBD748;"><span class="legend-color" style="background-color: #FBD748;"></span>Imperio</div>
-                <div class="legend-item" style="color: #834F99;"><span class="legend-color" style="background-color: #834F99;"></span>Confundo</div>
-                <div class="legend-item" style="color: #DA3832;"><span class="legend-color" style="background-color: #DA3832;"></span>Expelliarmus</div>
-                <div class="legend-item" style="color: #4782B4;"><span class="legend-color" style="background-color: #4782B4;"></span>Petrificus Totalus</div>
-                <div class="legend-item" style="color: #c18ef7;"><span class="legend-color" style="background-color: #F5DEB3;"></span>Obliviate</div>
-                <div class="legend-item" style="color: #8CCBF0;"><span class="legend-color" style="background-color: #8CCBF0;"></span>Expecto Patronum</div>
-            </div>
+                <div class="legend-item" style="color: #39FF14;"><span class="legend-color" style="background-color: #39FF14;"></span>Avada Kedavra</div>
+                <div class="legend-item" style="color: #FF6F31;"><span class="legend-color" style="background-color: #FF6F31;"></span>Confringo</div>
+                <div class="legend-item" style="color: #FF4500;"><span class="legend-color" style="background-color: #FF4500;"></span>Incendio</div>
+                <div class="legend-item" style="color: #006400;"><span class="legend-color" style="background-color: #006400;"></span>Morsmordre</div>
+                <div class="legend-item" style="color: #9400D3;"><span class="legend-color" style="background-color: #9400D3;"></span>Sectumsempra</div>
+                <div class="legend-item" style="color: #FFD700;"><span class="legend-color" style="background-color: #FFD700;"></span>Stupefy</div>
+                <div class="legend-item" style="color: #C0C0C0;"><span class="legend-color" style="background-color: #C0C0C0;"></span>Crucio</div>
+                <div class="legend-item" style="color: #FFA500;"><span class="legend-color" style="background-color: #3CB371;"></span>Imperio</div>
+                <div class="legend-item" style="color: #BA55D3;"><span class="legend-color" style="background-color: #BA55D3;"></span>Confundo</div>
+                <div class="legend-item" style="color: #B22222;"><span class="legend-color" style="background-color: #B22222;"></span>Expelliarmus</div>
+                <div class="legend-item" style="color: #1E90FF;"><span class="legend-color" style="background-color: #1E90FF;"></span>Petrificus Totalus</div>
+                <div class="legend-item" style="color: #FFB6C1;"><span class="legend-color" style="background-color: #FFB6C1;"></span>Obliviate</div>
+                <div class="legend-item" style="color: #0ABAB5;"><span class="legend-color" style="background-color: #0ABAB5;"></span>Expecto Patronum</div>
+            </div>            
         </div>
 
-        <!-- Node Graph -->
-        <div id="node-graph" style="flex: 1; padding-left: 2.5em;">
-            <svg id="graph" width="1000" height="800"></svg>
-        </div>
-    </div>
+     <!-- Graphs Container -->
+     <div id="graphs-container" style="display: flex;">
+        
+    <!-- Node Graph -->
+    <div id="node-graph" style="flex: 1; padding-left: 0; transform: translateX(20px);">
+        <svg id="graph" width="1200" height="800"></svg>
+    </div>    
 
     <!-- Container for Spider Graph and Bar Graph -->
-    <div id="right-graphs-container" style="display: flex; flex-direction: column; gap: 20px; flex: 1; min-width: 600px;">
+    <div id="right-graphs-container" style="display: flex; flex-direction: column; gap: 10px; flex: 1; min-width: 600px;">
         <!-- Spider Graph Section -->
         <div class="spider-section">
             <h2 id="spider-stats">Spell Stats</h2>
@@ -212,19 +232,19 @@
 
     <script>
         const spellColors = {
-            "Avada Kedavra": "#28A745",
-            "Confringo": "#FF4500",
-            "Incendio": "#FF6347",
-            "Morsmordre": "#6EBB97",
-            "Sectumsempra": "#8B0000",
-            "Stupefy": "#E8913D",
-            "Crucio": "#ffffff",
-            "Imperio": "#FBD748",
-            "Confundo": "#834F99",
-            "Expelliarmus": "#DA3832",
-            "Petrificus Totalus": "#4782B4",
-            "Obliviate": "#c18ef7",
-            "Expecto patronum": "#8CCBF0"
+            "Avada Kedavra": "#39FF14",
+            "Confringo": "#FF6700",
+            "Incendio": "#FF4500",
+            "Morsmordre": "#006400",
+            "Sectumsempra": "#9400D3",
+            "Stupefy": "#FFD700",
+            "Crucio": "#C0C0C0",
+            "Imperio": "#3CB371",
+            "Confundo": "#BA55D3",
+            "Expelliarmus": "#B22222",
+            "Petrificus Totalus": "#1E90FF",
+            "Obliviate": "#FFB6C1",
+            "Expecto Patronum": "#0ABAB5"
         };
 
         const casterImages = {
@@ -239,16 +259,17 @@
             "Peter Pettigrew": "character_node_svg/pettigrew.svg",
             "Ron Weasley": "character_node_svg/weasley.svg",
             "Albus Dumbledore": "character_node_svg/dumbledore.svg",
-            "Dark Mark": "character_node_svg/dark_mark.gif",
-            "Unnamed Character": "character_node_svg/unknown_1.svg"
+            "Unnamed Character": "character_node_svg/unknown.svg"
         };
     
         const svg = d3.select("svg#graph");
         const graphWidth = +svg.attr("width");
         const graphHeight = +svg.attr("height");
-        const imageNodeRadius = 200;
-        const circleNodeRadius = 300;
-    
+        const imageNodeRadius = 250;
+        const circleNodeRadius = 350;
+
+        const darkMarkFixedPosition = { fx: -20, fy: -100 };
+
         Promise.all([
             d3.csv("megafile.csv"), // Main data file
             d3.csv("characters.csv") // List of valid character names
@@ -260,6 +281,7 @@
             const nodes = [];
             const nodeMap = new Map();
             const links = [];
+            
     
             data.forEach(d => {
                 const { caster, victim, spell_name } = d;
@@ -280,9 +302,17 @@
                 }
     
                 if (!nodeMap.has(targetNode)) {
-                    nodeMap.set(targetNode, { id: targetNode, isCentral: castersSet.has(targetNode) });
-                    nodes.push(nodeMap.get(targetNode));
-                }
+    const isDarkMark = targetNode === "Dark Mark";
+    nodeMap.set(targetNode, {
+        id: targetNode,
+        isCentral: castersSet.has(targetNode),
+        fx: isDarkMark ? darkMarkFixedPosition.fx : null, // Fix X for "Dark Mark"
+        fy: isDarkMark ? darkMarkFixedPosition.fy : null  // Fix Y for "Dark Mark"
+    });
+    nodes.push(nodeMap.get(targetNode));
+}
+
+                
     
                 links.push({
                     source: sourceNode,
@@ -297,7 +327,7 @@
         const sameTargetSource = links.filter(l => l.source === link.target && l.target === link.source);
         link.offsetIndex = sameSourceTarget.indexOf(link) - sameTargetSource.length / 2;
     });
-    
+
             const link = svg.append("g")
                 .attr("class", "links")
                 .selectAll("path")
@@ -312,6 +342,7 @@
             const dr = Math.sqrt(dx * dx + dy * dy) + d.offsetIndex * 10; // Add offset to prevent overlap
             return `M${d.source.x},${d.source.y}A${dr},${dr} 0 0,1 ${d.target.x},${d.target.y}`;
         });
+
     
             const travelingLine = svg.append("g")
                 .attr("class", "traveling-lines")
@@ -333,14 +364,16 @@
                 .attr("x2", 10)
                 .attr("y2", 0)
                 .style("visibility", "hidden");
-    
+
+                let nodeGroup = svg.append("g").attr("class", "nodes");
                 const node = svg.append("g")
     .attr("class", "nodes")
     .selectAll("g")
     .data(nodes)
     .join("g")
+
     .each(function (d) {
-        const nodeGroup = d3.select(this);
+        nodeGroup = d3.select(this);
         if (casterImages[d.id]) {
             // If there is an image for this node
             nodeGroup.append("image")
@@ -351,34 +384,59 @@
                 .attr("y", -30);
         } else {
             nodeGroup.append("image")
-                .attr("xlink:href", "character_node_svg/unnamed_3.svg")
-                .attr("width", 35)
-                .attr("height", 35)
+                .attr("xlink:href", "character_node_svg/hat.svg")
+                .attr("width", 50)
+                .attr("height", 50)
                 .attr("x", -15)
                 .attr("y", -15);
         }
     });
 
     
-            const simulation = d3.forceSimulation(nodes)
-                .force("radial-image", d3.forceRadial(d => d.isCentral ? imageNodeRadius : circleNodeRadius, graphWidth / 2, graphHeight / 2).strength(1))
-                .force("collide", d3.forceCollide().radius(d => (d.id === "Unnamed Character" ? 50 : 30)).iterations(4))
-                .force("link", d3.forceLink(links).id(d => d.id).distance(150))
-                .force("charge", d3.forceManyBody().strength(-300))
-                .force("center", d3.forceCenter(graphWidth / 2, graphHeight / 2))
-                .force("x", d3.forceX(graphWidth / 2).strength(d => (d.isCentral ? 0.5 : 0.1)))
-.force("y", d3.forceY(graphHeight / 2).strength(d => (d.isCentral ? 0.5 : 0.1)))
+    const simulation = d3.forceSimulation(nodes)
+    .force("radial-image", d3.forceRadial(
+        d => d.isCentral ? imageNodeRadius : circleNodeRadius,
+        graphWidth / 2 - 100, // Shift the graph 100px to the left
+        graphHeight / 2
+    ).strength(1))
+    .force("collide", d3.forceCollide()
+        .radius(d => (d.id === "Unnamed Character" ? 70 : 50))
+        .iterations(4))
+    .force("link", d3.forceLink(links)
+        .id(d => d.id)
+        .distance(d => d.target.id === "Dark Mark" ? 30 : 120)) // Shorten edges to "Dark Mark"
+    .force("charge", d3.forceManyBody().strength(-300))
+    .force("center", d3.forceCenter(graphWidth / 2 - 100, graphHeight / 2)) // Recenter to the left
+    .force("x", d3.forceX(graphWidth / 2 - 100).strength(d => (d.isCentral ? 0.7 : 0.3))) // Shift X-axis forces
+    .force("y", d3.forceY(graphHeight / 2).strength(d => (d.isCentral ? 0.5 : 0.1)));
 
-                .on("tick", () => {
-                    link.attr("d", d => {
-                const dx = d.target.x - d.source.x;
-                const dy = d.target.y - d.source.y;
-                const dr = Math.sqrt(dx * dx + dy * dy) + d.offsetIndex * 10; // Add offset to prevent overlap
-                return `M${d.source.x},${d.source.y}A${dr},${dr} 0 0,1 ${d.target.x},${d.target.y}`;
-            });
-    
-                    node.attr("transform", d => `translate(${d.x},${d.y})`);
-                });
+
+
+simulation.nodes(nodes);
+
+// Ensure simulation respects fixed positions
+simulation.on("tick", () => {
+    node.attr("transform", d => {
+        if (d.id === "Dark Mark") {
+            d.x = darkMarkFixedPosition.fx; // Lock X
+            d.y = darkMarkFixedPosition.fy; // Lock Y
+        }
+        return `translate(${d.x},${d.y})`;
+    });
+
+    link.attr("d", d => {
+        const isDarkMarkLink = d.target.id === "Dark Mark";
+
+        const dx = isDarkMarkLink ? darkMarkFixedPosition.fx - d.source.x : d.target.x - d.source.x;
+        const dy = isDarkMarkLink ? darkMarkFixedPosition.fy - d.source.y : d.target.y - d.source.y;
+        const dr = Math.sqrt(dx * dx + dy * dy) + (d.offsetIndex || 0) * 10;
+
+        return `M${d.source.x},${d.source.y}A${dr},${dr} 0 0,1 ${
+            isDarkMarkLink ? darkMarkFixedPosition.fx : d.target.x
+        },${isDarkMarkLink ? darkMarkFixedPosition.fy : d.target.y}`;
+    });
+});
+
     
             simulation.force("link").links(links);
     
@@ -388,13 +446,13 @@
                 .attr("class", "tooltip");
     
                 node.on("mouseover", (event, d) => {
-    // Always show the tooltip for all nodes (casters and victims)
-    tooltip.html(d.id)
-        .style("top", `${event.pageY - 20}px`)
-        .style("left", `${event.pageX + 20}px`)
-        .style("visibility", "visible");
+                    // Always show the tooltip for all nodes (casters and victims)
+                    tooltip.html(d.id)
+                        .style("top", `${event.pageY - 20}px`)
+                        .style("left", `${event.pageX + 20}px`)
+                        .style("visibility", "visible");
 
-    if (d.isCentral) {
+    if (d.isCentral || d.id === "Unnamed Character") {
         d3.select("body").style("cursor", "url('HP_WandH.png'), auto");
 
         // Highlight links connected to this caster
@@ -411,10 +469,14 @@
         d3.select("body").style("cursor", "url('HP_OnlyWand.png'), auto");
     }
 })
-.on("mousemove", (event) => {
-    tooltip.style("top", `${event.pageY - 20}px`).style("left", `${event.pageX + 20}px`);
+node.on("mousemove", (event) => {
+    tooltip.html(d.id)
+        .style("top", `${event.pageY - 20}px`)
+        .style("left", `${event.pageX + 20}px`)
+        .style("visibility", "visible");
+    highlightNode(d);
 })
-.on("mouseout", () => {
+node.on("mouseout", () => {
     tooltip.style("visibility", "hidden");
     link.attr("stroke-opacity", 0.6);
     node.selectAll("circle, image").attr("opacity", 1);
@@ -447,7 +509,52 @@ function resetCurvePaths() {
     link.attr("stroke-dasharray", null).attr("stroke-dashoffset", null);
 };
         });
+        
+        //click event
+        let selectedNode = null;
+
+        node.on("click", (event, d) => {
+    // Check if the clicked node is already selected
+    if (selectedNode && selectedNode.id === d.id) {
+        // Deselect the node if it's clicked again
+        selectedNode = null;
+        resetHighlight();
+    } else {
+        // Set the clicked node as the selected node
+        selectedNode = d;
+        highlightNode(d);
+    }
+});
+
+function highlightNode(node) {
+    link.attr("stroke-opacity", l => (l.source.id === node.id || l.target.id === node.id ? 1 : 0.1))
+        .attr("stroke-width", l => (l.source.id === node.id || l.target.id === node.id ? 3 : 1));
+
+    nodeGroup.selectAll("circle, image").attr("opacity", n => {
+        return (n.id === node.id || links.some(l => (l.source.id === node.id && l.target.id === n.id) || (l.target.id === node.id && l.source.id === n.id))) ? 1 : 0.3;
+    });
+
+    d3.select("body").style("cursor", "url('HP_WandH.png'), auto");
+}
+
+function resetHighlight() {
+    link.attr("stroke-opacity", 0.6).attr("stroke-width", 2);
+    nodeGroup.selectAll("image").attr("opacity", 1);
+    d3.select("body").style("cursor", "url('HP_OnlyWand.png'), auto");
+}
+
+        svg.on("click", () => {
+            if (selectedNode) {
+                selectedNode = null;
+                resetHighlight();
+            }
+        });
+
     </script>    
+
+<div id="dark-mark-container">
+    <img src="character_node_svg/dark_mark2.gif" alt="Dark Mark" style="position: absolute; top: 0px; left: 0px; width: 440px; height: 236px; opacity: 0.9;">
+</div>
 
 
          </div>
@@ -455,28 +562,11 @@ function resetCurvePaths() {
         <!-- Bar Graph -->
         <!-- <div class="stacked-graphs"> -->
         <!-- <svg id="bar-graph" height="600" width="600"></svg> -->
+        <div id="bar-graph-container">
         <script>
             // Load the CSV file
             const requestData = async function() {
                 const spells = await d3.csv("megafile.csv");
-
-                // Spell Colors
-                const spellColors = {
-                    "Avada Kedavra": "#28A745",
-                    "Confringo": "#FF4500",
-                    "Incendio": "#FF6347",
-                    "Morsmordre": "#6EBB97",
-                    "Sectumsempra": "#8B0000",
-                    "Stupefy": "#E8913D",
-                    "Crucio": "#48493E",
-                    "Imperio": "#FBD748",
-                    "Confundo": "#834F99",
-                    "Expelliarmus": "#DA3832",
-                    "Petrificus Totalus": "#4782B4",
-                    "Obliviate": "#F5DEB3",
-                    "Expecto Patronum": "#8CCBF0"
-                };
-
                 // const bSvg = d3.select("svg#bar-graph");
                 // const barWidth = bSvg.attr("width");
                 // const barHeight = bSvg.attr('height');
@@ -590,32 +680,32 @@ function resetCurvePaths() {
                         .attr('type', 'checkbox')
                         .attr('id', d => d)
                         .attr('value', d => d)
+                        .attr('class', 'snitch-checkbox')
                         .property('checked', (d, i) => i === 0 || i === 1)
-                        .on('change', handleCheckboxChange)
                         .style('accent-color', d => spellColors[d])
-                        .style('height', '25px')
-                        .style('width', '25px')
+                        .style('height', '30px')
+                        .style('width', '30px')
+                        .on('change', handleCheckboxChange)
                         .style('cursor', "url('HP_WandH.png'), auto");
 
                         checkboxes.append('label')
                         .attr('for', d => d)
                             .text(d => d)
-                            .style('color', 'white') // Text color on top of the image
+                            .style('color', 'white')
                             .style('font-family', 'serif')
                             .style('font-size', '10pt')
-                            // .style('padding', '10px 10px') // Adjust padding for better fit
-                            .style('width', '100px') // Set width to match the image
-                            .style('height', '50px') // Set height to match the image
+                            .style('width', '100px')
+                            .style('height', '50px')
                             .style('text-align', 'center')
-                            .style('line-height', '30px') // Vertically center the text
                             .style('display', 'flex')
                             .style('align-items', 'center')
                             .style('justify-content', 'center')
-                            .style('border-radius', '5px') // Adjust border radius if needed
-                            .style('background-image', d => `url('text.svg')`) // Set background image
-                            .style('background-size', 'contain') // Contain the image within the label
-                            .style('background-repeat', 'no-repeat') // Prevent repetition
-                            .style('background-position', 'center') // Center the image
+                            .style('border-radius', '5px')
+                            .style('background-image', d => `url('button.svg')`)
+                            .style('background-size', 'contain')
+                            .style('background-repeat', 'no-repeat')
+                            .style('background-position', 'center')
+                            .style('padding', '10px')
                             .style('cursor', "url('HP_WandH.png'), auto");
                     }
 
