@@ -383,9 +383,12 @@
                 .style("top", `${event.pageY - 20}px`)
                 .style("left", `${event.pageX + 20}px`)
                 .style("visibility", "visible");
+                d3.select("body")
+                  .style("cursor", "url('HP_WandH.png'), auto");
             if (!selectedNode) highlightNode(d);
         }).on("mouseout", () => {
             tooltip.style("visibility", "hidden");
+            d3.select("body").style("cursor", "url('HP_OnlyWand.png'), auto");
             if (!selectedNode) {
                 resetHighlight();
                 resetCurvePaths(); //might take out depending on which one is prettier
@@ -418,6 +421,7 @@
             nodeGroup.selectAll("circle, image").attr("opacity", 1);
         }
 
+        //Animating spell casting and resetting animation
         function animateCurvePaths(casterId) {
             // Filter links where the caster is the source or the target
             const casterLinks = links.filter(l => l.source.id === casterId || l.target.id === casterId);
@@ -603,7 +607,6 @@
                     }
 
                 function handleCheckboxChange(event) {
-                    d3.select("body").style("cursor", "url('HP_WandH.png'), auto");
                     const spellName = event.target.value;
 
                     if (event.target.checked) {
