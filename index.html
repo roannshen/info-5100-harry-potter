@@ -228,329 +228,222 @@
         </div>
     </div>
 </div>
-    
 
-    <script>
-        const spellColors = {
-            "Avada Kedavra": "#39FF14",
-            "Confringo": "#FF6700",
-            "Incendio": "#FF4500",
-            "Morsmordre": "#006400",
-            "Sectumsempra": "#9400D3",
-            "Stupefy": "#FFD700",
-            "Crucio": "#C0C0C0",
-            "Imperio": "#3CB371",
-            "Confundo": "#BA55D3",
-            "Expelliarmus": "#B22222",
-            "Petrificus Totalus": "#1E90FF",
-            "Obliviate": "#FFB6C1",
-            "Expecto Patronum": "#0ABAB5"
-        };
+<script>
+    const spellColors = {
+        "Avada Kedavra": "#39FF14",
+        "Confringo": "#FF6700",
+        "Incendio": "#FF4500",
+        "Morsmordre": "#006400",
+        "Sectumsempra": "#9400D3",
+        "Stupefy": "#FFD700",
+        "Crucio": "#C0C0C0",
+        "Imperio": "#3CB371",
+        "Confundo": "#BA55D3",
+        "Expelliarmus": "#B22222",
+        "Petrificus Totalus": "#1E90FF",
+        "Obliviate": "#FFB6C1",
+        "Expecto Patronum": "#0ABAB5"
+    };
 
-        const casterImages = {
-            "Bellatrix Lestrange": "character_node_svg/lestrange.svg",
-            "Lord Voldemort": "character_node_svg/voldemort.svg",
-            "Harry Potter": "character_node_svg/potter.svg",
-            "Hermione Granger": "character_node_svg/granger.svg",
-            "Neville Longbottom": "character_node_svg/longbottom.svg",
-            "Severus Snape": "character_node_svg/snape.svg",
-            "Draco Malfoy": "character_node_svg/malfoy.svg",
-            "Dolores Umbridge": "character_node_svg/umbridge.svg",
-            "Peter Pettigrew": "character_node_svg/pettigrew.svg",
-            "Ron Weasley": "character_node_svg/weasley.svg",
-            "Albus Dumbledore": "character_node_svg/dumbledore.svg",
-            "Unnamed Character": "character_node_svg/unknown.svg"
-        };
-    
-        const svg = d3.select("svg#graph");
-        const graphWidth = +svg.attr("width");
-        const graphHeight = +svg.attr("height");
-        const imageNodeRadius = 250;
-        const circleNodeRadius = 350;
+    const casterImages = {
+        "Bellatrix Lestrange": "character_node_svg/lestrange.svg",
+        "Lord Voldemort": "character_node_svg/voldemort.svg",
+        "Harry Potter": "character_node_svg/potter.svg",
+        "Hermione Granger": "character_node_svg/granger.svg",
+        "Neville Longbottom": "character_node_svg/longbottom.svg",
+        "Severus Snape": "character_node_svg/snape.svg",
+        "Draco Malfoy": "character_node_svg/malfoy.svg",
+        "Dolores Umbridge": "character_node_svg/umbridge.svg",
+        "Peter Pettigrew": "character_node_svg/pettigrew.svg",
+        "Ron Weasley": "character_node_svg/weasley.svg",
+        "Albus Dumbledore": "character_node_svg/dumbledore.svg",
+        "Unnamed Character": "character_node_svg/unknown.svg"
+    };
 
-        const darkMarkFixedPosition = { fx: -20, fy: -100 };
+    const svg = d3.select("svg#graph");
+    const graphWidth = +svg.attr("width");
+    const graphHeight = +svg.attr("height");
+    const imageNodeRadius = 250;
+    const circleNodeRadius = 350;
+    const darkMarkFixedPosition = { fx: -20, fy: -100 };
 
-        Promise.all([
-            d3.csv("megafile.csv"), // Main data file
-            d3.csv("characters.csv") // List of valid character names
-        ]).then(([data, characters]) => {
-            const validCharacters = new Set(characters.map(d => d.Character_Name));
-    
-            const castersSet = new Set(data.map(d => d.caster));
-    
-            const nodes = [];
-            const nodeMap = new Map();
-            const links = [];
-            
-    
-            data.forEach(d => {
-                const { caster, victim, spell_name } = d;
-    
-                const sourceNode = caster;
-                let targetNode;
-    
-                // Separate "Dark Mark" as a distinct node
-                if (victim === "Dark Mark") {
-                    targetNode = "Dark Mark";
-                } else {
-                    targetNode = validCharacters.has(victim) ? victim : "Unnamed Character";
-                }
-    
-                if (!nodeMap.has(sourceNode)) {
-                    nodeMap.set(sourceNode, { id: sourceNode, isCentral: true });
-                    nodes.push(nodeMap.get(sourceNode));
-                }
-    
-                if (!nodeMap.has(targetNode)) {
-    const isDarkMark = targetNode === "Dark Mark";
-    nodeMap.set(targetNode, {
-        id: targetNode,
-        isCentral: castersSet.has(targetNode),
-        fx: isDarkMark ? darkMarkFixedPosition.fx : null, // Fix X for "Dark Mark"
-        fy: isDarkMark ? darkMarkFixedPosition.fy : null  // Fix Y for "Dark Mark"
-    });
-    nodes.push(nodeMap.get(targetNode));
-}
+    let link, nodeGroup, selectedNode = null;
 
-                
-    
-                links.push({
-                    source: sourceNode,
-                    target: targetNode,
-                    spell: spell_name
+    Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, characters]) => {
+        const nodes = [];
+        const links = [];
+        const validCharacters = new Set(characters.map(d => d.Character_Name));
+        const nodeMap = new Map();
+
+        // Process data into nodes and links
+        data.forEach(({ caster, victim, spell_name }) => {
+            const sourceNode = caster;
+            const targetNode = victim === "Dark Mark" ? "Dark Mark" : validCharacters.has(victim) ? victim : "Unnamed Character";
+
+            if (!nodeMap.has(sourceNode)) {
+                nodeMap.set(sourceNode, { id: sourceNode, isCentral: true });
+                nodes.push(nodeMap.get(sourceNode));
+            }
+            if (!nodeMap.has(targetNode)) {
+                nodeMap.set(targetNode, {
+                    id: targetNode,
+                    isCentral: false,
+                    fx: targetNode === "Dark Mark" ? darkMarkFixedPosition.fx : null,
+                    fy: targetNode === "Dark Mark" ? darkMarkFixedPosition.fy : null
                 });
-            });
+                nodes.push(nodeMap.get(targetNode));
+            }
+            links.push({ source: sourceNode, target: targetNode, spell: spell_name });
+        });
 
-            links.forEach((link, index) => {
-        link.index = index;
-        const sameSourceTarget = links.filter(l => l.source === link.source && l.target === link.target);
-        const sameTargetSource = links.filter(l => l.source === link.target && l.target === link.source);
-        link.offsetIndex = sameSourceTarget.indexOf(link) - sameTargetSource.length / 2;
-    });
+        links.forEach((link, index) => {
+            link.index = index;
+            const sameSourceTarget = links.filter(l => l.source === link.source && l.target === link.target);
+            const sameTargetSource = links.filter(l => l.source === link.target && l.target === link.source);
+            link.offsetIndex = sameSourceTarget.indexOf(link) - sameTargetSource.length / 2;
+        });
 
-            const link = svg.append("g")
-                .attr("class", "links")
-                .selectAll("path")
-                .data(links)
-                .join("path")
-                .attr("stroke", d => spellColors[d.spell] || "#999")
-                .attr("stroke-width", 2)
-                .attr("fill", "none")
-                .attr("d", d => {
+        // Draw links
+        link = svg.append("g")
+            .attr("class", "links")
+            .selectAll("path")
+            .data(links)
+            .join("path")
+            .attr("stroke", d => spellColors[d.spell] || "#999")
+            .attr("stroke-width", 2)
+            .attr("fill", "none")
+            .attr("d", d => {
             const dx = d.target.x - d.source.x;
             const dy = d.target.y - d.source.y;
             const dr = Math.sqrt(dx * dx + dy * dy) + d.offsetIndex * 10; // Add offset to prevent overlap
             return `M${d.source.x},${d.source.y}A${dr},${dr} 0 0,1 ${d.target.x},${d.target.y}`;
         });
 
-    
-            const travelingLine = svg.append("g")
-                .attr("class", "traveling-lines")
-                .selectAll("line")
-                .data(links)
-                .join("line")
-                .attr("stroke", d => {
-                    const baseColor = d3.color(spellColors[d.spell] || "#999");
-                    if (baseColor) {
-                        baseColor.r = Math.min(255, baseColor.r + 50);
-                        baseColor.g = Math.min(255, baseColor.g + 50);
-                        baseColor.b = Math.min(255, baseColor.b + 50);
-                    }
-                    return baseColor;
-                })
-                .attr("stroke-width", 3)
-                .attr("x1", -10)
-                .attr("y1", 0)
-                .attr("x2", 10)
-                .attr("y2", 0)
-                .style("visibility", "hidden");
+        // Draw nodes
+        nodeGroup = svg.append("g").attr("class", "nodes");
+        const node = nodeGroup.selectAll("g")
+            .data(nodes)
+            .join("g")
+            .each(function (d) {
+                const group = d3.select(this);
+                if (casterImages[d.id]) {
+                    group.append("image")
+                        .attr("xlink:href", casterImages[d.id])
+                        .attr("width", 60)
+                        .attr("height", 60)
+                        .attr("x", -30)
+                        .attr("y", -30);
+                } else {
+                    group.append("image")
+                        .attr("xlink:href", "character_node_svg/hat.svg")
+                        .attr("width", 50)
+                        .attr("height", 50)
+                        .attr("x", -15)
+                        .attr("y", -15);
+                }
+            });
 
-                let nodeGroup = svg.append("g").attr("class", "nodes");
-                const node = svg.append("g")
-    .attr("class", "nodes")
-    .selectAll("g")
-    .data(nodes)
-    .join("g")
+        // Setup force simulation
+        const simulation = d3.forceSimulation(nodes)
+            .force("link", d3.forceLink(links).id(d => d.id).distance(120))
+            .force("charge", d3.forceManyBody().strength(-300))
+            .force("center", d3.forceCenter(graphWidth / 2, graphHeight / 2))
+            .force("x", d3.forceX(graphWidth / 2).strength(0.5))
+            .force("y", d3.forceY(graphHeight / 2).strength(0.5))
+            .force("radial-image", d3.forceRadial(
+                d => d.isCentral ? imageNodeRadius : circleNodeRadius,
+                graphWidth / 2 - 100, // Shift the graph 100px to the left
+                graphHeight / 2)
+                .strength(1))
+            .force("collide", d3.forceCollide()
+                .radius(d => (d.id === "Unnamed Character" ? 70 : 50))
+                .iterations(4));
 
-    .each(function (d) {
-        nodeGroup = d3.select(this);
-        if (casterImages[d.id]) {
-            // If there is an image for this node
-            nodeGroup.append("image")
-                .attr("xlink:href", casterImages[d.id])
-                .attr("width", 60)
-                .attr("height", 60)
-                .attr("x", -30)
-                .attr("y", -30);
-        } else {
-            nodeGroup.append("image")
-                .attr("xlink:href", "character_node_svg/hat.svg")
-                .attr("width", 50)
-                .attr("height", 50)
-                .attr("x", -15)
-                .attr("y", -15);
-        }
-    });
-
-    
-    const simulation = d3.forceSimulation(nodes)
-    .force("radial-image", d3.forceRadial(
-        d => d.isCentral ? imageNodeRadius : circleNodeRadius,
-        graphWidth / 2 - 100, // Shift the graph 100px to the left
-        graphHeight / 2
-    ).strength(1))
-    .force("collide", d3.forceCollide()
-        .radius(d => (d.id === "Unnamed Character" ? 70 : 50))
-        .iterations(4))
-    .force("link", d3.forceLink(links)
-        .id(d => d.id)
-        .distance(d => d.target.id === "Dark Mark" ? 30 : 120)) // Shorten edges to "Dark Mark"
-    .force("charge", d3.forceManyBody().strength(-300))
-    .force("center", d3.forceCenter(graphWidth / 2 - 100, graphHeight / 2)) // Recenter to the left
-    .force("x", d3.forceX(graphWidth / 2 - 100).strength(d => (d.isCentral ? 0.7 : 0.3))) // Shift X-axis forces
-    .force("y", d3.forceY(graphHeight / 2).strength(d => (d.isCentral ? 0.5 : 0.1)));
-
-
-
-simulation.nodes(nodes);
-
-// Ensure simulation respects fixed positions
-simulation.on("tick", () => {
-    node.attr("transform", d => {
-        if (d.id === "Dark Mark") {
-            d.x = darkMarkFixedPosition.fx; // Lock X
-            d.y = darkMarkFixedPosition.fy; // Lock Y
-        }
-        return `translate(${d.x},${d.y})`;
-    });
-
-    link.attr("d", d => {
-        const isDarkMarkLink = d.target.id === "Dark Mark";
-
-        const dx = isDarkMarkLink ? darkMarkFixedPosition.fx - d.source.x : d.target.x - d.source.x;
-        const dy = isDarkMarkLink ? darkMarkFixedPosition.fy - d.source.y : d.target.y - d.source.y;
-        const dr = Math.sqrt(dx * dx + dy * dy) + (d.offsetIndex || 0) * 10;
-
-        return `M${d.source.x},${d.source.y}A${dr},${dr} 0 0,1 ${
-            isDarkMarkLink ? darkMarkFixedPosition.fx : d.target.x
-        },${isDarkMarkLink ? darkMarkFixedPosition.fy : d.target.y}`;
-    });
-});
-
-    
-            simulation.force("link").links(links);
-    
-            // Tooltip for showing character names
-            const tooltip = d3.select("body")
-                .append("div")
-                .attr("class", "tooltip");
-    
-                node.on("mouseover", (event, d) => {
-                    // Always show the tooltip for all nodes (casters and victims)
-                    tooltip.html(d.id)
-                        .style("top", `${event.pageY - 20}px`)
-                        .style("left", `${event.pageX + 20}px`)
-                        .style("visibility", "visible");
-
-    if (d.isCentral || d.id === "Unnamed Character") {
-        d3.select("body").style("cursor", "url('HP_WandH.png'), auto");
-
-        // Highlight links connected to this caster
-        link.attr("stroke-opacity", l => (l.source.id === d.id || l.target.id === d.id ? 1 : 0.1));
-
-        // Highlight directly connected nodes
-        node.selectAll("circle, image").attr("opacity", n => {
-            return (n.id === d.id || links.some(l => (l.source.id === d.id && l.target.id === n.id) || (l.target.id === d.id && l.source.id === n.id))) ? 1 : 0.3;
+        simulation.nodes(nodes).on("tick", () => {
+            node.attr("transform", d => `translate(${d.x},${d.y})`);
+            link.attr("d", d => {
+                const dx = d.target.x - d.source.x;
+                const dy = d.target.y - d.source.y;
+                const dr = Math.sqrt(dx * dx + dy * dy) + d.offsetIndex * 10;
+                return `M${d.source.x},${d.source.y}A${dr},${dr} 0 0,1 ${d.target.x},${d.target.y}`;
+            });
         });
 
-        // Animate curve paths for this caster (both outgoing and incoming)
-        animateCurvePaths(d.id);
-    } else {
-        d3.select("body").style("cursor", "url('HP_OnlyWand.png'), auto");
-    }
-})
-node.on("mousemove", (event) => {
-    tooltip.html(d.id)
-        .style("top", `${event.pageY - 20}px`)
-        .style("left", `${event.pageX + 20}px`)
-        .style("visibility", "visible");
-    highlightNode(d);
-})
-node.on("mouseout", () => {
-    tooltip.style("visibility", "hidden");
-    link.attr("stroke-opacity", 0.6);
-    node.selectAll("circle, image").attr("opacity", 1);
-    resetCurvePaths();
-    d3.select("body").style("cursor", "url('HP_OnlyWand.png'), auto");
-});
+        simulation.force("link").links(links);
 
-// Function to animate the curve paths (both outgoing and incoming)
-function animateCurvePaths(casterId) {
-    // Filter links where the caster is the source or the target
-    const casterLinks = links.filter(l => l.source.id === casterId || l.target.id === casterId);
+        // Tooltip setup
+        const tooltip = d3.select("body")
+                          .append("div")
+                          .attr("class", "tooltip");
 
-    casterLinks.forEach(linkData => {
-        const path = link.filter(d => d === linkData); // Select the specific path
-        const pathElement = path.node();
-        const length = pathElement.getTotalLength();
-
-        // Set up the stroke-dasharray and stroke-dashoffset for animation
-        path.attr("stroke-dasharray", `${length} ${length}`)
-            .attr("stroke-dashoffset", length)
-            .transition()
-            .duration(1500)
-            .ease(d3.easeLinear)
-            .attr("stroke-dashoffset", 0);
-    });
-}
-
-// Function to reset all curve paths
-function resetCurvePaths() {
-    link.attr("stroke-dasharray", null).attr("stroke-dashoffset", null);
-};
-        });
-        
-        //click event
-        let selectedNode = null;
-
-        node.on("click", (event, d) => {
-    // Check if the clicked node is already selected
-    if (selectedNode && selectedNode.id === d.id) {
-        // Deselect the node if it's clicked again
-        selectedNode = null;
-        resetHighlight();
-    } else {
-        // Set the clicked node as the selected node
-        selectedNode = d;
-        highlightNode(d);
-    }
-});
-
-function highlightNode(node) {
-    link.attr("stroke-opacity", l => (l.source.id === node.id || l.target.id === node.id ? 1 : 0.1))
-        .attr("stroke-width", l => (l.source.id === node.id || l.target.id === node.id ? 3 : 1));
-
-    nodeGroup.selectAll("circle, image").attr("opacity", n => {
-        return (n.id === node.id || links.some(l => (l.source.id === node.id && l.target.id === n.id) || (l.target.id === node.id && l.source.id === n.id))) ? 1 : 0.3;
-    });
-
-    d3.select("body").style("cursor", "url('HP_WandH.png'), auto");
-}
-
-function resetHighlight() {
-    link.attr("stroke-opacity", 0.6).attr("stroke-width", 2);
-    nodeGroup.selectAll("image").attr("opacity", 1);
-    d3.select("body").style("cursor", "url('HP_OnlyWand.png'), auto");
-}
-
-        svg.on("click", () => {
-            if (selectedNode) {
-                selectedNode = null;
+        // Add event listeners for interaction
+        node.on("mouseover", (event, d) => {
+            tooltip.html(d.id)
+                .style("top", `${event.pageY - 20}px`)
+                .style("left", `${event.pageX + 20}px`)
+                .style("visibility", "visible");
+            if (!selectedNode) highlightNode(d);
+        }).on("mouseout", () => {
+            tooltip.style("visibility", "hidden");
+            if (!selectedNode) {
                 resetHighlight();
+                resetCurvePaths(); //might take out depending on which one is prettier
             }
         });
 
-    </script>    
+        node.on("click", (event, d) => {
+            if (selectedNode && selectedNode.id === d.id) {
+                selectedNode = null;
+                resetHighlight();
+            } else {
+                selectedNode = d;
+                highlightNode(d);
+            }
+        });
+
+        // Highlighting and resetting functions
+        function highlightNode(node) {
+            animateCurvePaths(node.id);
+            link.attr("stroke-opacity", l => (l.source.id === node.id || l.target.id === node.id ? 1 : 0.1))
+                .attr("stroke-width", l => (l.source.id === node.id || l.target.id === node.id ? 3 : 1));
+
+            nodeGroup.selectAll("circle, image").attr("opacity", n => (
+                n.id === node.id || links.some(l => (l.source.id === node.id && l.target.id === n.id) || (l.target.id === node.id && l.source.id === n.id))
+            ) ? 1 : 0.3);
+        }
+
+        function resetHighlight() {
+            link.attr("stroke-opacity", 0.6).attr("stroke-width", 2);
+            nodeGroup.selectAll("circle, image").attr("opacity", 1);
+        }
+
+        function animateCurvePaths(casterId) {
+            // Filter links where the caster is the source or the target
+            const casterLinks = links.filter(l => l.source.id === casterId || l.target.id === casterId);
+
+            casterLinks.forEach(linkData => {
+                const path = link.filter(d => d === linkData); // Select the specific path
+                const pathElement = path.node();
+                const length = pathElement.getTotalLength();
+
+                // Set up the stroke-dasharray and stroke-dashoffset for animation
+                path.attr("stroke-dasharray", `${length} ${length}`) //source: https://hackernoon.com/animating-line-charts-with-d3js
+                    .attr("stroke-dashoffset", length)
+                    .transition()
+                    .duration(1500)
+                    .ease(d3.easeLinear)
+                    .attr("stroke-dashoffset", 0);
+                });
+}
+
+            function resetCurvePaths() {
+            link.attr("stroke-dasharray", null).attr("stroke-dashoffset", null);
+        }
+});
+        
+</script>
+    
 
 <div id="dark-mark-container">
     <img src="character_node_svg/dark_mark2.gif" alt="Dark Mark" style="position: absolute; top: 0px; left: 0px; width: 440px; height: 236px; opacity: 0.9;">
