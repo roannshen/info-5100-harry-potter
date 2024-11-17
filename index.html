@@ -272,8 +272,8 @@
     // const darkMarkFixedPosition = { fx: -20, fy: -100 };
     const fixedPositions = {
         "Dark Mark": { fx: -20, fy: -100 },
-        "Stag": { fx: 1000, fy: 650 },
-        "Otter": { fx: 1100, fy: 700 }
+        "Stag": { fx: 1040, fy: 690 },
+        "Otter": { fx: 1100, fy: 660 }
     };
 
     let link, nodeGroup, selectedNode = null;
@@ -288,7 +288,7 @@
         data.forEach(({ caster, victim, spell_name }) => {
             const sourceNode = caster;
             // let targetNode = victim === "Dark Mark"
-            let targetNode = validCharacters.has(victim) ? victim : "Unnamed Character";
+            let targetNode = (validCharacters.has(victim) || casterImages[victim]) ? victim : "Unnamed Character";
             if (!nodeMap.has(sourceNode)) {
                 nodeMap.set(sourceNode, { id: sourceNode, isCentral: true });
                 nodes.push(nodeMap.get(sourceNode));
@@ -310,14 +310,6 @@
         node.fy = fixedPositions[node.id].fy;
     }
 });
-
-svg.selectAll(".fixed-marker")
-    .data(Object.entries(fixedPositions))
-    .join("circle")
-    .attr("cx", ([, pos]) => pos.fx)
-    .attr("cy", ([, pos]) => pos.fy)
-    .attr("r", 10)
-    .attr("fill", "red");
 
 
             links.push({ source: sourceNode, target: targetNode, spell: spell_name });
