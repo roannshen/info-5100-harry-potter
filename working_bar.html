@@ -374,6 +374,7 @@ Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, cha
 
     // Highlighting and reset functions
     function highlightNode(node) {
+        animateCurvePaths(node.id);
         link.attr("stroke-opacity", l => (l.source.id === node.id || l.target.id === node.id ? 1 : 0.1))
             .attr("stroke-width", l => (l.source.id === node.id || l.target.id === node.id ? 3 : 1));
         nodeGroup.selectAll("image").attr("opacity", n => (
