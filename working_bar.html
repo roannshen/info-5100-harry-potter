@@ -407,6 +407,10 @@ Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, cha
     });
 
     node.on("click", (event, d) => {
+        const isCaster = data.some(row => row.caster === d.id);
+        if (!isCaster) {
+                return;
+            }
         if (selectedNode && selectedNode.id === d.id) {
             selectedNode = null;
             resetHighlight();
