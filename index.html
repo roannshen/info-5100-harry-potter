@@ -185,11 +185,70 @@
             width: 100%;
             height: 100%;
         }
+
+        #legend-container {
+                position: fixed; 
+                top: 10px; 
+                right: 10px; 
+                background-color: rgba(0, 0, 0, 0.4);
+                border-radius: 10px;
+                padding: 15px;
+                max-width: 200px;
+                max-height: 400px; 
+                overflow-y: auto; 
+                z-index: 100; 
+                color: white;
+                font-family: "Baskervville", serif;
+            }
+
+            #legend-container h3 {
+                font-size: 14pt;
+                text-align: center;
+                margin-top: 5px;
+                margin-bottom: 10px;
+            }
+
+            .legend-items {
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .legend-item {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                font-size: 10pt;
+            }
+
+            .legend-color {
+                width: 20px;
+                height: 20px;
+                border-radius: 5px;
+            }
         </style>
     </head>
 <body>
     <div id="section">
         <h1>Deep Dive into the Dangers of the Harry Potter Universe</h1>
+        <div id="legend-container" style="flex: 0 0 auto;">
+            <h3>Legend: Spell Colors</h3>
+            <div class="legend-items">
+                <div class="legend-item" style="color: #39FF14;"><span class="legend-color" style="background-color: #39FF14;"></span>Avada Kedavra</div>
+                <div class="legend-item" style="color: #FF6F31;"><span class="legend-color" style="background-color: #FF6F31;"></span>Confringo</div>
+                <div class="legend-item" style="color: #FF4500;"><span class="legend-color" style="background-color: #FF4500;"></span>Incendio</div>
+                <div class="legend-item" style="color: #006400;"><span class="legend-color" style="background-color: #006400;"></span>Morsmordre</div>
+                <div class="legend-item" style="color: #9400D3;"><span class="legend-color" style="background-color: #9400D3;"></span>Sectumsempra</div>
+                <div class="legend-item" style="color: #FFD700;"><span class="legend-color" style="background-color: #FFD700;"></span>Stupefy</div>
+                <div class="legend-item" style="color: #C0C0C0;"><span class="legend-color" style="background-color: #C0C0C0;"></span>Crucio</div>
+                <div class="legend-item" style="color: #FFA500;"><span class="legend-color" style="background-color: #3CB371;"></span>Imperio</div>
+                <div class="legend-item" style="color: #BA55D3;"><span class="legend-color" style="background-color: #BA55D3;"></span>Confundo</div>
+                <div class="legend-item" style="color: #B22222;"><span class="legend-color" style="background-color: #B22222;"></span>Expelliarmus</div>
+                <div class="legend-item" style="color: #1E90FF;"><span class="legend-color" style="background-color: #1E90FF;"></span>Petrificus Totalus</div>
+                <div class="legend-item" style="color: #FFB6C1;"><span class="legend-color" style="background-color: #FFB6C1;"></span>Obliviate</div>
+                <div class="legend-item" style="color: #0ABAB5;"><span class="legend-color" style="background-color: #0ABAB5;"></span>Expecto Patronum</div>
+            </div>            
+        </div>
         <button id="reset-button">Reset Visualization</button>
         <div id="row">
             <div id = "left-col">
