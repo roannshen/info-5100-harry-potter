@@ -73,46 +73,6 @@
                 color: black;
             }
 
-            #legend-container {
-                position: fixed; 
-                top: 10px; 
-                right: 10px; 
-                background-color: rgba(0, 0, 0, 0.4);
-                border-radius: 10px;
-                padding: 15px;
-                max-width: 200px;
-                max-height: 400px; 
-                overflow-y: auto; 
-                z-index: 100; 
-                color: white;
-                font-family: "Baskervville", serif;
-            }
-
-            #legend-container h3 {
-                font-size: 14pt;
-                text-align: center;
-                margin-top: 5px;
-                margin-bottom: 10px;
-            }
-
-            .legend-items {
-                display: flex;
-                flex-direction: column;
-                gap: 5px;
-            }
-
-            .legend-item {
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                font-size: 10pt;
-            }
-
-            .legend-color {
-                width: 20px;
-                height: 20px;
-                border-radius: 5px;
-            }
 
             #spider-container {
                 display: flex;
@@ -136,11 +96,6 @@
                 display: flex;
                 align-items: center;
                 gap: 10px;
-            }
-
-            #bar-graph-container {
-                width: 400px;
-                height: 400px;
             }
 
             .spider-section {
@@ -180,57 +135,90 @@
                 opacity: 1; /* Show the Snitch GIF when checked */
             }
 
+            #section {
+            width: 100vw;
+            height: 100vh;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 24px;
+            display: inline-flex;
+            flex-direction: column;
+            flex:1;
+        }
+
+        #row {
+            width: 100%;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: center;
+            display: inline-flex;
+            gap: 24px;
+            flex: 1;
+        }
+
+        #left-col {
+            width: 60%;
+            height: 100%;
+            padding: 10px;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            display: inline-flex;
+            flex-direction: column;
+
+        }
+
+        #right-col {
+            width: 40%;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
+            gap: 24px;
+            display: inline-flex;
+            align-items: center; 
+            justify-content: center;
+
+
+        }
+
+        svg {
+            width: 100%;
+            height: 100%;
+        }
         </style>
     </head>
 <body>
+    <div id="section">
         <h1>Deep Dive into the Dangers of the Harry Potter Universe</h1>
-        <!-- Legend Section -->
-        <div id="legend-container" style="flex: 0 0 auto;">
-            <h3>Legend: Spell Colors</h3>
-            <div class="legend-items">
-                <div class="legend-item" style="color: #39FF14;"><span class="legend-color" style="background-color: #39FF14;"></span>Avada Kedavra</div>
-                <div class="legend-item" style="color: #FF6F31;"><span class="legend-color" style="background-color: #FF6F31;"></span>Confringo</div>
-                <div class="legend-item" style="color: #FF4500;"><span class="legend-color" style="background-color: #FF4500;"></span>Incendio</div>
-                <div class="legend-item" style="color: #006400;"><span class="legend-color" style="background-color: #006400;"></span>Morsmordre</div>
-                <div class="legend-item" style="color: #9400D3;"><span class="legend-color" style="background-color: #9400D3;"></span>Sectumsempra</div>
-                <div class="legend-item" style="color: #FFD700;"><span class="legend-color" style="background-color: #FFD700;"></span>Stupefy</div>
-                <div class="legend-item" style="color: #C0C0C0;"><span class="legend-color" style="background-color: #C0C0C0;"></span>Crucio</div>
-                <div class="legend-item" style="color: #FFA500;"><span class="legend-color" style="background-color: #3CB371;"></span>Imperio</div>
-                <div class="legend-item" style="color: #BA55D3;"><span class="legend-color" style="background-color: #BA55D3;"></span>Confundo</div>
-                <div class="legend-item" style="color: #B22222;"><span class="legend-color" style="background-color: #B22222;"></span>Expelliarmus</div>
-                <div class="legend-item" style="color: #1E90FF;"><span class="legend-color" style="background-color: #1E90FF;"></span>Petrificus Totalus</div>
-                <div class="legend-item" style="color: #FFB6C1;"><span class="legend-color" style="background-color: #FFB6C1;"></span>Obliviate</div>
-                <div class="legend-item" style="color: #0ABAB5;"><span class="legend-color" style="background-color: #0ABAB5;"></span>Expecto Patronum</div>
-            </div>            
-        </div>
-
-     <!-- Graphs Container -->
-     <div id="graphs-container" style="display: flex;">
-        
-    <!-- Node Graph -->
-    <div id="node-graph" style="flex: 1; padding-left: 0; transform: translateX(20px);">
-        <svg id="graph" width="1200" height="800"></svg>
-    </div>    
-
-    <!-- Container for Spider Graph and Bar Graph -->
-    <div id="right-graphs-container" style="display: flex; flex-direction: column; gap: 10px; flex: 1; min-width: 600px;">
-        <!-- Spider Graph Section -->
-        <div class="spider-section">
-            <h2 id="spider-stats">Spell Stats</h2>
-            <div class="spider-container">
-                <svg id="spider-graph" height="400" width="600"></svg>
-                <div id="checkboxes-container"></div>
+        <button id="reset-button">Reset Visualization</button>
+        <div id="row">
+            <div id = "left-col">
+                <svg id="graph"></svg>
+            </div>    
+            <div id="right-col">
+                <svg id="bar-graph"></svg>
+                <div id="summary-stat"><p>summary stat</p></div>
             </div>
-        </div>
-
-        <!-- Bar Graph Section -->
-        <div id="bar-graph-container" style="min-width: 600px;">
-            <svg id="bar-graph" height="600" width="600"></svg>
+            
         </div>
     </div>
-</div>
+
+    <div id="section">
+        <h1>Understanding the Spells of the Harry Potter Universe</h2>
+        <div id="row">
+            <div id = "left-col">
+                <svg id="spider-graph"></svg>
+            </div>
+            <div class = "right-col">
+                <div id="checkboxes-container"></div>
+                <div id="spell-description"><p>spell description</p></div>
+            </div>
+        </div>
+    </div>
+
 
 <script>
+    
     const spellColors = {
         "Avada Kedavra": "#39FF14",
         "Confringo": "#FF6700",
@@ -264,36 +252,39 @@
         "Stag": "character_node_svg/stag.gif"
     };
 
-    const svg = d3.select("svg#graph");
-    const graphWidth = +svg.attr("width");
-    const graphHeight = +svg.attr("height");
-    const imageNodeRadius = 250;
-    const circleNodeRadius = 350;
-    // const darkMarkFixedPosition = { fx: -20, fy: -100 };
-    const fixedPositions = {
-        "Dark Mark": { fx: -20, fy: -100 },
-        "Stag": { fx: 1040, fy: 690 },
-        "Otter": { fx: 1100, fy: 660 }
-    };
+// NODE GRAPH
+const svg = d3.select("svg#graph")
+    .attr("width", "100%")
+    .attr("height", "100%");
 
-    let link, nodeGroup, selectedNode = null;
+const graphWidth = svg.node().getBoundingClientRect().width;
+const graphHeight = svg.node().getBoundingClientRect().height;
+const imageNodeRadius = 250;
+const circleNodeRadius = 350;
 
-    Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, characters]) => {
-        const nodes = [];
-        const links = [];
-        const validCharacters = new Set(characters.map(d => d.Character_Name));
-        const nodeMap = new Map();
+const fixedPositions = {
+    "Stag": { fx: 1040, fy: 690 },
+    "Otter": { fx: 1100, fy: 660 }
+};
 
-        // Process data into nodes and links
-        data.forEach(({ caster, victim, spell_name }) => {
-            const sourceNode = caster;
-            // let targetNode = victim === "Dark Mark"
-            let targetNode = (validCharacters.has(victim) || casterImages[victim]) ? victim : "Unnamed Character";
-            if (!nodeMap.has(sourceNode)) {
-                nodeMap.set(sourceNode, { id: sourceNode, isCentral: true });
-                nodes.push(nodeMap.get(sourceNode));
-            }
-            if (!nodeMap.has(targetNode)) {
+let link, nodeGroup, selectedNode = null;
+let spellData = [];
+
+Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, characters]) => {
+    const nodes = [];
+    const links = [];
+    const validCharacters = new Set(characters.map(d => d.Character_Name));
+    const nodeMap = new Map();
+
+    // Process data into nodes and links
+    data.forEach(({ caster, victim, spell_name }) => {
+        let targetNode = validCharacters.has(victim) ? victim : "Unnamed Character";
+
+        if (!nodeMap.has(caster)) {
+            nodeMap.set(caster, { id: caster, isCentral: true });
+            nodes.push(nodeMap.get(caster));
+        }
+        if (!nodeMap.has(targetNode)) {
             const isFixed = fixedPositions[targetNode];
             nodeMap.set(targetNode, {
                 id: targetNode,
@@ -304,152 +295,100 @@
             nodes.push(nodeMap.get(targetNode));
         }
 
-        nodes.forEach(node => {
-    if (fixedPositions[node.id]) {
-        node.fx = fixedPositions[node.id].fx;
-        node.fy = fixedPositions[node.id].fy;
-    }
-});
+        links.push({ source: caster, target: targetNode, spell: spell_name });
+    });
 
+    // Draw links
+    link = svg.append("g")
+        .attr("class", "links")
+        .selectAll("path")
+        .data(links)
+        .join("path")
+        .attr("stroke", d => spellColors[d.spell] || "#999")
+        .attr("stroke-width", 2)
+        .attr("fill", "none");
 
-            links.push({ source: sourceNode, target: targetNode, spell: spell_name });
+    // Draw nodes
+    nodeGroup = svg.append("g").attr("class", "nodes");
+    const node = nodeGroup.selectAll("g")
+        .data(nodes)
+        .join("g")
+        .each(function (d) {
+            const group = d3.select(this);
+            const image = group.append("image")
+                .attr("xlink:href", casterImages[d.id] || "character_node_svg/hat.svg")
+                .attr("width", 60)
+                .attr("height", 60)
+                .attr("x", -30)
+                .attr("y", -30);
         });
 
-        links.forEach((link, index) => {
-            link.index = index;
-            const sameSourceTarget = links.filter(l => l.source === link.source && l.target === link.target);
-            const sameTargetSource = links.filter(l => l.source === link.target && l.target === link.source);
-            link.offsetIndex = sameSourceTarget.indexOf(link) - sameTargetSource.length / 2;
-        });
+    // Setup force simulation
+    const simulation = d3.forceSimulation(nodes)
+        .force("link", d3.forceLink(links).id(d => d.id).distance(120))
+        .force("charge", d3.forceManyBody().strength(-300))
+        .force("center", d3.forceCenter(graphWidth / 2, graphHeight / 2))
+        .force("collide", d3.forceCollide().radius(50).iterations(4));
 
-        // Draw links
-        link = svg.append("g")
-            .attr("class", "links")
-            .selectAll("path")
-            .data(links)
-            .join("path")
-            .attr("stroke", d => spellColors[d.spell] || "#999")
-            .attr("stroke-width", 2)
-            .attr("fill", "none")
-            .attr("d", d => {
+    simulation.nodes(nodes).on("tick", () => {
+        node.attr("transform", d => `translate(${d.x},${d.y})`);
+        link.attr("d", d => {
             const dx = d.target.x - d.source.x;
             const dy = d.target.y - d.source.y;
-            const dr = Math.sqrt(dx * dx + dy * dy) + d.offsetIndex * 10; // Add offset to prevent overlap
+            const dr = Math.sqrt(dx * dx + dy * dy);
             return `M${d.source.x},${d.source.y}A${dr},${dr} 0 0,1 ${d.target.x},${d.target.y}`;
         });
+    });
 
-        // Draw nodes
-        nodeGroup = svg.append("g").attr("class", "nodes");
-        const node = nodeGroup.selectAll("g")
-            .data(nodes)
-            .join("g")
-            .each(function (d) {
-                const group = d3.select(this);
-                if (casterImages[d.id]) {
-                    group.append("image")
-                        .attr("xlink:href", casterImages[d.id])
-                        .attr("width", 60)
-                        .attr("height", 60)
-                        .attr("x", -30)
-                        .attr("y", -30);
-                } else {
-                    group.append("image")
-                        .attr("xlink:href", "character_node_svg/hat.svg")
-                        .attr("width", 50)
-                        .attr("height", 50)
-                        .attr("x", -15)
-                        .attr("y", -15);
-                }
-            });
+    simulation.force("link").links(links);
 
-        // Setup force simulation
-        const simulation = d3.forceSimulation(nodes)
-            .force("link", d3.forceLink(links).id(d => d.id).distance(120))
-            .force("charge", d3.forceManyBody().strength(-300))
-            .force("center", d3.forceCenter(graphWidth / 2, graphHeight / 2))
-            .force("x", d3.forceX(graphWidth / 2).strength(0.5))
-            .force("y", d3.forceY(graphHeight / 2).strength(0.5))
-            .force("radial-image", d3.forceRadial(
-                d => d.isCentral ? imageNodeRadius : circleNodeRadius,
-                graphWidth / 2 - 100, // Shift the graph 100px to the left
-                graphHeight / 2)
-                .strength(1))
-            .force("collide", d3.forceCollide()
-                .radius(d => (d.id === "Unnamed Character" ? 70 : 50))
-                .iterations(4));
+    // Tooltip setup
+    const tooltip = d3.select("body")
+        .append("div")
+        .attr("class", "tooltip")
+        .style("visibility", "hidden");
 
-        simulation.nodes(nodes).on("tick", () => {
-            node.attr("transform", d => `translate(${d.x},${d.y})`);
-            link.attr("d", d => {
-                const dx = d.target.x - d.source.x;
-                const dy = d.target.y - d.source.y;
-                const dr = Math.sqrt(dx * dx + dy * dy) + d.offsetIndex * 10;
-                return `M${d.source.x},${d.source.y}A${dr},${dr} 0 0,1 ${d.target.x},${d.target.y}`;
-            });
-        });
+    // Event listeners for interaction
+    node.on("mouseover", (event, d) => {
+        tooltip.html(d.id)
+            .style("top", `${event.pageY - 20}px`)
+            .style("left", `${event.pageX + 20}px`)
+            .style("visibility", "visible");
+        if (!selectedNode) highlightNode(d);
+    }).on("mouseout", () => {
+        tooltip.style("visibility", "hidden");
+        if (!selectedNode) resetHighlight();
+    });
 
-        simulation.force("link").links(links);
-
-        // Tooltip setup
-        const tooltip = d3.select("body")
-                          .append("div")
-                          .attr("class", "tooltip");
-
-        // Add event listeners for interaction
-        node.on("mouseover", (event, d) => {
-            tooltip.html(d.id)
-                .style("top", `${event.pageY - 20}px`)
-                .style("left", `${event.pageX + 20}px`)
-                .style("visibility", "visible");
-                d3.select("body")
-                  .style("cursor", "url('HP_WandH.png'), auto");
-                  const isCaster = data.some(row => row.caster === d.id);
-            if (!isCaster) {
-                d3.select("body").style("cursor", "url('HP_OnlyWand.png'), auto");
-                return;
-            }
-            if (!selectedNode) highlightNode(d);
-        }).on("mouseout", () => {
-            tooltip.style("visibility", "hidden");
-            d3.select("body").style("cursor", "url('HP_OnlyWand.png'), auto");
-            if (!selectedNode) {
-                resetHighlight();
-                resetCurvePaths(); //might take out depending on which one is prettier
-            }
-        });
-
-        node.on("click", (event, d) => {
-            const isCaster = data.some(row => row.caster === d.id);
-            if (!isCaster) {
-                return;
-            }
-            if (selectedNode && selectedNode.id === d.id) {
-                selectedNode = null;
-                resetHighlight();
-            } else {
-                selectedNode = d;
-                highlightNode(d);
-            }
-        });
-
-        // Highlighting and resetting functions
-        function highlightNode(node) {
-            animateCurvePaths(node.id);
-            link.attr("stroke-opacity", l => (l.source.id === node.id || l.target.id === node.id ? 1 : 0.1))
-                .attr("stroke-width", l => (l.source.id === node.id || l.target.id === node.id ? 3 : 1));
-
-            nodeGroup.selectAll("circle, image").attr("opacity", n => (
-                n.id === node.id || links.some(l => (l.source.id === node.id && l.target.id === n.id) || (l.target.id === node.id && l.source.id === n.id))
-            ) ? 1 : 0.3);
+    node.on("click", (event, d) => {
+        if (selectedNode && selectedNode.id === d.id) {
+            selectedNode = null;
+            resetHighlight();
+            resetBarGraph(); // Reset the bar graph highlighting
+        } else {
+            selectedNode = d;
+            highlightNode(d);
+            highlightSpellsInBarGraph(d.id); // Highlight spells in the bar graph
         }
+    });
 
-        function resetHighlight() {
-            link.attr("stroke-opacity", 0.6).attr("stroke-width", 2);
-            nodeGroup.selectAll("circle, image").attr("opacity", 1);
-        }
+    // Highlighting and reset functions
+    function highlightNode(node) {
+        animateCurvePaths(node.id);
+        link.attr("stroke-opacity", l => (l.source.id === node.id || l.target.id === node.id ? 1 : 0.1))
+            .attr("stroke-width", l => (l.source.id === node.id || l.target.id === node.id ? 3 : 1));
+        nodeGroup.selectAll("image").attr("opacity", n => (
+            n.id === node.id || links.some(l => l.source.id === node.id && l.target.id === n.id)
+        ) ? 1 : 0.3);
+    }
 
-        //Animating spell casting and resetting animation
-        function animateCurvePaths(casterId) {
+    function resetHighlight() {
+        link.attr("stroke-opacity", 1).attr("stroke-width", 2);
+        nodeGroup.selectAll("image").attr("opacity", 1);
+    }
+
+     //Animating spell casting and resetting animation
+     function animateCurvePaths(casterId) {
             // Filter links where the caster is the source or the target
             const casterLinks = links.filter(l => l.source.id === casterId || l.target.id === casterId);
 
@@ -466,334 +405,339 @@
                     .ease(d3.easeLinear)
                     .attr("stroke-dashoffset", 0);
                 });
-}
+    }   
 
-            function resetCurvePaths() {
+    function resetCurvePaths() {
             link.attr("stroke-dasharray", null).attr("stroke-dashoffset", null);
         }
+
+    function resetHighlight() {
+        link.attr("stroke-opacity", 1).attr("stroke-width", 2);
+        nodeGroup.selectAll("image").attr("opacity", 1);
+    }
+
+
+    function highlightSpellsInBarGraph(character) {
+        // Filter spells cast by the selected character
+        const characterSpells = data.filter(d => d.caster === character);
+
+        // Create a map of spell counts for the character
+        const spellCounts = new Map();
+        characterSpells.forEach(d => {
+            spellCounts.set(d.spell_name, (spellCounts.get(d.spell_name) || 0) + 1);
+        });
+
+        // Update the bar graph
+        d3.selectAll("#bar-graph rect")
+            .attr("fill", d => spellCounts.has(d.spell) ? spellColors[d.spell] : "#999")
+            .attr("opacity", d => spellCounts.has(d.spell) ? 1 : 0.3);
+    }
+
+    function resetBarGraph() {
+        d3.selectAll("#bar-graph rect")
+            .attr("fill", d => spellColors[d.spell])
+            .attr("opacity", 1);
+    }
 });
-        
+
+// BAR GRAPH
+// Load the CSV file
+const requestData = async function() {
+    const spells = await d3.csv("megafile.csv");
+    const barWidth = 400;
+    const barHeight = 200;
+    const margin = { top: 20, right: 30, bottom: 80, left: 50 };
+
+    // Bar Chart Dimensions
+    const barSvg = d3.select("#bar-graph")
+        .attr("width", barWidth + margin.left + margin.right)
+        .attr("height", barHeight + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", `translate(${margin.left},${margin.top})`);
+
+    // Calculate spell usage
+    const spellUsage = d3.rollup(spells, v => v.length, d => d.spell_name);
+    spellData = Array.from(spellUsage, ([spell, count]) => ({ spell, count }));
+    spellData.sort((a, b) => a.count - b.count);
+    // Scales for the bar chart
+    const x = d3.scaleBand()
+        .domain(spellData.map(d => d.spell))
+        .range([0, barWidth])
+        .padding(0.1);
+    const y = d3.scaleLinear()
+        .domain([0, d3.max(spellData, d => d.count)])
+        .nice()
+        .range([barHeight, 0]);
+
+    // Add bars to the bar chart
+    barSvg.append("g")
+        .selectAll("rect")
+        .data(spellData)
+        .enter().append("rect")
+        .attr("x", d => x(d.spell))
+        .attr("y", d => y(d.count))
+        .attr("width", x.bandwidth())
+        .attr("height", d => barHeight - y(d.count))
+        .attr("fill", d => spellColors[d.spell]);
+
+    // Add X and Y axes
+    barSvg.append("g")
+        .attr("transform", `translate(0,${barHeight})`)
+        .call(d3.axisBottom(x))
+        .attr("class", "axis")
+        .selectAll("text")
+        .attr("dy", "0.75em") // Adjusts the vertical position of tick labels
+        .attr("transform", "rotate(-45)")
+        .style("text-anchor", "end");
+
+    barSvg.append("g")
+        .call(d3.axisLeft(y))
+        .attr("dy", "0.35em") // Adjusts the vertical position of tick labels
+        .attr("class", "axis");
+
+    // Add axis labels
+    barSvg.append("text")
+        .attr("x", barWidth / 2)
+        .attr("y", barHeight + 80) // Adjusted position for the label
+        .attr("text-anchor", "middle")
+        .attr("class", "axis-label")
+        .text("Spell Name");
+
+    barSvg.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("x", -barHeight / 2)
+        .attr("y", -margin.left + 15) // Adjusted position for the label
+        .attr("text-anchor", "middle")
+        .attr("class", "axis-label")
+        .text("Spell Usage");
+
+}
+
+    requestData();
+     
 </script>
+
+<!-- SPIDER GRAPH -->
+            
+<script>
+    const maxSelected = 8;
+    let selectedSpells = ['Avada Kedavra', 'Confringo'];
+    const spellsNames = ['Avada Kedavra', 'Confringo', 'Crucio', 'Imperio', 'Incendio', 'Expelliarmus', 'Petrificus Totalus']// filterSpellsByCharacter(character);
+
+
+    // Function to filter spells by character
+    // TODO: IMPORT d3.csv("megafile.csv") FOR THE spellData data
     
+    function filterSpellsByCharacter(character) {
+        return spellData.filter(spell => spell.caster === character).map(spell => spell.spell_name);
+    }
 
-<div id="dark-mark-container">
-    <img src="character_node_svg/dark1.gif" alt="Dark Mark" style="position: absolute; top: 0px; left: 0px; width: 440px; height: 236px;">
-</div>
+    function createCheckboxes(spellNames) {
+        const checkboxesContainer = d3.select('#checkboxes-container');
+        checkboxesContainer.selectAll('*').remove();
 
+        const checkboxes = checkboxesContainer.selectAll('div')
+            .data(spellNames)
+            .enter()
+            .append('div')
+            .attr('class', 'checkbox-item')
+            .style('padding', '10px 15px')
+            .style('display', 'flex')
+            .style('align-items', 'center');
 
-         </div>
+        checkboxes.append('input')
+            .attr('type', 'checkbox')
+            .attr('id', d => d)
+            .attr('value', d => d)
+            .attr('class', 'snitch-checkbox')
+            .property('checked', (d, i) => i === 0 || i === 1)
+            .style('accent-color', d => spellColors[d])
+            .style('height', '30px')
+            .style('width', '30px')
+            .on('change', handleCheckboxChange)
+            .style('cursor', "url('HP_WandH.png'), auto");
 
-        <!-- Bar Graph -->
-        <!-- <div class="stacked-graphs"> -->
-        <!-- <svg id="bar-graph" height="600" width="600"></svg> -->
-        <div id="bar-graph-container">
-        <script>
-            // Load the CSV file
-            const requestData = async function() {
-                const spells = await d3.csv("megafile.csv");
-                // const bSvg = d3.select("svg#bar-graph");
-                // const barWidth = bSvg.attr("width");
-                // const barHeight = bSvg.attr('height');
-                const barWidth = 550;
-                const barHeight = 250;
-                const margin = { top: 20, right: 30, bottom: 100, left: 60 }; 
+            checkboxes.append('label')
+            .attr('for', d => d)
+                .text(d => d)
+                .style('color', 'white')
+                .style('font-family', 'serif')
+                .style('font-size', '10pt')
+                .style('width', '100px')
+                .style('height', '50px')
+                .style('text-align', 'center')
+                .style('display', 'flex')
+                .style('align-items', 'center')
+                .style('justify-content', 'center')
+                .style('border-radius', '5px')
+                .style('background-image', d => `url('button.svg')`)
+                .style('background-size', 'contain')
+                .style('background-repeat', 'no-repeat')
+                .style('background-position', 'center')
+                .style('padding', '10px')
+                .style('cursor', "url('HP_WandH.png'), auto");
+        }
 
-                // Bar Chart Dimensions
-                const barSvg = d3.select("#bar-graph")
-                    .attr("width", barWidth + margin.left + margin.right)
-                    .attr("height", barHeight + margin.top + margin.bottom)
-                    .append("g")
-                    .attr("transform", `translate(${margin.left},${margin.top})`);
+    function handleCheckboxChange(event) {
+        const spellName = event.target.value;
 
-                // Calculate spell usage
-                const spellUsage = d3.rollup(spells, v => v.length, d => d.spell_name);
-                const spellData = Array.from(spellUsage, ([spell, count]) => ({ spell, count }));
+        if (event.target.checked) {
+            if (selectedSpells.length < maxSelected) {
+                event.target.checked = true;
+                selectedSpells.push(spellName);
+            } else {
+            event.target.checked = false;
+            alert("You can select up to 3 spells only.");
+            }
+        } else {
+            selectedSpells = selectedSpells.filter(spell => spell !== spellName);
+        }
 
-                // Scales for the bar chart
-                const x = d3.scaleBand()
-                    .domain(spellData.map(d => d.spell))
-                    .range([0, barWidth])
-                    .padding(0.1);
-                const y = d3.scaleLinear()
-                    .domain([0, d3.max(spellData, d => d.count)])
-                    .nice()
-                    .range([barHeight, 0]);
+        drawSpiderChart(selectedSpells);
+    }
 
-                // Add bars to the bar chart
-                barSvg.append("g")
-                    .selectAll("rect")
-                    .data(spellData)
-                    .enter().append("rect")
-                    .attr("x", d => x(d.spell))
-                    .attr("y", d => y(d.count))
-                    .attr("width", x.bandwidth())
-                    .attr("height", d => barHeight - y(d.count))
-                    .attr("fill", d => spellColors[d.spell] ); 
+    function updateSpiderChart(selectedSpells) {
+        const filteredStats = selectedSpells.map(spell => ({
+            spell: spell,
+            stats: spellStats[spell]
+    }));
 
+    d3.select('#spider-chart').selectAll('*').remove();
+        drawSpiderChart(selectedSpells);
+    }
 
-                // Add X and Y axes
-                barSvg.append("g")
-                    .attr("transform", `translate(0,${barHeight})`)
-                    .call(d3.axisBottom(x))
-                    .attr("class", "axis") 
-                    .selectAll("text")
-                    .attr("transform", "rotate(-45)")
-                    .style("text-anchor", "end");
+    createCheckboxes(spellsNames);
 
-
-                barSvg.append("g").call(d3.axisLeft(y))
-                    .attr("class", "axis");
-
-                // Add axis labels
-                barSvg.append("text")
-                    .attr("x", barWidth / 2)
-                    .attr("y", barHeight + 80)
-                    .attr("text-anchor", "middle")
-                    .attr("class", "axis-label")
-                    .text("Spell Name");
-
-                barSvg.append("text")
-                    .attr("transform", "rotate(-90)")
-                    .attr("x", -barHeight / 2)
-                    .attr("y", -margin.left + 20)
-                    .attr("text-anchor", "middle")
-                    .attr("class", "axis-label")
-                    .text("Spell Usage");
-            };
-
-            requestData();
-        </script>
-
-        <!-- Spider graph -->
-        <!-- <div class="spider-section">
-            <h2 id="spider-stats">Spell Stats</h2>
-            <div class="spider-container"><svg id="spider-graph" height="600" width="600"></svg>
-                <div id="checkboxes-container"></div>
+    function drawSpiderChart(spellsList) {
+        d3.csv('norm_spell_stats.csv').then((spells) => {
+            // Cite: We used https://yangdanny97.github.io/blog/2019/03/01/D3-Spider-Chart to learn how to graph spider graphs
+            let data = [];
+            let features = ["Damage", "Range", "Cooldown", "Duration", "CD OOC"];
             
-            </div>
-        </div> -->
-        <!-- </div> -->
-            
-            <script>
-                const maxSelected = 8;
-                let selectedSpells = ['Avada Kedavra', 'Confringo'];
-                const spellsNames = ['Avada Kedavra', 'Confringo', 'Crucio', 'Imperio', 'Incendio', 'Expelliarmus', 'Petrificus Totalus']// filterSpellsByCharacter(character);
-
-
-                // Function to filter spells by character
-                // TODO: IMPORT d3.csv("megafile.csv") FOR THE spellData data
-                
-                function filterSpellsByCharacter(character) {
-                    return spellData.filter(spell => spell.caster === character).map(spell => spell.spell_name);
-                }
-
-                function createCheckboxes(spellNames) {
-                    const checkboxesContainer = d3.select('#checkboxes-container');
-                    checkboxesContainer.selectAll('*').remove();
-
-                    const checkboxes = checkboxesContainer.selectAll('div')
-                        .data(spellNames)
-                        .enter()
-                        .append('div')
-                        .attr('class', 'checkbox-item')
-                        .style('padding', '10px 15px')
-                        .style('display', 'flex')
-                        .style('align-items', 'center');
-
-                    checkboxes.append('input')
-                        .attr('type', 'checkbox')
-                        .attr('id', d => d)
-                        .attr('value', d => d)
-                        .attr('class', 'snitch-checkbox')
-                        .property('checked', (d, i) => i === 0 || i === 1)
-                        .style('accent-color', d => spellColors[d])
-                        .style('height', '30px')
-                        .style('width', '30px')
-                        .on('change', handleCheckboxChange)
-                        .style('cursor', "url('HP_WandH.png'), auto");
-
-                        checkboxes.append('label')
-                        .attr('for', d => d)
-                            .text(d => d)
-                            .style('color', 'white')
-                            .style('font-family', 'serif')
-                            .style('font-size', '10pt')
-                            .style('width', '100px')
-                            .style('height', '50px')
-                            .style('text-align', 'center')
-                            .style('display', 'flex')
-                            .style('align-items', 'center')
-                            .style('justify-content', 'center')
-                            .style('border-radius', '5px')
-                            .style('background-image', d => `url('Asset 5.svg')`)
-                            .style('background-size', 'contain')
-                            .style('background-repeat', 'no-repeat')
-                            .style('background-position', 'center')
-                            .style('padding', '10px')
-                            .style('cursor', "url('HP_WandH.png'), auto");
-                    }
-
-                function handleCheckboxChange(event) {
-                    const spellName = event.target.value;
-
-                    if (event.target.checked) {
-                        if (selectedSpells.length < maxSelected) {
-                            event.target.checked = true;
-                            selectedSpells.push(spellName);
-                        } else {
-                        event.target.checked = false;
-                        alert("You can select up to 3 spells only.");
-                        }
-                    } else {
-                        selectedSpells = selectedSpells.filter(spell => spell !== spellName);
-                    }
-
-                    drawSpiderChart(selectedSpells);
-                }
-
-                function updateSpiderChart(selectedSpells) {
-                    const filteredStats = selectedSpells.map(spell => ({
-                        spell: spell,
-                        stats: spellStats[spell]
-                }));
-
-                d3.select('#spider-chart').selectAll('*').remove();
-                    drawSpiderChart(selectedSpells);
-                }
-
-            createCheckboxes(spellsNames);
-
-            function drawSpiderChart(spellsList) {
-                d3.csv('norm_spell_stats.csv').then((spells) => {
-                    // Cite: We used https://yangdanny97.github.io/blog/2019/03/01/D3-Spider-Chart to learn how to graph spider graphs
-                    let data = [];
-                    let features = ["Damage", "Range", "Cooldown", "Duration", "CD OOC"];
-                    
-                    // Filter the data based on the selected spells
-                    for (let i = 0; i < spells.length; i++) {
-                        if (spellsList.includes(spells[i]['Name'])) {
-                            data.push({
-                                'Name': spells[i]['Name'],
-                                'Damage': Number(spells[i]['Damage']),
-                                'Range': Number(spells[i]['Range']),
-                                'Cooldown': Number(spells[i]['Cooldown']),
-                                'Duration': Number(spells[i]['Duration']),
-                                'CD OOC': Number(spells[i]['CD OOC'])
-                            });
-                        }
-                    }
-
-                    let width = 400;
-                    let height = 400;
-                    let svg = d3.select('svg#spider-graph');
-
-                    let radialScale = d3.scaleLinear()
-                        .domain([0, 1])
-                        .range([0, 125]);
-                    let ticks = [.2, .4, .6, .8, 1.0];
-
-                    // Remove any existing circles, labels, lines, and paths
-                    svg.selectAll("circle").remove();
-                    svg.selectAll(".ticklabel").remove();
-                    svg.selectAll("line").remove();
-                    svg.selectAll(".axislabel").remove();
-                    svg.selectAll("path").remove();
-
-                    // Draw circles for the radial grid
-                    // outer location
-                    svg.selectAll("circle")
-                        .data(ticks)
-                        .enter()
-                        .append("circle")
-                        .attr("cx", width / 2)
-                        .attr("cy", height / 2)
-                        .attr("fill", "none")
-                        .attr("stroke", "gray")
-                        .attr("r", d => radialScale(d));
-
-                    // Draw axis labels
-                    svg.selectAll(".ticklabel")
-                        .data(ticks)
-                        .enter()
-                        .append("text")
-                        .attr("x", width / 2 + 5)
-                        .attr("y", d => height / 2 - radialScale(d))
-                        .text(d => d.toString())
-                        .style("fill", "white");
-
-                    function angleToCoordinate(angle, value) {
-                        let x = Math.cos(angle) * radialScale(value);
-                        let y = Math.sin(angle) * radialScale(value);
-                        return { "x": width / 2 + x, "y": height / 2 - y };
-                    }
-
-                    let featureData = features.map((f, i) => {
-                        let angle = (Math.PI / 2) + (2 * Math.PI * i / features.length);
-                        return {
-                            "name": f,
-                            "angle": angle,
-                            "line_coord": angleToCoordinate(angle, 1),
-                            "label_coord": angleToCoordinate(angle, 1.15)
-                        };
+            // Filter the data based on the selected spells
+            for (let i = 0; i < spells.length; i++) {
+                if (spellsList.includes(spells[i]['Name'])) {
+                    data.push({
+                        'Name': spells[i]['Name'],
+                        'Damage': Number(spells[i]['Damage']),
+                        'Range': Number(spells[i]['Range']),
+                        'Cooldown': Number(spells[i]['Cooldown']),
+                        'Duration': Number(spells[i]['Duration']),
+                        'CD OOC': Number(spells[i]['CD OOC'])
                     });
-
-                    svg.selectAll("line")
-                        .data(featureData)
-                        .enter()
-                        .append("line")
-                        .attr("x1", width / 2)
-                        .attr("y1", height / 2)
-                        .attr("x2", d => d.line_coord.x)
-                        .attr("y2", d => d.line_coord.y)
-                        .attr("stroke", "white");
-
-                    svg.selectAll(".axislabel")
-                        .data(featureData)
-                        .enter()
-                        .append("text")
-                        .attr("x", d => d.label_coord.x)
-                        .attr("y", d => d.label_coord.y)
-                        .text(d => d.name)
-                        .style("fill", "white");
-
-                    let line = d3.line()
-                        .x(d => d.x)
-                        .y(d => d.y);
-
-                    // let colors = ["#28A745", "#FF4500", "#48493E", "#DA3832", "#FBD748", "#FF6347", "#4782B4"];
-
-                    function getPathCoordinates(data_point) {
-                        let coordinates = [];
-                        for (let i = 0; i < features.length; i++) {
-                            let ft_name = features[i];
-                            let angle = (Math.PI / 2) + (2 * Math.PI * i / features.length);
-                            coordinates.push(angleToCoordinate(angle, data_point[ft_name]));
-                        }
-                        return coordinates;
-                    }
-
-                    // Properly join data for paths and handle enter, update, and exit
-                    const paths = svg.selectAll("path")
-                        .data(data, d => d.Name);
-
-                    paths.exit().remove(); // Remove paths that are no longer in the data
-
-                    paths.enter()
-                        .append("path")
-                        .merge(paths)
-                        .attr("d", d => line(getPathCoordinates(d)))
-                        .attr("stroke-width", 3)
-                        .attr("stroke", d => spellColors[d['Name']])
-                        .attr("fill", d => spellColors[d['Name']])
-                        .attr("stroke-opacity", 1)
-                        .attr("opacity", 0.5);
-                });
+                }
             }
 
-            
-    drawSpiderChart(selectedSpells)
+        let width = 400;
+        let height = 400;
+        let svg = d3.select('svg#spider-graph');
 
-            </script>
-        <!-- </div> -->
-    </body>
+        let radialScale = d3.scaleLinear()
+            .domain([0, 1])
+            .range([0, 125]);
+        let ticks = [.2, .4, .6, .8, 1.0];
+
+        // Remove any existing circles, labels, lines, and paths
+        svg.selectAll("circle").remove();
+        svg.selectAll(".ticklabel").remove();
+        svg.selectAll("line").remove();
+        svg.selectAll(".axislabel").remove();
+        svg.selectAll("path").remove();
+
+        // Draw circles for the radial grid
+        // outer location
+        svg.selectAll("circle")
+            .data(ticks)
+            .enter()
+            .append("circle")
+            .attr("cx", width / 2)
+            .attr("cy", height / 2)
+            .attr("fill", "none")
+            .attr("stroke", "gray")
+            .attr("r", d => radialScale(d));
+
+        // Draw axis labels
+        svg.selectAll(".ticklabel")
+            .data(ticks)
+            .enter()
+            .append("text")
+            .attr("x", width / 2 + 5)
+            .attr("y", d => height / 2 - radialScale(d))
+            .text(d => d.toString())
+            .style("fill", "white");
+
+        function angleToCoordinate(angle, value) {
+            let x = Math.cos(angle) * radialScale(value);
+            let y = Math.sin(angle) * radialScale(value);
+            return { "x": width / 2 + x, "y": height / 2 - y };
+        }
+
+        let featureData = features.map((f, i) => {
+            let angle = (Math.PI / 2) + (2 * Math.PI * i / features.length);
+            return {
+                "name": f,
+                "angle": angle,
+                "line_coord": angleToCoordinate(angle, 1),
+                "label_coord": angleToCoordinate(angle, 1.15)
+            };
+        });
+
+        svg.selectAll("line")
+            .data(featureData)
+            .enter()
+            .append("line")
+            .attr("x1", width / 2)
+            .attr("y1", height / 2)
+            .attr("x2", d => d.line_coord.x)
+            .attr("y2", d => d.line_coord.y)
+            .attr("stroke", "white");
+
+        svg.selectAll(".axislabel")
+            .data(featureData)
+            .enter()
+            .append("text")
+            .attr("x", d => d.label_coord.x)
+            .attr("y", d => d.label_coord.y)
+            .text(d => d.name)
+            .style("fill", "white");
+
+        let line = d3.line()
+            .x(d => d.x)
+            .y(d => d.y);
+
+        // let colors = ["#28A745", "#FF4500", "#48493E", "#DA3832", "#FBD748", "#FF6347", "#4782B4"];
+
+        function getPathCoordinates(data_point) {
+            let coordinates = [];
+            for (let i = 0; i < features.length; i++) {
+                let ft_name = features[i];
+                let angle = (Math.PI / 2) + (2 * Math.PI * i / features.length);
+                coordinates.push(angleToCoordinate(angle, data_point[ft_name]));
+            }
+            return coordinates;
+        }
+
+        // Properly join data for paths and handle enter, update, and exit
+        const paths = svg.selectAll("path")
+            .data(data, d => d.Name);
+
+        paths.exit().remove(); // Remove paths that are no longer in the data
+
+        paths.enter()
+            .append("path")
+            .merge(paths)
+            .attr("d", d => line(getPathCoordinates(d)))
+            .attr("stroke-width", 3)
+            .attr("stroke", d => spellColors[d['Name']])
+            .attr("fill", d => spellColors[d['Name']])
+            .attr("stroke-opacity", 1)
+            .attr("opacity", 0.5);
+    });
+}
+
+
+drawSpiderChart(selectedSpells)
+
+</script>
+</body>
 </html>
