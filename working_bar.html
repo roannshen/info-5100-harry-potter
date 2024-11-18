@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://d3js.org/d3.v7.min.js"></script>
+        <title>Harry Potter Network Graph</title>
+        <link href="https://fonts.cdnfonts.com/css/harry-p" rel="stylesheet">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Baskervville:ital@0;1&display=swap" rel="stylesheet">
+        <style>
+            body {
+                font-family: "Baskervville", serif;
+                cursor: url('HP_OnlyWand.png'), auto;
+                background-image: url('background2.png');
+                background-size: cover; 
+                background-repeat: no-repeat;
+                background-position: center;
+                height: 100%;
+                color: white;
+                margin: 0;
+                background-attachment: fixed;
+            }
+
+            h1 {
+                font-family: 'Harry P', sans-serif;
+                font-weight: 400;
+                font-size: 39pt;
+                text-align: center;
+                margin: 30px;
+                color: white;
+            }
+
+            .axis text {
+                font-family: "Baskervville", serif;
+                fill: white;
+            }
+
+            .axis path,
+            .axis line {
+                stroke: white; 
+            }
+
+            .axis-label {
+                fill: white;
+            }
+
+            .checkboxes-container {
+                cursor: url('HP_OnlyWand.png'), auto;
+                color: white;
+                font-size: 14pt;
+            }
+
+            .checkboxes-container p {
+                color: white;
+                font-size: 14pt;
+            }
+
+            input, label {
+                cursor: url('HP_OnlyWand.png'), auto;
+            }
+
+            .tooltip {
+                position: absolute;
+                background: #f9f9f9;
+                border: 1px solid #ccc;
+                padding: 5px;
+                border-radius: 5px;
+                box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+                font-size: 12px;
+                visibility: hidden;
+                color: black;
+            }
+
+
+            #spider-container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
+                gap: 10px;
+            }
+
+            #checkboxes-container {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+                justify-items: center;
+                align-items: start;
+                width: 100%;
+                z-index: 1;
+            }
+
+            .checkbox-item {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .spider-section {
+                position: relative;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .snitch-checkbox {
+                position: relative;
+                cursor: pointer;
+                appearance: none;
+                width: 30px;
+                height: 30px;
+                border: 2px solid rgb(222, 220, 208);
+                border-radius: 4px;
+            }
+
+            .snitch-checkbox::before {
+                content: '';
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 70px;
+                height: 70px;
+                transform: translate(-50%, -50%);
+                background: url('character_node_svg/snitch.gif') no-repeat center center;
+                background-size: contain;
+                opacity: 0;
+                transition: opacity 0.2s ease-in-out;
+                z-index: 10;
+            }
+
+            .snitch-checkbox:checked::before {
+                opacity: 1; /* Show the Snitch GIF when checked */
+            }
+
+            #section {
+            width: 100vw;
+            height: 100vh;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 24px;
+            display: inline-flex;
+            flex-direction: column;
+            flex:1;
+        }
+
+        #row {
+            width: 100%;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: center;
+            display: inline-flex;
+            gap: 24px;
+            flex: 1;
+        }
+
+        #left-col {
+            width: 60%;
+            height: 100%;
+            padding: 10px;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            display: inline-flex;
+            flex-direction: column;
+
+        }
+
+        #right-col {
+            width: 40%;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
+            gap: 24px;
+            display: inline-flex;
+            align-items: center; 
+            justify-content: center;
+
+
+        }
+
+        svg {
+            width: 100%;
+            height: 100%;
+        }
+        </style>
+    </head>
+<body>
+    <div id="section">
+        <h1>Deep Dive into the Dangers of the Harry Potter Universe</h1>
+        <button id="reset-button">Reset Visualization</button>
+        <div id="row">
+            <div id = "left-col">
+                <svg id="graph"></svg>
+            </div>    
+            <div id="right-col">
+                <svg id="bar-graph"></svg>
+                <div id="summary-stat"><p>summary stat</p></div>
+            </div>
+            
+        </div>
+    </div>
+
+    <div id="section">
+        <h1>Understanding the Spells of the Harry Potter Universe</h2>
+        <div id="row">
+            <div id = "left-col">
+                <svg id="spider-graph"></svg>
+            </div>
+            <div class = "right-col">
+                <div id="checkboxes-container"></div>
+                <div id="spell-description"><p>spell description</p></div>
+            </div>
+        </div>
+    </div>
+
+
+<script>
+    
+    const spellColors = {
+        "Avada Kedavra": "#39FF14",
+        "Confringo": "#FF6700",
+        "Incendio": "#FF4500",
+        "Morsmordre": "#006400",
+        "Sectumsempra": "#9400D3",
+        "Stupefy": "#FFD700",
+        "Crucio": "#C0C0C0",
+        "Imperio": "#3CB371",
+        "Confundo": "#BA55D3",
+        "Expelliarmus": "#B22222",
+        "Petrificus Totalus": "#1E90FF",
+        "Obliviate": "#FFB6C1",
+        "Expecto Patronum": "#0ABAB5"
+    };
+
+    const casterImages = {
+        "Bellatrix Lestrange": "character_node_svg/lestrange.svg",
+        "Lord Voldemort": "character_node_svg/voldemort.svg",
+        "Harry Potter": "character_node_svg/potter.svg",
+        "Hermione Granger": "character_node_svg/granger.svg",
+        "Neville Longbottom": "character_node_svg/longbottom.svg",
+        "Severus Snape": "character_node_svg/snape.svg",
+        "Draco Malfoy": "character_node_svg/malfoy.svg",
+        "Dolores Umbridge": "character_node_svg/umbridge.svg",
+        "Peter Pettigrew": "character_node_svg/pettigrew.svg",
+        "Ron Weasley": "character_node_svg/weasley.svg",
+        "Albus Dumbledore": "character_node_svg/dumbledore.svg",
+        "Unnamed Character": "character_node_svg/unknown.svg",
+        "Otter": "character_node_svg/otter.gif",
+        "Stag": "character_node_svg/stag.gif"
+    };
+
+// NODE GRAPH
+const svg = d3.select("svg#graph")
+    .attr("width", "100%")
+    .attr("height", "100%");
+
+const graphWidth = svg.node().getBoundingClientRect().width;
+const graphHeight = svg.node().getBoundingClientRect().height;
+const imageNodeRadius = 250;
+const circleNodeRadius = 350;
+
+const fixedPositions = {
+    "Stag": { fx: 1040, fy: 690 },
+    "Otter": { fx: 1100, fy: 660 }
+};
+
+let link, nodeGroup, selectedNode = null;
+let spellData = [];
+
+Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, characters]) => {
+    const nodes = [];
+    const links = [];
+    const validCharacters = new Set(characters.map(d => d.Character_Name));
+    const nodeMap = new Map();
+
+    // Process data into nodes and links
+    data.forEach(({ caster, victim, spell_name }) => {
+        let targetNode = validCharacters.has(victim) ? victim : "Unnamed Character";
+
+        if (!nodeMap.has(caster)) {
+            nodeMap.set(caster, { id: caster, isCentral: true });
+            nodes.push(nodeMap.get(caster));
+        }
+        if (!nodeMap.has(targetNode)) {
+            const isFixed = fixedPositions[targetNode];
+            nodeMap.set(targetNode, {
+                id: targetNode,
+                isCentral: false,
+                fx: isFixed?.fx || null,
+                fy: isFixed?.fy || null
+            });
+            nodes.push(nodeMap.get(targetNode));
+        }
+
+        links.push({ source: caster, target: targetNode, spell: spell_name });
+    });
+
+    // Draw links
+    link = svg.append("g")
+        .attr("class", "links")
+        .selectAll("path")
+        .data(links)
+        .join("path")
+        .attr("stroke", d => spellColors[d.spell] || "#999")
+        .attr("stroke-width", 2)
+        .attr("fill", "none");
+
+    // Draw nodes
+    nodeGroup = svg.append("g").attr("class", "nodes");
+    const node = nodeGroup.selectAll("g")
+        .data(nodes)
+        .join("g")
+        .each(function (d) {
+            const group = d3.select(this);
+            const image = group.append("image")
+                .attr("xlink:href", casterImages[d.id] || "character_node_svg/hat.svg")
+                .attr("width", 60)
+                .attr("height", 60)
+                .attr("x", -30)
+                .attr("y", -30);
+        });
+
+    // Setup force simulation
+    const simulation = d3.forceSimulation(nodes)
+        .force("link", d3.forceLink(links).id(d => d.id).distance(120))
+        .force("charge", d3.forceManyBody().strength(-300))
+        .force("center", d3.forceCenter(graphWidth / 2, graphHeight / 2))
+        .force("collide", d3.forceCollide().radius(50).iterations(4));
+
+    simulation.nodes(nodes).on("tick", () => {
+        node.attr("transform", d => `translate(${d.x},${d.y})`);
+        link.attr("d", d => {
+            const dx = d.target.x - d.source.x;
+            const dy = d.target.y - d.source.y;
+            const dr = Math.sqrt(dx * dx + dy * dy);
+            return `M${d.source.x},${d.source.y}A${dr},${dr} 0 0,1 ${d.target.x},${d.target.y}`;
+        });
+    });
+
+    simulation.force("link").links(links);
+
+    // Tooltip setup
+    const tooltip = d3.select("body")
+        .append("div")
+        .attr("class", "tooltip")
+        .style("visibility", "hidden");
+
+    // Event listeners for interaction
+    node.on("mouseover", (event, d) => {
+        tooltip.html(d.id)
+            .style("top", `${event.pageY - 20}px`)
+            .style("left", `${event.pageX + 20}px`)
+            .style("visibility", "visible");
+        if (!selectedNode) highlightNode(d);
+    }).on("mouseout", () => {
+        tooltip.style("visibility", "hidden");
+        if (!selectedNode) resetHighlight();
+    });
+
+    node.on("click", (event, d) => {
+        if (selectedNode && selectedNode.id === d.id) {
+            selectedNode = null;
+            resetHighlight();
+            resetBarGraph(); // Reset the bar graph highlighting
+        } else {
+            selectedNode = d;
+            highlightNode(d);
+            highlightSpellsInBarGraph(d.id); // Highlight spells in the bar graph
+        }
+    });
+
+    // Highlighting and reset functions
+    function highlightNode(node) {
+        link.attr("stroke-opacity", l => (l.source.id === node.id || l.target.id === node.id ? 1 : 0.1))
+            .attr("stroke-width", l => (l.source.id === node.id || l.target.id === node.id ? 3 : 1));
+        nodeGroup.selectAll("image").attr("opacity", n => (
+            n.id === node.id || links.some(l => l.source.id === node.id && l.target.id === n.id)
+        ) ? 1 : 0.3);
+    }
+
+    function resetHighlight() {
+        link.attr("stroke-opacity", 1).attr("stroke-width", 2);
+        nodeGroup.selectAll("image").attr("opacity", 1);
+    }
+
+     //Animating spell casting and resetting animation
+     function animateCurvePaths(casterId) {
+            // Filter links where the caster is the source or the target
+            const casterLinks = links.filter(l => l.source.id === casterId || l.target.id === casterId);
+
+            casterLinks.forEach(linkData => {
+                const path = link.filter(d => d === linkData); // Select the specific path
+                const pathElement = path.node();
+                const length = pathElement.getTotalLength();
+
+                // Set up the stroke-dasharray and stroke-dashoffset for animation
+                path.attr("stroke-dasharray", `${length} ${length}`) //source: https://hackernoon.com/animating-line-charts-with-d3js
+                    .attr("stroke-dashoffset", length)
+                    .transition()
+                    .duration(1500)
+                    .ease(d3.easeLinear)
+                    .attr("stroke-dashoffset", 0);
+                });
+    }   
+
+    function resetCurvePaths() {
+            link.attr("stroke-dasharray", null).attr("stroke-dashoffset", null);
+        }
+
+    function resetHighlight() {
+        link.attr("stroke-opacity", 1).attr("stroke-width", 2);
+        nodeGroup.selectAll("image").attr("opacity", 1);
+    }
+
+
+    function highlightSpellsInBarGraph(character) {
+        // Filter spells cast by the selected character
+        const characterSpells = data.filter(d => d.caster === character);
+
+        // Create a map of spell counts for the character
+        const spellCounts = new Map();
+        characterSpells.forEach(d => {
+            spellCounts.set(d.spell_name, (spellCounts.get(d.spell_name) || 0) + 1);
+        });
+
+        // Update the bar graph
+        d3.selectAll("#bar-graph rect")
+            .attr("fill", d => spellCounts.has(d.spell) ? spellColors[d.spell] : "#999")
+            .attr("opacity", d => spellCounts.has(d.spell) ? 1 : 0.3);
+    }
+
+    function resetBarGraph() {
+        d3.selectAll("#bar-graph rect")
+            .attr("fill", d => spellColors[d.spell])
+            .attr("opacity", 1);
+    }
+});
+
+// BAR GRAPH
+// Load the CSV file
+const requestData = async function() {
+    const spells = await d3.csv("megafile.csv");
+    const barWidth = 400;
+    const barHeight = 200;
+    const margin = { top: 20, right: 30, bottom: 80, left: 50 };
+
+    // Bar Chart Dimensions
+    const barSvg = d3.select("#bar-graph")
+        .attr("width", barWidth + margin.left + margin.right)
+        .attr("height", barHeight + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", `translate(${margin.left},${margin.top})`);
+
+    // Calculate spell usage
+    const spellUsage = d3.rollup(spells, v => v.length, d => d.spell_name);
+    spellData = Array.from(spellUsage, ([spell, count]) => ({ spell, count }));
+    spellData.sort((a, b) => a.count - b.count);
+    // Scales for the bar chart
+    const x = d3.scaleBand()
+        .domain(spellData.map(d => d.spell))
+        .range([0, barWidth])
+        .padding(0.1);
+    const y = d3.scaleLinear()
+        .domain([0, d3.max(spellData, d => d.count)])
+        .nice()
+        .range([barHeight, 0]);
+
+    // Add bars to the bar chart
+    barSvg.append("g")
+        .selectAll("rect")
+        .data(spellData)
+        .enter().append("rect")
+        .attr("x", d => x(d.spell))
+        .attr("y", d => y(d.count))
+        .attr("width", x.bandwidth())
+        .attr("height", d => barHeight - y(d.count))
+        .attr("fill", d => spellColors[d.spell]);
+
+    // Add X and Y axes
+    barSvg.append("g")
+        .attr("transform", `translate(0,${barHeight})`)
+        .call(d3.axisBottom(x))
+        .attr("class", "axis")
+        .selectAll("text")
+        .attr("dy", "0.75em") // Adjusts the vertical position of tick labels
+        .attr("transform", "rotate(-45)")
+        .style("text-anchor", "end");
+
+    barSvg.append("g")
+        .call(d3.axisLeft(y))
+        .attr("dy", "0.35em") // Adjusts the vertical position of tick labels
+        .attr("class", "axis");
+
+    // Add axis labels
+    barSvg.append("text")
+        .attr("x", barWidth / 2)
+        .attr("y", barHeight + 80) // Adjusted position for the label
+        .attr("text-anchor", "middle")
+        .attr("class", "axis-label")
+        .text("Spell Name");
+
+    barSvg.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("x", -barHeight / 2)
+        .attr("y", -margin.left + 15) // Adjusted position for the label
+        .attr("text-anchor", "middle")
+        .attr("class", "axis-label")
+        .text("Spell Usage");
+
+}
+
+    requestData();
+     
+</script>
+
+<!-- SPIDER GRAPH -->
+            
+<script>
+    const maxSelected = 8;
+    let selectedSpells = ['Avada Kedavra', 'Confringo'];
+    const spellsNames = ['Avada Kedavra', 'Confringo', 'Crucio', 'Imperio', 'Incendio', 'Expelliarmus', 'Petrificus Totalus']// filterSpellsByCharacter(character);
+
+
+    // Function to filter spells by character
+    // TODO: IMPORT d3.csv("megafile.csv") FOR THE spellData data
+    
+    function filterSpellsByCharacter(character) {
+        return spellData.filter(spell => spell.caster === character).map(spell => spell.spell_name);
+    }
+
+    function createCheckboxes(spellNames) {
+        const checkboxesContainer = d3.select('#checkboxes-container');
+        checkboxesContainer.selectAll('*').remove();
+
+        const checkboxes = checkboxesContainer.selectAll('div')
+            .data(spellNames)
+            .enter()
+            .append('div')
+            .attr('class', 'checkbox-item')
+            .style('padding', '10px 15px')
+            .style('display', 'flex')
+            .style('align-items', 'center');
+
+        checkboxes.append('input')
+            .attr('type', 'checkbox')
+            .attr('id', d => d)
+            .attr('value', d => d)
+            .attr('class', 'snitch-checkbox')
+            .property('checked', (d, i) => i === 0 || i === 1)
+            .style('accent-color', d => spellColors[d])
+            .style('height', '30px')
+            .style('width', '30px')
+            .on('change', handleCheckboxChange)
+            .style('cursor', "url('HP_WandH.png'), auto");
+
+            checkboxes.append('label')
+            .attr('for', d => d)
+                .text(d => d)
+                .style('color', 'white')
+                .style('font-family', 'serif')
+                .style('font-size', '10pt')
+                .style('width', '100px')
+                .style('height', '50px')
+                .style('text-align', 'center')
+                .style('display', 'flex')
+                .style('align-items', 'center')
+                .style('justify-content', 'center')
+                .style('border-radius', '5px')
+                .style('background-image', d => `url('button.svg')`)
+                .style('background-size', 'contain')
+                .style('background-repeat', 'no-repeat')
+                .style('background-position', 'center')
+                .style('padding', '10px')
+                .style('cursor', "url('HP_WandH.png'), auto");
+        }
+
+    function handleCheckboxChange(event) {
+        const spellName = event.target.value;
+
+        if (event.target.checked) {
+            if (selectedSpells.length < maxSelected) {
+                event.target.checked = true;
+                selectedSpells.push(spellName);
+            } else {
+            event.target.checked = false;
+            alert("You can select up to 3 spells only.");
+            }
+        } else {
+            selectedSpells = selectedSpells.filter(spell => spell !== spellName);
+        }
+
+        drawSpiderChart(selectedSpells);
+    }
+
+    function updateSpiderChart(selectedSpells) {
+        const filteredStats = selectedSpells.map(spell => ({
+            spell: spell,
+            stats: spellStats[spell]
+    }));
+
+    d3.select('#spider-chart').selectAll('*').remove();
+        drawSpiderChart(selectedSpells);
+    }
+
+    createCheckboxes(spellsNames);
+
+    function drawSpiderChart(spellsList) {
+        d3.csv('norm_spell_stats.csv').then((spells) => {
+            // Cite: We used https://yangdanny97.github.io/blog/2019/03/01/D3-Spider-Chart to learn how to graph spider graphs
+            let data = [];
+            let features = ["Damage", "Range", "Cooldown", "Duration", "CD OOC"];
+            
+            // Filter the data based on the selected spells
+            for (let i = 0; i < spells.length; i++) {
+                if (spellsList.includes(spells[i]['Name'])) {
+                    data.push({
+                        'Name': spells[i]['Name'],
+                        'Damage': Number(spells[i]['Damage']),
+                        'Range': Number(spells[i]['Range']),
+                        'Cooldown': Number(spells[i]['Cooldown']),
+                        'Duration': Number(spells[i]['Duration']),
+                        'CD OOC': Number(spells[i]['CD OOC'])
+                    });
+                }
+            }
+
+        let width = 400;
+        let height = 400;
+        let svg = d3.select('svg#spider-graph');
+
+        let radialScale = d3.scaleLinear()
+            .domain([0, 1])
+            .range([0, 125]);
+        let ticks = [.2, .4, .6, .8, 1.0];
+
+        // Remove any existing circles, labels, lines, and paths
+        svg.selectAll("circle").remove();
+        svg.selectAll(".ticklabel").remove();
+        svg.selectAll("line").remove();
+        svg.selectAll(".axislabel").remove();
+        svg.selectAll("path").remove();
+
+        // Draw circles for the radial grid
+        // outer location
+        svg.selectAll("circle")
+            .data(ticks)
+            .enter()
+            .append("circle")
+            .attr("cx", width / 2)
+            .attr("cy", height / 2)
+            .attr("fill", "none")
+            .attr("stroke", "gray")
+            .attr("r", d => radialScale(d));
+
+        // Draw axis labels
+        svg.selectAll(".ticklabel")
+            .data(ticks)
+            .enter()
+            .append("text")
+            .attr("x", width / 2 + 5)
+            .attr("y", d => height / 2 - radialScale(d))
+            .text(d => d.toString())
+            .style("fill", "white");
+
+        function angleToCoordinate(angle, value) {
+            let x = Math.cos(angle) * radialScale(value);
+            let y = Math.sin(angle) * radialScale(value);
+            return { "x": width / 2 + x, "y": height / 2 - y };
+        }
+
+        let featureData = features.map((f, i) => {
+            let angle = (Math.PI / 2) + (2 * Math.PI * i / features.length);
+            return {
+                "name": f,
+                "angle": angle,
+                "line_coord": angleToCoordinate(angle, 1),
+                "label_coord": angleToCoordinate(angle, 1.15)
+            };
+        });
+
+        svg.selectAll("line")
+            .data(featureData)
+            .enter()
+            .append("line")
+            .attr("x1", width / 2)
+            .attr("y1", height / 2)
+            .attr("x2", d => d.line_coord.x)
+            .attr("y2", d => d.line_coord.y)
+            .attr("stroke", "white");
+
+        svg.selectAll(".axislabel")
+            .data(featureData)
+            .enter()
+            .append("text")
+            .attr("x", d => d.label_coord.x)
+            .attr("y", d => d.label_coord.y)
+            .text(d => d.name)
+            .style("fill", "white");
+
+        let line = d3.line()
+            .x(d => d.x)
+            .y(d => d.y);
+
+        // let colors = ["#28A745", "#FF4500", "#48493E", "#DA3832", "#FBD748", "#FF6347", "#4782B4"];
+
+        function getPathCoordinates(data_point) {
+            let coordinates = [];
+            for (let i = 0; i < features.length; i++) {
+                let ft_name = features[i];
+                let angle = (Math.PI / 2) + (2 * Math.PI * i / features.length);
+                coordinates.push(angleToCoordinate(angle, data_point[ft_name]));
+            }
+            return coordinates;
+        }
+
+        // Properly join data for paths and handle enter, update, and exit
+        const paths = svg.selectAll("path")
+            .data(data, d => d.Name);
+
+        paths.exit().remove(); // Remove paths that are no longer in the data
+
+        paths.enter()
+            .append("path")
+            .merge(paths)
+            .attr("d", d => line(getPathCoordinates(d)))
+            .attr("stroke-width", 3)
+            .attr("stroke", d => spellColors[d['Name']])
+            .attr("fill", d => spellColors[d['Name']])
+            .attr("stroke-opacity", 1)
+            .attr("opacity", 0.5);
+    });
+}
+
+
+drawSpiderChart(selectedSpells)
+
+</script>
+</body>
+</html>
