@@ -809,7 +809,7 @@ Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, cha
     function resetVisualization() {
         // Reset selectedNode to null
         selectedNode = null;
-
+        d3.select("#bar-chart-title").text("The Spells of the Harry Potter Universe");
         d3.select("#summary-stat p").text("Click on a character node to learn more");
 
         // Reset the graph
