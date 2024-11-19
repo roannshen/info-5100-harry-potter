@@ -321,6 +321,8 @@
         "Stag": "character_node_svg/stag.gif"
     };
 
+
+
 // NODE GRAPH
 const svg = d3.select("svg#graph")
     .attr("width", "100%")
@@ -729,6 +731,21 @@ Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, cha
             .text("Spell Usage");
 
 
+    }
+
+    //RESET 
+    document.getElementById("reset-button").addEventListener("click", resetVisualization);
+
+    function resetVisualization() {
+        // Reset selectedNode to null
+        selectedNode = null;
+
+        // Reset the graph
+        resetHighlight();
+        resetCurvePaths();
+
+        // Reset the bar chart
+        resetBarGraph();
     }
 
 
