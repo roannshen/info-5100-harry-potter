@@ -582,6 +582,10 @@ Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, cha
             // .domain([0, 45]) //stays same entire time
             .nice()
             .range([barHeight, 0]);
+        
+        const tooltip = d3.select("body")
+                    .append("div")
+                    .attr("class", "tooltip");
 
         // Add the bars
         barSvg.selectAll("rect")
@@ -591,7 +595,19 @@ Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, cha
             .attr("y", d => y(d.count))
             .attr("width", x.bandwidth())
             .attr("height", d => barHeight - y(d.count))
-            .attr("fill", d => spellColors[d.spell]);
+            .attr("fill", d => spellColors[d.spell])
+            .on("mouseover", (event, d) => {
+            tooltip.style("visibility", "visible")
+                .text(`Usage: ${d.count}`);
+            d3.select(event.target).style("cursor", "url('HP_WandH.png'), auto"); // Change cursor on mouseover
+            })
+            .on("mousemove", event => {
+                tooltip.style("top", `${event.pageY - 10}px`)
+            .style("left", `${event.pageX + 10}px`);
+            })
+            .on("mouseout", () => {
+                tooltip.style("visibility", "hidden");
+            });
 
         // Add X and Y axes
         barSvg.append("g")
@@ -654,6 +670,10 @@ Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, cha
             .nice()
             .range([barHeight, 0]);
 
+        const tooltip = d3.select("body")
+            .append("div")
+             .attr("class", "tooltip");
+
         // Add bars to the bar chart
         barSvg.append("g")
             .selectAll("rect")
@@ -663,7 +683,19 @@ Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, cha
             .attr("y", d => y(d.count))
             .attr("width", x.bandwidth())
             .attr("height", d => barHeight - y(d.count))
-            .attr("fill", d => spellColors[d.spell]);
+            .attr("fill", d => spellColors[d.spell])
+            .on("mouseover", (event, d) => {
+            tooltip.style("visibility", "visible")
+                .text(`Usage: ${d.count}`);
+            d3.select(event.target).style("cursor", "url('HP_WandH.png'), auto"); // Change cursor on mouseover
+            })
+            .on("mousemove", event => {
+                tooltip.style("top", `${event.pageY - 10}px`)
+            .style("left", `${event.pageX + 10}px`);
+            })
+            .on("mouseout", () => {
+                tooltip.style("visibility", "hidden");
+            });
 
         // Add X and Y axes
         barSvg.append("g")
@@ -731,6 +763,10 @@ const requestData = async function() {
         .domain([0, d3.max(spellData, d => d.count)])
         .nice()
         .range([barHeight, 0]);
+    
+    const tooltip = d3.select("body")
+        .append("div")
+        .attr("class", "tooltip");
 
     // Add bars to the bar chart
     barSvg.append("g")
@@ -741,7 +777,19 @@ const requestData = async function() {
         .attr("y", d => y(d.count))
         .attr("width", x.bandwidth())
         .attr("height", d => barHeight - y(d.count))
-        .attr("fill", d => spellColors[d.spell]);
+        .attr("fill", d => spellColors[d.spell])
+        .on("mouseover", (event, d) => {
+            tooltip.style("visibility", "visible")
+                .text(`Usage: ${d.count}`);
+            d3.select(event.target).style("cursor", "url('HP_WandH.png'), auto"); // Change cursor on mouseover
+            })
+            .on("mousemove", event => {
+                tooltip.style("top", `${event.pageY - 10}px`)
+            .style("left", `${event.pageX + 10}px`);
+            })
+            .on("mouseout", () => {
+                tooltip.style("visibility", "hidden");
+            });
 
     // Add X and Y axes
     barSvg.append("g")
