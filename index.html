@@ -524,7 +524,7 @@ Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, cha
             
             // Get the character's house from the houseMap
             const house = houseMap.get(characterName) || "Unknown House";
-            const summaryText = `${characterName} is a ${house} who casted ${totalSpells} spell${totalSpells !== 1 ? 's' : ''} in total, with ${mostUsedSpell} as the most used spell.`;
+            const summaryText = `${characterName} is a ${house} who cast ${totalSpells} spell${totalSpells !== 1 ? 's' : ''} in total, with ${mostUsedSpell} as the most used spell.`;
 
             // Update the #summary-stat element
             d3.select("#summary-stat p").text(summaryText);
