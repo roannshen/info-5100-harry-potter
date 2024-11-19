@@ -120,6 +120,17 @@
                 height: 30px;
                 border: 2px solid rgb(222, 220, 208);
                 border-radius: 4px;
+                background-color: white; 
+                transition: background-color 0.1s ease-in-out, border-color 0.1s ease-in-out;
+            }
+
+            .snitch-checkbox:checked {
+                background-color: var(--accent-color, #FFD700);
+                border-color: var(--accent-color, #FFD700);
+                background-image: linear-gradient(
+                    rgba(0, 0, 0, 0.2),
+                    rgba(0, 0, 0, 0.2)
+                ); 
             }
 
             .snitch-checkbox::before {
@@ -127,18 +138,18 @@
                 position: absolute;
                 top: 50%;
                 left: 50%;
-                width: 70px;
-                height: 70px;
+                width: 65px;
+                height: 65px;
                 transform: translate(-50%, -50%);
                 background: url('character_node_svg/snitch.gif') no-repeat center center;
                 background-size: contain;
                 opacity: 0;
-                transition: opacity 0.2s ease-in-out;
+                transition: opacity 0.1s;
                 z-index: 10;
             }
 
             .snitch-checkbox:checked::before {
-                opacity: 1; /* Show the Snitch GIF when checked */
+                opacity: 1; 
             }
 
             #section {
@@ -172,8 +183,6 @@
                 display: inline-flex;
                 flex-direction: column;
                 margin-left: 50px;
-
-
             }
 
             #right-col {
@@ -186,8 +195,6 @@
                 gap: 12px;
                 display: inline-flex;
                 align-items: center; 
-
-
             }
 
             svg {
@@ -247,19 +254,19 @@
                 <div id="legend-container">
                     <!-- <h3>Legend: Spell Colors</h3> -->
                     <div class="legend-items">
-                        <div class="legend-item" style="color: #FF6F31;"><span class="legend-color" style="background-color: #FF6F31;"></span>Confringo</div>
+                        <div class="legend-item" style="color: #FFD700;"><span class="legend-color" style="background-color: #FFD700;"></span>Confringo</div>
                         <div class="legend-item" style="color: #006400;"><span class="legend-color" style="background-color: #006400;"></span>Morsmordre</div>
-                        <div class="legend-item" style="color: #BA55D3;"><span class="legend-color" style="background-color: #BA55D3;"></span>Confundo</div>
+                        <div class="legend-item" style="color: #ff7d52;"><span class="legend-color" style="background-color: #ff8652;"></span>Confundo</div>
                         <div class="legend-item" style="color:  #3CB371;"><span class="legend-color" style="background-color: #3CB371;"></span>Imperio</div>
-                        <div class="legend-item" style="color: #9400D3;"><span class="legend-color" style="background-color: #9400D3;"></span>Sectumsempra</div>
+                        <div class="legend-item" style="color: #1624be;"><span class="legend-color" style="background-color: #1624be;"></span>Sectumsempra</div>
                         <div class="legend-item" style="color: #0ABAB5;"><span class="legend-color" style="background-color: #0ABAB5;"></span>Expecto Patronum</div>
                         <div class="legend-item" style="color: #FFB6C1;"><span class="legend-color" style="background-color: #FFB6C1;"></span>Obliviate</div>
-                        <div class="legend-item" style="color: #FF4500;"><span class="legend-color" style="background-color: #FF4500;"></span>Incendio</div>
+                        <div class="legend-item" style="color: #BA55D3;"><span class="legend-color" style="background-color: #BA55D3;"></span>Incendio</div>
                         <div class="legend-item" style="color: #1E90FF;"><span class="legend-color" style="background-color: #1E90FF;"></span>Petrificus Totalus</div>
                         <div class="legend-item" style="color: #C0C0C0;"><span class="legend-color" style="background-color: #C0C0C0;"></span>Crucio</div>
-                        <div class="legend-item" style="color: #B22222;"><span class="legend-color" style="background-color: #B22222;"></span>Expelliarmus</div>
+                        <div class="legend-item" style="color: #961414;"><span class="legend-color" style="background-color: #961414;"></span>Expelliarmus</div>
                         <div class="legend-item" style="color: #39FF14;"><span class="legend-color" style="background-color: #39FF14;"></span>Avada Kedavra</div>
-                        <div class="legend-item" style="color: #FFD700;"><span class="legend-color" style="background-color: #FFD700;"></span>Stupefy</div>
+                        <div class="legend-item" style="color: #df3737;"><span class="legend-color" style="background-color: #df3737;"></span>Stupefy</div>
                     </div>            
                 </div>
             </div>    
@@ -291,15 +298,15 @@
     
     const spellColors = {
         "Avada Kedavra": "#39FF14",
-        "Confringo": "#FF6700",
-        "Incendio": "#FF4500",
+        "Confringo": "#FFD700",
+        "Incendio": "#BA55D3",
         "Morsmordre": "#006400",
-        "Sectumsempra": "#9400D3",
-        "Stupefy": "#FFD700",
+        "Sectumsempra": "#1624be",
+        "Stupefy": "#df3737",
         "Crucio": "#C0C0C0",
         "Imperio": "#3CB371",
-        "Confundo": "#BA55D3",
-        "Expelliarmus": "#B22222",
+        "Confundo": "#ff8652",
+        "Expelliarmus": "#961414",
         "Petrificus Totalus": "#1E90FF",
         "Obliviate": "#FFB6C1",
         "Expecto Patronum": "#0ABAB5"
@@ -902,17 +909,33 @@ const requestData = async function() {
             .style('display', 'flex')
             .style('align-items', 'center');
 
+        // checkboxes.append('input')
+        //     .attr('type', 'checkbox')
+        //     .attr('id', d => d)
+        //     .attr('value', d => d)
+        //     .attr('class', 'snitch-checkbox')
+        //     .property('checked', (d, i) => i === 0 || i === 1)
+        //     // .style('accent-color', d => spellColors[d])
+        //     .style('height', '30px')
+        //     .style('width', '30px')
+        //     .on('change', handleCheckboxChange)
+        //     .style('cursor', "url('HP_WandH.png'), auto");
+
         checkboxes.append('input')
-            .attr('type', 'checkbox')
-            .attr('id', d => d)
-            .attr('value', d => d)
-            .attr('class', 'snitch-checkbox')
-            .property('checked', (d, i) => i === 0 || i === 1)
-            .style('accent-color', d => spellColors[d])
-            .style('height', '30px')
-            .style('width', '30px')
-            .on('change', handleCheckboxChange)
-            .style('cursor', "url('HP_WandH.png'), auto");
+    .attr('type', 'checkbox')
+    .attr('id', d => d)
+    .attr('value', d => d)
+    .attr('class', 'snitch-checkbox')
+    .property('checked', (d, i) => i === 0 || i === 1)
+    .style('height', '30px')
+    .style('width', '30px')
+    .each(function (d) {
+        // Set the custom property for the accent color based on spellColors
+        const accentColor = spellColors[d];
+        this.style.setProperty('--accent-color', accentColor);
+    })
+    .on('change', handleCheckboxChange)
+    .style('cursor', "url('HP_WandH.png'), auto");
 
             checkboxes.append('label')
             .attr('for', d => d)
