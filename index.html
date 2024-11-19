@@ -247,7 +247,6 @@
                 width: 30%;
                 height: 100%;
                 flex-direction: column;
-                justify-content: center;
                 align-items: center;
                 gap: 12px;
                 display: inline-flex;
@@ -294,7 +293,7 @@
 <body>
     <div id="section">
         <h1>Deep Dive into the Dangers of the Harry Potter Universe</h1>
-        <button id="reset-button">Reset Visualization</button>
+        <!-- <button id="reset-button">Reset Visualization</button> -->
         <div id="row">
             <div id = "left-col">
                 <svg id="graph" class="svg" height="1200" width="800"></svg>
@@ -496,7 +495,7 @@ Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, cha
 
     // Setup force simulation
     const simulation = d3.forceSimulation(nodes)
-        .force("link", d3.forceLink(links).id(d => d.id).distance(120))
+        .force("link", d3.forceLink(links).id(d => d.id).distance(100))
         .force("charge", d3.forceManyBody().strength(-300))
         .force("center", d3.forceCenter(graphWidth / 2, graphHeight / 2))
         .force("x", d3.forceX(graphWidth / 2).strength(0.5))
