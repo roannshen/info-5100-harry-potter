@@ -34,6 +34,7 @@
 
             .axis text {
                 font-family: "Baskervville", serif;
+                font-size:8pt;
                 fill: white;
             }
 
@@ -44,6 +45,7 @@
 
             .axis-label {
                 fill: white;
+                font-size: small;
             }
 
             .checkboxes-container {
@@ -73,6 +75,10 @@
                 color: black;
             }
 
+            #bar-chart-title{
+                margin-top: 10px;
+                margin-bottom: 10px;
+            }
 
             #spider-container {
                 display: flex;
@@ -144,119 +150,124 @@
             display: inline-flex;
             flex-direction: column;
             flex:1;
-        }
+         }
 
-        #row {
-            width: 100%;
-            flex-direction: row;
-            justify-content: flex-start;
-            align-items: center;
-            display: inline-flex;
-            gap: 24px;
-            flex: 1;
-        }
-
-        #left-col {
-            width: 60%;
-            height: 100%;
-            padding: 10px;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            display: inline-flex;
-            flex-direction: column;
-
-        }
-
-        #right-col {
-            width: 40%;
-            flex-direction: column;
-            justify-content: flex-start;
-            align-items: flex-start;
-            gap: 24px;
-            display: inline-flex;
-            align-items: center; 
-            justify-content: center;
-
-
-        }
-
-        svg {
-            width: 100%;
-            height: 100%;
-        }
-
-        #legend-container {
-                position: fixed; 
-                top: 10px; 
-                right: 10px; 
-                background-color: rgba(0, 0, 0, 0.4);
-                border-radius: 10px;
-                padding: 15px;
-                max-width: 200px;
-                max-height: 400px; 
-                overflow-y: auto; 
-                z-index: 100; 
-                color: white;
-                font-family: "Baskervville", serif;
+            #row {
+                width: 100%;
+                flex-direction: row;
+                justify-content: flex-start;
+                align-items: center;
+                display: inline-flex;
+                gap: 24px;
+                flex: 1;
             }
 
-            #legend-container h3 {
-                font-size: 14pt;
-                text-align: center;
-                margin-top: 5px;
-                margin-bottom: 10px;
-            }
-
-            .legend-items {
-                display: flex;
+            #left-col {
+                width: 60%;
+                height: 100%;
+                padding: 10px;
+                justify-content: center;
+                align-items: center;
+                gap: 10px;
+                display: inline-flex;
                 flex-direction: column;
-                gap: 5px;
+                margin-left: 50px;
+
+
+            }
+
+            #right-col {
+                margin-right: 50px;
+                width: 40%;
+                height: 100%;
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: center;
+                gap: 12px;
+                display: inline-flex;
+                align-items: center; 
+
+
+            }
+
+            svg {
+                width: 100%;
+                height: 100%;
+            }
+
+            #legend-container {
+                display: flex;
+                flex-wrap: wrap; 
+                flex-direction: row;
+                justify-content: center; 
+                gap: 10px; 
+                max-width: 100%; 
+                margin-top: 20px; 
             }
 
             .legend-item {
                 display: flex;
                 align-items: center;
-                gap: 10px;
+                gap: 5px;
                 font-size: 10pt;
+                width: 150px;
+                text-align: center; 
             }
+
+            .legend-items {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap; 
+                gap: 5px;
+            }
+
+            #legend-container h3 {
+                font-size: 12pt;
+                text-align: center;
+                margin-top: 5px;
+                margin-bottom: 10px;
+            }
+
 
             .legend-color {
                 width: 20px;
                 height: 20px;
                 border-radius: 5px;
             }
+
         </style>
     </head>
 <body>
     <div id="section">
         <h1>Deep Dive into the Dangers of the Harry Potter Universe</h1>
-        <div id="legend-container" style="flex: 0 0 auto;">
-            <h3>Legend: Spell Colors</h3>
-            <div class="legend-items">
-                <div class="legend-item" style="color: #39FF14;"><span class="legend-color" style="background-color: #39FF14;"></span>Avada Kedavra</div>
-                <div class="legend-item" style="color: #FF6F31;"><span class="legend-color" style="background-color: #FF6F31;"></span>Confringo</div>
-                <div class="legend-item" style="color: #FF4500;"><span class="legend-color" style="background-color: #FF4500;"></span>Incendio</div>
-                <div class="legend-item" style="color: #006400;"><span class="legend-color" style="background-color: #006400;"></span>Morsmordre</div>
-                <div class="legend-item" style="color: #9400D3;"><span class="legend-color" style="background-color: #9400D3;"></span>Sectumsempra</div>
-                <div class="legend-item" style="color: #FFD700;"><span class="legend-color" style="background-color: #FFD700;"></span>Stupefy</div>
-                <div class="legend-item" style="color: #C0C0C0;"><span class="legend-color" style="background-color: #C0C0C0;"></span>Crucio</div>
-                <div class="legend-item" style="color: #FFA500;"><span class="legend-color" style="background-color: #3CB371;"></span>Imperio</div>
-                <div class="legend-item" style="color: #BA55D3;"><span class="legend-color" style="background-color: #BA55D3;"></span>Confundo</div>
-                <div class="legend-item" style="color: #B22222;"><span class="legend-color" style="background-color: #B22222;"></span>Expelliarmus</div>
-                <div class="legend-item" style="color: #1E90FF;"><span class="legend-color" style="background-color: #1E90FF;"></span>Petrificus Totalus</div>
-                <div class="legend-item" style="color: #FFB6C1;"><span class="legend-color" style="background-color: #FFB6C1;"></span>Obliviate</div>
-                <div class="legend-item" style="color: #0ABAB5;"><span class="legend-color" style="background-color: #0ABAB5;"></span>Expecto Patronum</div>
-            </div>            
-        </div>
         <button id="reset-button">Reset Visualization</button>
         <div id="row">
             <div id = "left-col">
                 <svg id="graph"></svg>
+                <div id="legend-container">
+                    <!-- <h3>Legend: Spell Colors</h3> -->
+                    <div class="legend-items">
+                        <div class="legend-item" style="color: #FF6F31;"><span class="legend-color" style="background-color: #FF6F31;"></span>Confringo</div>
+                        <div class="legend-item" style="color: #006400;"><span class="legend-color" style="background-color: #006400;"></span>Morsmordre</div>
+                        <div class="legend-item" style="color: #BA55D3;"><span class="legend-color" style="background-color: #BA55D3;"></span>Confundo</div>
+                        <div class="legend-item" style="color:  #3CB371;"><span class="legend-color" style="background-color: #3CB371;"></span>Imperio</div>
+                        <div class="legend-item" style="color: #9400D3;"><span class="legend-color" style="background-color: #9400D3;"></span>Sectumsempra</div>
+                        <div class="legend-item" style="color: #0ABAB5;"><span class="legend-color" style="background-color: #0ABAB5;"></span>Expecto Patronum</div>
+                        <div class="legend-item" style="color: #FFB6C1;"><span class="legend-color" style="background-color: #FFB6C1;"></span>Obliviate</div>
+                        <div class="legend-item" style="color: #FF4500;"><span class="legend-color" style="background-color: #FF4500;"></span>Incendio</div>
+                        <div class="legend-item" style="color: #1E90FF;"><span class="legend-color" style="background-color: #1E90FF;"></span>Petrificus Totalus</div>
+                        <div class="legend-item" style="color: #C0C0C0;"><span class="legend-color" style="background-color: #C0C0C0;"></span>Crucio</div>
+                        <div class="legend-item" style="color: #B22222;"><span class="legend-color" style="background-color: #B22222;"></span>Expelliarmus</div>
+                        <div class="legend-item" style="color: #39FF14;"><span class="legend-color" style="background-color: #39FF14;"></span>Avada Kedavra</div>
+                        <div class="legend-item" style="color: #FFD700;"><span class="legend-color" style="background-color: #FFD700;"></span>Stupefy</div>
+                    </div>            
+                </div>
             </div>    
             <div id="right-col">
+                <h2 id="bar-chart-title">The Spells of the Harry Potter Universe <h2>
+
                 <svg id="bar-graph"></svg>
-                <div id="summary-stat"><p>summary stat</p></div>
+                <div id="summary-stat"><p style="margin-top: 0;">Click on a character node to learn more</p></div>
             </div>
             
         </div>
@@ -311,6 +322,8 @@
         "Stag": "character_node_svg/stag.gif"
     };
 
+
+
 // NODE GRAPH
 const svg = d3.select("svg#graph")
     .attr("width", "100%")
@@ -329,12 +342,21 @@ const fixedPositions = {
 
 let link, nodeGroup, selectedNode = null;
 let spellData = [];
+let spells = [];
+
 
 Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, characters]) => {
     const nodes = [];
     const links = [];
     const validCharacters = new Set(characters.map(d => d.Character_Name));
     const nodeMap = new Map();
+
+    // Create a Map for character houses
+    const houseMap = new Map();
+    characters.forEach(character => {
+        houseMap.set(character.Character_Name, character.House);
+    });
+
 
     // Process data into nodes and links
     data.forEach(({ caster, victim, spell_name }) => {
@@ -467,17 +489,47 @@ Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, cha
 
     node.on("click", (event, d) => {
         const isCaster = data.some(row => row.caster === d.id);
+        const characterName = d.id;
+        const characterSpells = data.filter(row => row.caster === characterName);
+        const spellCounts = d3.rollup(characterSpells, v => v.length, d => d.spell_name);
+        const filteredSpellData = Array.from(spellCounts, ([spell, count]) => ({ spell, count }));
+        const totalSpells = d3.sum(Array.from(spellCounts.values()));
+
+        let mostUsedSpell = "";
+        let maxCount = 0;
+        spellCounts.forEach((count, spell) => {
+            if (count > maxCount) {
+                maxCount = count;
+                mostUsedSpell = spell;
+            }
+        });
+
         if (!isCaster) {
                 return;
             }
-        if (selectedNode && selectedNode.id === d.id) {
+        if (selectedNode && selectedNode.id === characterName) {
             selectedNode = null;
-            resetHighlight();
-            resetBarGraph(); // Reset the bar graph highlighting
+            d3.select("#bar-chart-title").text("The Spells of the Harry Potter Universe"); // Reset title
+            resetBarGraph(); 
+            d3.select("#summary-stat p").text("Click on a character node to learn more");
+            // Reset the bar graph highlighting
         } else {
+            // const characterSpells = data.filter(row => row.caster === characterName);
+            // const spellCounts = d3.rollup(characterSpells, v => v.length, d => d.spell_name);
+            // const filteredSpellData = Array.from(spellCounts, ([spell, count]) => ({ spell, count }));
             selectedNode = d;
             highlightNode(d);
-            highlightSpellsInBarGraph(d.id); // Highlight spells in the bar graph
+            d3.select("#bar-chart-title").text(`The Spells of ${d.id}`); // Update title with character name
+            updateBarChart(filteredSpellData); // Call the function to update the bar chart
+            
+            // Get the character's house from the houseMap
+            const house = houseMap.get(characterName) || "Unknown House";
+            const summaryText = `${characterName} is a ${house} who cast ${totalSpells} spell${totalSpells !== 1 ? 's' : ''} in total, with ${mostUsedSpell} as the most used spell.`;
+
+            // Update the #summary-stat element
+            d3.select("#summary-stat p").text(summaryText);
+
+
         }
     });
 
@@ -526,27 +578,207 @@ Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, cha
     }
 
 
-    function highlightSpellsInBarGraph(character) {
-        // Filter spells cast by the selected character
-        const characterSpells = data.filter(d => d.caster === character);
+    function updateBarChart(filteredSpellData) {
+        const spellCountMap = new Map(filteredSpellData.map(d => [d.spell, d.count]));
+        const allSpellsData = spellData.map(d => ({
+        spell: d.spell,
+        count: spellCountMap.get(d.spell) || 0 // Use the count from the map, or 0 if not cast
+        }));
 
-        // Create a map of spell counts for the character
-        const spellCounts = new Map();
-        characterSpells.forEach(d => {
-            spellCounts.set(d.spell_name, (spellCounts.get(d.spell_name) || 0) + 1);
-        });
+        // Clear the existing bars
+        d3.select("#bar-graph").selectAll("*").remove();
 
-        // Update the bar graph
-        d3.selectAll("#bar-graph rect")
-            .attr("fill", d => spellCounts.has(d.spell) ? spellColors[d.spell] : "#999")
-            .attr("opacity", d => spellCounts.has(d.spell) ? 1 : 0.3);
+        // Bar chart dimensions
+        const barWidth = 400;
+        const barHeight = 200;
+        const margin = { top: 20, right: 30, bottom: 100, left: 50 };
+
+        // Set up the SVG
+        const barSvg = d3.select("#bar-graph")
+            .attr("width", barWidth + margin.left + margin.right)
+            .attr("height", barHeight + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", `translate(${margin.left},${margin.top})`);
+
+        // Set up scales
+        const x = d3.scaleBand()
+            .domain(allSpellsData.map(d => d.spell))
+            .range([0, barWidth])
+            .padding(0.1);
+
+        const y = d3.scaleLinear()
+            .domain([0, d3.max(allSpellsData, d => d.count)]) 
+            // .domain([0, 45]) //stays same entire time
+            .nice()
+            .range([barHeight, 0]);
+        
+        const tooltip = d3.select("body")
+                    .append("div")
+                    .attr("class", "tooltip");
+
+        // Add the bars
+        barSvg.selectAll("rect")
+            .data(allSpellsData)
+            .enter().append("rect")
+            .attr("x", d => x(d.spell))
+            .attr("y", d => y(d.count))
+            .attr("width", x.bandwidth())
+            .attr("height", d => barHeight - y(d.count))
+            .attr("fill", d => spellColors[d.spell])
+            .on("mouseover", (event, d) => {
+            tooltip.style("visibility", "visible")
+                .text(`Usage: ${d.count}`);
+            d3.select(event.target).style("cursor", "url('HP_WandH.png'), auto"); // Change cursor on mouseover
+            })
+            .on("mousemove", event => {
+                tooltip.style("top", `${event.pageY - 10}px`)
+            .style("left", `${event.pageX + 10}px`);
+            })
+            .on("mouseout", () => {
+                tooltip.style("visibility", "hidden");
+            });
+
+        // Add X and Y axes
+        barSvg.append("g")
+            .attr("transform", `translate(0,${barHeight})`)
+            .call(d3.axisBottom(x))
+            .attr("class", "axis")
+            .selectAll("text")
+            .attr("dy", "0.75em") 
+            .attr("transform", "rotate(-45)")
+            .style("text-anchor", "end");
+
+        barSvg.append("g")
+            .call(d3.axisLeft(y))
+            .attr("dy", "0.35em") // Adjusts the vertical position of tick labels
+            .attr("class", "axis");
+
+            // Add axis labels
+        barSvg.append("text")
+            .attr("x", barWidth / 2)
+            .attr("y", barHeight + 80) // Adjusted position for the label
+            .attr("text-anchor", "middle")
+            .attr("class", "axis-label")
+            .text("Spell Name");
+
+        barSvg.append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("x", -barHeight / 2)
+            .attr("y", -margin.left + 15) 
+            .attr("text-anchor", "middle")
+            .attr("class", "axis-label")
+            .text("Spell Usage");
+
     }
 
     function resetBarGraph() {
-        d3.selectAll("#bar-graph rect")
+        d3.select("#bar-graph").selectAll("*").remove();
+
+        const barWidth = 400;
+        const barHeight = 200;
+        const margin = { top: 20, right: 30, bottom: 100, left: 50 };
+
+        // Bar Chart Dimensions
+        const barSvg = d3.select("#bar-graph")
+            .attr("width", barWidth + margin.left + margin.right)
+            .attr("height", barHeight + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", `translate(${margin.left},${margin.top})`);
+
+        // Calculate spell usage
+        const spellUsage = d3.rollup(data, v => v.length, d => d.spell_name);
+        spellData = Array.from(spellUsage, ([spell, count]) => ({ spell, count })).sort((a, b) => a.count - b.count);
+
+        // Scales for the bar chart
+        const x = d3.scaleBand()
+            .domain(spellData.map(d => d.spell))
+            .range([0, barWidth])
+            .padding(0.1);
+        const y = d3.scaleLinear()
+            .domain([0, d3.max(spellData, d => d.count)])
+            .nice()
+            .range([barHeight, 0]);
+
+        const tooltip = d3.select("body")
+            .append("div")
+             .attr("class", "tooltip");
+
+        // Add bars to the bar chart
+        barSvg.append("g")
+            .selectAll("rect")
+            .data(spellData)
+            .enter().append("rect")
+            .attr("x", d => x(d.spell))
+            .attr("y", d => y(d.count))
+            .attr("width", x.bandwidth())
+            .attr("height", d => barHeight - y(d.count))
             .attr("fill", d => spellColors[d.spell])
-            .attr("opacity", 1);
+            .on("mouseover", (event, d) => {
+            tooltip.style("visibility", "visible")
+                .text(`Usage: ${d.count}`);
+            d3.select(event.target).style("cursor", "url('HP_WandH.png'), auto"); // Change cursor on mouseover
+            })
+            .on("mousemove", event => {
+                tooltip.style("top", `${event.pageY - 10}px`)
+            .style("left", `${event.pageX + 10}px`);
+            })
+            .on("mouseout", () => {
+                tooltip.style("visibility", "hidden");
+            });
+
+        // Add X and Y axes
+        barSvg.append("g")
+            .attr("transform", `translate(0,${barHeight})`)
+            .call(d3.axisBottom(x))
+            .attr("class", "axis")
+            .selectAll("text")
+            .attr("dy", "0.75em") // Adjusts the vertical position of tick labels
+            .attr("transform", "rotate(-45)")
+            .style("text-anchor", "end");
+
+        barSvg.append("g")
+            .call(d3.axisLeft(y))
+            .attr("dy", "0.35em") // Adjusts the vertical position of tick labels
+            .attr("class", "axis");
+
+        // Add axis labels
+        barSvg.append("text")
+            .attr("x", barWidth / 2)
+            .attr("y", barHeight + 100) // Adjusted position for the label
+            .attr("text-anchor", "middle")
+            .attr("class", "axis-label")
+            .text("Spell Name");
+
+        barSvg.append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("x", -barHeight / 2)
+            .attr("y", -margin.left + 15) // Adjusted position for the label
+            .attr("text-anchor", "middle")
+            .attr("class", "axis-label")
+            .text("Spell Usage");
+
+
     }
+
+    //RESET 
+    document.getElementById("reset-button").addEventListener("click", resetVisualization);
+
+    function resetVisualization() {
+        // Reset selectedNode to null
+        selectedNode = null;
+
+        d3.select("#summary-stat p").text("Click on a character node to learn more");
+
+        // Reset the graph
+        resetHighlight();
+        resetCurvePaths();
+
+        // Reset the bar chart
+        resetBarGraph();
+    }
+
+
+    
 });
 
 // BAR GRAPH
@@ -555,7 +787,7 @@ const requestData = async function() {
     const spells = await d3.csv("megafile.csv");
     const barWidth = 400;
     const barHeight = 200;
-    const margin = { top: 20, right: 30, bottom: 80, left: 50 };
+    const margin = { top: 20, right: 30, bottom: 100, left: 50 };
 
     // Bar Chart Dimensions
     const barSvg = d3.select("#bar-graph")
@@ -577,6 +809,10 @@ const requestData = async function() {
         .domain([0, d3.max(spellData, d => d.count)])
         .nice()
         .range([barHeight, 0]);
+    
+    const tooltip = d3.select("body")
+        .append("div")
+        .attr("class", "tooltip");
 
     // Add bars to the bar chart
     barSvg.append("g")
@@ -587,7 +823,19 @@ const requestData = async function() {
         .attr("y", d => y(d.count))
         .attr("width", x.bandwidth())
         .attr("height", d => barHeight - y(d.count))
-        .attr("fill", d => spellColors[d.spell]);
+        .attr("fill", d => spellColors[d.spell])
+        .on("mouseover", (event, d) => {
+            tooltip.style("visibility", "visible")
+                .text(`Usage: ${d.count}`);
+            d3.select(event.target).style("cursor", "url('HP_WandH.png'), auto"); // Change cursor on mouseover
+            })
+            .on("mousemove", event => {
+                tooltip.style("top", `${event.pageY - 10}px`)
+            .style("left", `${event.pageX + 10}px`);
+            })
+            .on("mouseout", () => {
+                tooltip.style("visibility", "hidden");
+            });
 
     // Add X and Y axes
     barSvg.append("g")
@@ -607,7 +855,7 @@ const requestData = async function() {
     // Add axis labels
     barSvg.append("text")
         .attr("x", barWidth / 2)
-        .attr("y", barHeight + 80) // Adjusted position for the label
+        .attr("y", barHeight + 100) // Adjusted position for the label
         .attr("text-anchor", "middle")
         .attr("class", "axis-label")
         .text("Spell Name");
