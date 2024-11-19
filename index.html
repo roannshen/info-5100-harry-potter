@@ -114,7 +114,7 @@
 
             .snitch-checkbox {
                 position: relative;
-                cursor: pointer;
+                cursor: "url('HP_WandH.png'), auto";
                 appearance: none;
                 width: 30px;
                 height: 30px;
@@ -157,6 +157,7 @@
             height: 100vh;
             justify-content: flex-start;
             align-items: center;
+            margin-top: 50px;
             gap: 24px;
             display: inline-flex;
             flex-direction: column;
@@ -165,12 +166,11 @@
 
             #row {
                 width: 100%;
-                flex-direction: row;
-                justify-content:space-around;
-                align-items: center;
-                display: inline-flex;
-                gap: 24px;
-                flex: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: flex-start;
+    gap: 24px;
             }
 
             #left-col {
@@ -247,7 +247,7 @@
                 width: 30%;
                 height: 100%;
                 flex-direction: column;
-                justify-content: flex-start;
+                justify-content: center;
                 align-items: center;
                 gap: 12px;
                 display: inline-flex;
@@ -259,7 +259,7 @@
                 height: 100%;
                 padding: 10px;
                 /* justify-content: center; */
-                /* align-items: center; */
+                align-items: center;
                 gap: 10px;
                 /* display: inline-flex; */
                 margin-left: 50px;
@@ -272,6 +272,23 @@
             #stat-features {
                 text-align: center;
             }
+
+            #reset-button {
+                background-image: url('button.svg');
+                background-color: transparent;
+                background-repeat: no-repeat;
+                background-position: center;
+                border: none;
+                color: white;
+                line-height: 70px;
+                padding: 0 20px;
+                width: 300px;
+                height: 100px;
+                font-size: 16px;
+                font-family: 'Baskervville', serif;
+                cursor: url('HP_WandH.png'), auto;
+            }
+
         </style>
     </head>
 <body>
@@ -280,14 +297,14 @@
         <button id="reset-button">Reset Visualization</button>
         <div id="row">
             <div id = "left-col">
-                <svg id="graph" class="svg"></svg>
+                <svg id="graph" class="svg" height="1200" width="800"></svg>
                 <div id="legend-container">
                     <!-- <h3>Legend: Spell Colors</h3> -->
                     <div class="legend-items">
                         <div class="legend-item" style="color: #FFD700;"><span class="legend-color" style="background-color: #FFD700;"></span>Confringo</div>
                         <div class="legend-item" style="color: #006400;"><span class="legend-color" style="background-color: #006400;"></span>Morsmordre</div>
                         <div class="legend-item" style="color: #ff7d52;"><span class="legend-color" style="background-color: #ff8652;"></span>Confundo</div>
-                        <div class="legend-item" style="color:  #3CB371;"><span class="legend-color" style="background-color: #3CB371;"></span>Imperio</div>
+                        <div class="legend-item" style="color: #3CB371;"><span class="legend-color" style="background-color: #3CB371;"></span>Imperio</div>
                         <div class="legend-item" style="color: #1624be;"><span class="legend-color" style="background-color: #1624be;"></span>Sectumsempra</div>
                         <div class="legend-item" style="color: #0ABAB5;"><span class="legend-color" style="background-color: #0ABAB5;"></span>Expecto Patronum</div>
                         <div class="legend-item" style="color: #FFB6C1;"><span class="legend-color" style="background-color: #FFB6C1;"></span>Obliviate</div>
@@ -360,9 +377,9 @@
         "Peter Pettigrew": "character_node_svg/pettigrew.svg",
         "Ron Weasley": "character_node_svg/weasley.svg",
         "Albus Dumbledore": "character_node_svg/dumbledore.svg",
-        "Unnamed Character": "character_node_svg/unknown.svg",
-        "Otter": "character_node_svg/otter.gif",
-        "Stag": "character_node_svg/stag.gif"
+        "Unnamed Character": "character_node_svg/unknown.svg"
+        // "Otter": "character_node_svg/otter.gif",
+        // "Stag": "character_node_svg/stag.gif"
     };
 
 
@@ -463,15 +480,15 @@ Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, cha
             if (casterImages[d.id]) {
                 group.append("image")
                     .attr("xlink:href", casterImages[d.id])
-                    .attr("width", 60)
-                    .attr("height", 60)
-                    .attr("x", -30)
-                    .attr("y", -30);
+                    .attr("width", 55)
+                    .attr("height", 55)
+                    .attr("x", -20)
+                    .attr("y", -20);
             } else {
                 group.append("image")
                     .attr("xlink:href", "character_node_svg/hat.svg")
-                    .attr("width", 50)
-                    .attr("height", 50)
+                    .attr("width", 40)
+                    .attr("height", 40)
                     .attr("x", -15)
                     .attr("y", -15);
             }
@@ -569,8 +586,10 @@ Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, cha
             const house = houseMap.get(characterName) || "Unknown House";
             const summaryText = `${characterName} is a ${house} who cast ${totalSpells} spell${totalSpells !== 1 ? 's' : ''} in total, with ${mostUsedSpell} as the most used spell.`;
 
+
             // Update the #summary-stat element
-            d3.select("#summary-stat p").text(summaryText);
+            d3.select('#summary-stat').text(summaryText);
+
 
 
         }
@@ -965,7 +984,7 @@ const requestData = async function() {
                     descriptionBox.style("visibility", "visible") 
                         .style('width', '400px') 
                         .style('height', '380px')
-                        .html(`<span style="font-weight: bold;">${d} Spell:</span> <span style="font-weight: normal;">${spellDataMap[d]}</span>`);  
+                        .html(`<span style="font-weight: bold;">${d}:</span> <span style="font-weight: normal;">${spellDataMap[d]}</span>`);  
                 })
             .on('mouseout', function() {
                 if (!this.checked) {
