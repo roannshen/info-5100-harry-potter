@@ -234,6 +234,7 @@
                 height: 20px;
                 border-radius: 5px;
             }
+
         </style>
     </head>
 <body>
@@ -266,7 +267,7 @@
                 <h2 id="bar-chart-title">The Spells of the Harry Potter Universe <h2>
 
                 <svg id="bar-graph"></svg>
-                <div id="summary-stat"><p>summary stat</p></div>
+                <div id="summary-stat"><p style="margin-top: 0;">Click on a character node to learn more</p></div>
             </div>
             
         </div>
@@ -349,6 +350,12 @@ Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, cha
     const links = [];
     const validCharacters = new Set(characters.map(d => d.Character_Name));
     const nodeMap = new Map();
+
+    // Create a Map for character houses
+    const houseMap = new Map();
+    characters.forEach(character => {
+        houseMap.set(character.Character_Name, character.House);
+    });
 
 
     // Process data into nodes and links
@@ -486,6 +493,17 @@ Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, cha
         const characterSpells = data.filter(row => row.caster === characterName);
         const spellCounts = d3.rollup(characterSpells, v => v.length, d => d.spell_name);
         const filteredSpellData = Array.from(spellCounts, ([spell, count]) => ({ spell, count }));
+        const totalSpells = d3.sum(Array.from(spellCounts.values()));
+
+        let mostUsedSpell = "";
+        let maxCount = 0;
+        spellCounts.forEach((count, spell) => {
+            if (count > maxCount) {
+                maxCount = count;
+                mostUsedSpell = spell;
+            }
+        });
+
         if (!isCaster) {
                 return;
             }
@@ -493,6 +511,7 @@ Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, cha
             selectedNode = null;
             d3.select("#bar-chart-title").text("The Spells of the Harry Potter Universe"); // Reset title
             resetBarGraph(); 
+            d3.select("#summary-stat p").text("Click on a character node to learn more");
             // Reset the bar graph highlighting
         } else {
             // const characterSpells = data.filter(row => row.caster === characterName);
@@ -502,6 +521,14 @@ Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, cha
             highlightNode(d);
             d3.select("#bar-chart-title").text(`The Spells of ${d.id}`); // Update title with character name
             updateBarChart(filteredSpellData); // Call the function to update the bar chart
+            
+            // Get the character's house from the houseMap
+            const house = houseMap.get(characterName) || "Unknown House";
+            const summaryText = `${characterName} is a ${house} who casted ${totalSpells} spell${totalSpells !== 1 ? 's' : ''} in total, with ${mostUsedSpell} as the most used spell.`;
+
+            // Update the #summary-stat element
+            d3.select("#summary-stat p").text(summaryText);
+
 
         }
     });
@@ -739,6 +766,8 @@ Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, cha
     function resetVisualization() {
         // Reset selectedNode to null
         selectedNode = null;
+
+        d3.select("#summary-stat p").text("Click on a character node to learn more");
 
         // Reset the graph
         resetHighlight();
