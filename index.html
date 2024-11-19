@@ -888,6 +888,9 @@ const requestData = async function() {
     let selectedSpells = ['Avada Kedavra', 'Confringo'];
     const spellsNames = ['Avada Kedavra', 'Confringo', 'Crucio', 'Imperio', 'Incendio', 'Expelliarmus', 'Petrificus Totalus']// filterSpellsByCharacter(character);
 
+    const tooltip = d3.select("body")
+                        .append("div")
+                        .attr("class", "tooltip");
 
     // Function to filter spells by character
     // TODO: IMPORT d3.csv("megafile.csv") FOR THE spellData data
@@ -909,53 +912,40 @@ const requestData = async function() {
             .style('display', 'flex')
             .style('align-items', 'center');
 
-        // checkboxes.append('input')
-        //     .attr('type', 'checkbox')
-        //     .attr('id', d => d)
-        //     .attr('value', d => d)
-        //     .attr('class', 'snitch-checkbox')
-        //     .property('checked', (d, i) => i === 0 || i === 1)
-        //     // .style('accent-color', d => spellColors[d])
-        //     .style('height', '30px')
-        //     .style('width', '30px')
-        //     .on('change', handleCheckboxChange)
-        //     .style('cursor', "url('HP_WandH.png'), auto");
-
-        checkboxes.append('input')
-    .attr('type', 'checkbox')
-    .attr('id', d => d)
-    .attr('value', d => d)
-    .attr('class', 'snitch-checkbox')
-    .property('checked', (d, i) => i === 0 || i === 1)
-    .style('height', '30px')
-    .style('width', '30px')
-    .each(function (d) {
-        // Set the custom property for the accent color based on spellColors
-        const accentColor = spellColors[d];
-        this.style.setProperty('--accent-color', accentColor);
-    })
-    .on('change', handleCheckboxChange)
-    .style('cursor', "url('HP_WandH.png'), auto");
-
-            checkboxes.append('label')
-            .attr('for', d => d)
-                .text(d => d)
-                .style('color', 'white')
-                .style('font-family', 'serif')
-                .style('font-size', '10pt')
-                .style('width', '100px')
-                .style('height', '50px')
-                .style('text-align', 'center')
-                .style('display', 'flex')
-                .style('align-items', 'center')
-                .style('justify-content', 'center')
-                .style('border-radius', '5px')
-                .style('background-image', d => `url('button.svg')`)
-                .style('background-size', 'contain')
-                .style('background-repeat', 'no-repeat')
-                .style('background-position', 'center')
-                .style('padding', '10px')
+            checkboxes.append('input')
+                .attr('type', 'checkbox')
+                .attr('id', d => d)
+                .attr('value', d => d)
+                .attr('class', 'snitch-checkbox')
+                .property('checked', (d, i) => i === 0 || i === 1)
+                .style('height', '30px')
+                .style('width', '30px')
+                .each(function (d) {
+                    const accentColor = spellColors[d];
+                    this.style.setProperty('--accent-color', accentColor);
+                })
+                .on('change', handleCheckboxChange)
                 .style('cursor', "url('HP_WandH.png'), auto");
+
+                checkboxes.append('label')
+                    .attr('for', d => d)
+                    .text(d => d)  // Label text based on the "Name" field
+                    .style('color', 'white')
+                    .style('font-family', 'serif')
+                    .style('font-size', '10pt')
+                    .style('width', '100px')
+                    .style('height', '50px')
+                    .style('text-align', 'center')
+                    .style('display', 'flex')
+                    .style('align-items', 'center')
+                    .style('justify-content', 'center')
+                    .style('border-radius', '5px')
+                    .style('background-image', d => `url('button.svg')`)
+                    .style('background-size', 'contain')
+                    .style('background-repeat', 'no-repeat')
+                    .style('background-position', 'center')
+                    .style('padding', '10px')
+                    .style('cursor', "url('HP_WandH.png'), auto");
         }
 
     function handleCheckboxChange(event) {
@@ -1111,7 +1101,21 @@ const requestData = async function() {
             .attr("stroke", d => spellColors[d['Name']])
             .attr("fill", d => spellColors[d['Name']])
             .attr("stroke-opacity", 1)
-            .attr("opacity", 0.5);
+            .attr("opacity", 0.5)
+            .on('mouseover', function(event, d) {
+                // Append the tooltip text
+                tooltip.style("visibility", "visible")  // Make the tooltip visible
+                    .text(d['Name']);  // Set the tooltip content to d['Name']
+            })
+            .on('mousemove', function(event) {
+                // Position the tooltip based on mouse movement
+                tooltip.style("top", `${event.pageY - 10}px`)  // Adjust Y position
+                    .style("left", `${event.pageX + 10}px`);  // Adjust X position
+            })
+            .on('mouseout', function() {
+                // Hide the tooltip when mouse leaves the path
+                tooltip.style("visibility", "hidden");
+            });
     });
 }
 
