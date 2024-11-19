@@ -339,12 +339,15 @@ const fixedPositions = {
 
 let link, nodeGroup, selectedNode = null;
 let spellData = [];
+let spells = [];
+
 
 Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, characters]) => {
     const nodes = [];
     const links = [];
     const validCharacters = new Set(characters.map(d => d.Character_Name));
     const nodeMap = new Map();
+
 
     // Process data into nodes and links
     data.forEach(({ caster, victim, spell_name }) => {
@@ -477,20 +480,26 @@ Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, cha
 
     node.on("click", (event, d) => {
         const isCaster = data.some(row => row.caster === d.id);
+        const characterName = d.id;
+        const characterSpells = data.filter(row => row.caster === characterName);
+        const spellCounts = d3.rollup(characterSpells, v => v.length, d => d.spell_name);
+        const filteredSpellData = Array.from(spellCounts, ([spell, count]) => ({ spell, count }));
         if (!isCaster) {
                 return;
             }
-        if (selectedNode && selectedNode.id === d.id) {
+        if (selectedNode && selectedNode.id === characterName) {
             selectedNode = null;
-            resetHighlight();
-            resetBarGraph(); 
             d3.select("#bar-chart-title").text("The Spells of the Harry Potter Universe"); // Reset title
+            resetBarGraph(); 
             // Reset the bar graph highlighting
         } else {
+            // const characterSpells = data.filter(row => row.caster === characterName);
+            // const spellCounts = d3.rollup(characterSpells, v => v.length, d => d.spell_name);
+            // const filteredSpellData = Array.from(spellCounts, ([spell, count]) => ({ spell, count }));
             selectedNode = d;
             highlightNode(d);
-            highlightSpellsInBarGraph(d.id); // Highlight spells in the bar graph
             d3.select("#bar-chart-title").text(`The Spells of ${d.id}`); // Update title with character name
+            updateBarChart(filteredSpellData); // Call the function to update the bar chart
 
         }
     });
@@ -540,27 +549,158 @@ Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, cha
     }
 
 
-    function highlightSpellsInBarGraph(character) {
-        // Filter spells cast by the selected character
-        const characterSpells = data.filter(d => d.caster === character);
+    function updateBarChart(filteredSpellData) {
+        const spellCountMap = new Map(filteredSpellData.map(d => [d.spell, d.count]));
+        const allSpellsData = spellData.map(d => ({
+        spell: d.spell,
+        count: spellCountMap.get(d.spell) || 0 // Use the count from the map, or 0 if not cast
+        }));
 
-        // Create a map of spell counts for the character
-        const spellCounts = new Map();
-        characterSpells.forEach(d => {
-            spellCounts.set(d.spell_name, (spellCounts.get(d.spell_name) || 0) + 1);
-        });
+        // Clear the existing bars
+        d3.select("#bar-graph").selectAll("*").remove();
 
-        // Update the bar graph
-        d3.selectAll("#bar-graph rect")
-            .attr("fill", d => spellCounts.has(d.spell) ? spellColors[d.spell] : "#999")
-            .attr("opacity", d => spellCounts.has(d.spell) ? 1 : 0.3);
+        // Bar chart dimensions
+        const barWidth = 400;
+        const barHeight = 200;
+        const margin = { top: 20, right: 30, bottom: 100, left: 50 };
+
+        // Set up the SVG
+        const barSvg = d3.select("#bar-graph")
+            .attr("width", barWidth + margin.left + margin.right)
+            .attr("height", barHeight + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", `translate(${margin.left},${margin.top})`);
+
+        // Set up scales
+        const x = d3.scaleBand()
+            .domain(allSpellsData.map(d => d.spell))
+            .range([0, barWidth])
+            .padding(0.1);
+
+        const y = d3.scaleLinear()
+            .domain([0, d3.max(allSpellsData, d => d.count)]) 
+            // .domain([0, 45]) //stays same entire time
+            .nice()
+            .range([barHeight, 0]);
+
+        // Add the bars
+        barSvg.selectAll("rect")
+            .data(allSpellsData)
+            .enter().append("rect")
+            .attr("x", d => x(d.spell))
+            .attr("y", d => y(d.count))
+            .attr("width", x.bandwidth())
+            .attr("height", d => barHeight - y(d.count))
+            .attr("fill", d => spellColors[d.spell]);
+
+        // Add X and Y axes
+        barSvg.append("g")
+            .attr("transform", `translate(0,${barHeight})`)
+            .call(d3.axisBottom(x))
+            .attr("class", "axis")
+            .selectAll("text")
+            .attr("dy", "0.75em") 
+            .attr("transform", "rotate(-45)")
+            .style("text-anchor", "end");
+
+        barSvg.append("g")
+            .call(d3.axisLeft(y))
+            .attr("dy", "0.35em") // Adjusts the vertical position of tick labels
+            .attr("class", "axis");
+
+            // Add axis labels
+        barSvg.append("text")
+            .attr("x", barWidth / 2)
+            .attr("y", barHeight + 80) // Adjusted position for the label
+            .attr("text-anchor", "middle")
+            .attr("class", "axis-label")
+            .text("Spell Name");
+
+        barSvg.append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("x", -barHeight / 2)
+            .attr("y", -margin.left + 15) 
+            .attr("text-anchor", "middle")
+            .attr("class", "axis-label")
+            .text("Spell Usage");
+
     }
 
     function resetBarGraph() {
-        d3.selectAll("#bar-graph rect")
-            .attr("fill", d => spellColors[d.spell])
-            .attr("opacity", 1);
+        d3.select("#bar-graph").selectAll("*").remove();
+
+        const barWidth = 400;
+        const barHeight = 200;
+        const margin = { top: 20, right: 30, bottom: 100, left: 50 };
+
+        // Bar Chart Dimensions
+        const barSvg = d3.select("#bar-graph")
+            .attr("width", barWidth + margin.left + margin.right)
+            .attr("height", barHeight + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", `translate(${margin.left},${margin.top})`);
+
+        // Calculate spell usage
+        const spellUsage = d3.rollup(data, v => v.length, d => d.spell_name);
+        spellData = Array.from(spellUsage, ([spell, count]) => ({ spell, count })).sort((a, b) => a.count - b.count);
+
+        // Scales for the bar chart
+        const x = d3.scaleBand()
+            .domain(spellData.map(d => d.spell))
+            .range([0, barWidth])
+            .padding(0.1);
+        const y = d3.scaleLinear()
+            .domain([0, d3.max(spellData, d => d.count)])
+            .nice()
+            .range([barHeight, 0]);
+
+        // Add bars to the bar chart
+        barSvg.append("g")
+            .selectAll("rect")
+            .data(spellData)
+            .enter().append("rect")
+            .attr("x", d => x(d.spell))
+            .attr("y", d => y(d.count))
+            .attr("width", x.bandwidth())
+            .attr("height", d => barHeight - y(d.count))
+            .attr("fill", d => spellColors[d.spell]);
+
+        // Add X and Y axes
+        barSvg.append("g")
+            .attr("transform", `translate(0,${barHeight})`)
+            .call(d3.axisBottom(x))
+            .attr("class", "axis")
+            .selectAll("text")
+            .attr("dy", "0.75em") // Adjusts the vertical position of tick labels
+            .attr("transform", "rotate(-45)")
+            .style("text-anchor", "end");
+
+        barSvg.append("g")
+            .call(d3.axisLeft(y))
+            .attr("dy", "0.35em") // Adjusts the vertical position of tick labels
+            .attr("class", "axis");
+
+        // Add axis labels
+        barSvg.append("text")
+            .attr("x", barWidth / 2)
+            .attr("y", barHeight + 100) // Adjusted position for the label
+            .attr("text-anchor", "middle")
+            .attr("class", "axis-label")
+            .text("Spell Name");
+
+        barSvg.append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("x", -barHeight / 2)
+            .attr("y", -margin.left + 15) // Adjusted position for the label
+            .attr("text-anchor", "middle")
+            .attr("class", "axis-label")
+            .text("Spell Usage");
+
+
     }
+
+
+    
 });
 
 // BAR GRAPH
