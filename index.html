@@ -34,6 +34,7 @@
 
             .axis text {
                 font-family: "Baskervville", serif;
+                font-size:8pt;
                 fill: white;
             }
 
@@ -44,6 +45,7 @@
 
             .axis-label {
                 fill: white;
+                font-size: small;
             }
 
             .checkboxes-container {
@@ -73,6 +75,10 @@
                 color: black;
             }
 
+            #bar-chart-title{
+                margin-top: 10px;
+                margin-bottom: 10px;
+            }
 
             #spider-container {
                 display: flex;
@@ -173,7 +179,7 @@
             flex-direction: column;
             justify-content: flex-start;
             align-items: flex-start;
-            gap: 24px;
+            gap: 12px;
             display: inline-flex;
             align-items: center; 
             justify-content: center;
@@ -255,6 +261,8 @@
                 <svg id="graph"></svg>
             </div>    
             <div id="right-col">
+                <h2 id="bar-chart-title">The Spells of the Harry Potter Universe <h2>
+
                 <svg id="bar-graph"></svg>
                 <div id="summary-stat"><p>summary stat</p></div>
             </div>
@@ -473,11 +481,15 @@ Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, cha
         if (selectedNode && selectedNode.id === d.id) {
             selectedNode = null;
             resetHighlight();
-            resetBarGraph(); // Reset the bar graph highlighting
+            resetBarGraph(); 
+            d3.select("#bar-chart-title").text("The Spells of the Harry Potter Universe"); // Reset title
+            // Reset the bar graph highlighting
         } else {
             selectedNode = d;
             highlightNode(d);
             highlightSpellsInBarGraph(d.id); // Highlight spells in the bar graph
+            d3.select("#bar-chart-title").text(`The Spells of ${d.id}`); // Update title with character name
+
         }
     });
 
