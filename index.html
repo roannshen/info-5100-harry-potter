@@ -166,7 +166,7 @@
             #row {
                 width: 100%;
                 flex-direction: row;
-                justify-content: flex-start;
+                justify-content:space-around;
                 align-items: center;
                 display: inline-flex;
                 gap: 24px;
@@ -242,6 +242,18 @@
                 border-radius: 5px;
             }
 
+            .spider-right {
+                margin-right: 50px;
+                width: 30%;
+                height: 100%;
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: center;
+                gap: 12px;
+                display: inline-flex;
+                /* align-items: center;  */
+            }
+
         </style>
     </head>
 <body>
@@ -275,6 +287,7 @@
 
                 <svg id="bar-graph"></svg>
                 <div id="summary-stat"><p style="margin-top: 0;">Click on a character node to learn more</p></div>
+                
             </div>
             
         </div>
@@ -285,10 +298,12 @@
         <div id="row">
             <div id = "left-col">
                 <svg id="spider-graph"></svg>
+                <div id="stat-features"></div>
             </div>
-            <div class = "right-col">
+            <div class = "spider-right">
+                <h3>Spells</h3>
                 <div id="checkboxes-container"></div>
-                <div id="spell-description"><p>spell description</p></div>
+                <div id="spell-description" min-height="400px" width="400px"><p>Hover on a spell to learn about its abilities</p></div>
             </div>
         </div>
     </div>
@@ -887,19 +902,15 @@ const requestData = async function() {
     const maxSelected = 8;
     let selectedSpells = ['Avada Kedavra', 'Confringo'];
     const spellsNames = ['Avada Kedavra', 'Confringo', 'Crucio', 'Imperio', 'Incendio', 'Expelliarmus', 'Petrificus Totalus']// filterSpellsByCharacter(character);
+    let spellDataMap = {};
 
     const tooltip = d3.select("body")
                         .append("div")
                         .attr("class", "tooltip");
 
-    // Function to filter spells by character
-    // TODO: IMPORT d3.csv("megafile.csv") FOR THE spellData data
-    
-    function filterSpellsByCharacter(character) {
-        return spellData.filter(spell => spell.caster === character).map(spell => spell.spell_name);
-    }
+    const descriptionBox = d3.select("#spell-description")
 
-    function createCheckboxes(spellNames) {
+    function createCheckboxes(spellNames, spellDataMap) {
         const checkboxesContainer = d3.select('#checkboxes-container');
         checkboxesContainer.selectAll('*').remove();
 
@@ -912,40 +923,71 @@ const requestData = async function() {
             .style('display', 'flex')
             .style('align-items', 'center');
 
-            checkboxes.append('input')
-                .attr('type', 'checkbox')
-                .attr('id', d => d)
-                .attr('value', d => d)
-                .attr('class', 'snitch-checkbox')
-                .property('checked', (d, i) => i === 0 || i === 1)
-                .style('height', '30px')
-                .style('width', '30px')
-                .each(function (d) {
-                    const accentColor = spellColors[d];
-                    this.style.setProperty('--accent-color', accentColor);
+        checkboxes.append('input')
+            .attr('type', 'checkbox')
+            .attr('id', d => d)
+            .attr('value', d => d)
+            .attr('class', 'snitch-checkbox')
+            .property('checked', (d, i) => i === 0 || i === 1)
+            .style('height', '30px')
+            .style('width', '30px')
+            .each(function (d) {
+                const accentColor = spellColors[d];
+                this.style.setProperty('--accent-color', accentColor);
+            })
+            .style('cursor', "url('HP_WandH.png'), auto")
+            .on('mouseover', function(event, d) {
+                if (!this.checked) {
+                    d3.select(this).style('background-color', 'gray');
+                }
+                
+                    descriptionBox.style("visibility", "visible") 
+                        .style('width', '400px') 
+                        .style('height', '400px')
+                        .html(`<span style="font-weight: bold;">${d} Spell:</span> <span style="font-weight: normal;">${spellDataMap[d]}</span>`);  
                 })
-                .on('change', handleCheckboxChange)
-                .style('cursor', "url('HP_WandH.png'), auto");
+            .on('mouseout', function() {
+                if (!this.checked) {
+                    d3.select(this).style('background-color', 'white');
+                }
+                descriptionBox.style("visibility", "visible").text("Hover on a spell to learn about its abilities");
+            })
+            .on('change', function(event, d) {
+                const accentColor = spellColors[d];
+                handleCheckboxChange(event)
+                d3.select(this)
+                    .style('background-color', this.checked ? accentColor : 'white')
+            });
 
-                checkboxes.append('label')
-                    .attr('for', d => d)
-                    .text(d => d)  // Label text based on the "Name" field
-                    .style('color', 'white')
-                    .style('font-family', 'serif')
-                    .style('font-size', '10pt')
-                    .style('width', '100px')
-                    .style('height', '50px')
-                    .style('text-align', 'center')
-                    .style('display', 'flex')
-                    .style('align-items', 'center')
-                    .style('justify-content', 'center')
-                    .style('border-radius', '5px')
-                    .style('background-image', d => `url('button.svg')`)
-                    .style('background-size', 'contain')
-                    .style('background-repeat', 'no-repeat')
-                    .style('background-position', 'center')
-                    .style('padding', '10px')
-                    .style('cursor', "url('HP_WandH.png'), auto");
+            checkboxes.append('label')
+                .attr('for', d => d)
+                .text(d => d)
+                .style('color', 'white')
+                .style('font-family', 'serif')
+                .style('font-size', '10pt')
+                .style('width', '100px')
+                .style('height', '50px')
+                .style('text-align', 'center')
+                .style('display', 'flex')
+                .style('align-items', 'center')
+                .style('justify-content', 'center')
+                .style('border-radius', '5px')
+                .style('background-image', d => `url('button.svg')`)
+                .style('background-size', 'contain')
+                .style('background-repeat', 'no-repeat')
+                .style('background-position', 'center')
+                .style('padding', '10px')
+                .style('cursor', "url('HP_WandH.png'), auto")
+                .on('mouseover', function(event, d) {
+                    descriptionBox.style("visibility", "visible") 
+                        .style('width', '400px') 
+                        .style('height', '500px')
+                        .html(`<span style="font-weight: bold;">${d} Spell:</span> <span style="font-weight: normal;">${spellDataMap[d]}</span>`);  
+                })
+                .on('mouseout', function() {
+                    descriptionBox.style("visibility", "visible").text("Hover on a spell to learn about its abilities")
+                    .style('justify-content', 'center');
+                });
         }
 
     function handleCheckboxChange(event) {
@@ -976,15 +1018,21 @@ const requestData = async function() {
         drawSpiderChart(selectedSpells);
     }
 
-    createCheckboxes(spellsNames);
+    d3.csv('spell_descriptions.csv').then(data => {
+        data.forEach(spell => {
+            spellDataMap[spell.Name] = spell.Description;
+        });
 
+        createCheckboxes(spellsNames, spellDataMap);
+    })
+
+    
     function drawSpiderChart(spellsList) {
         d3.csv('norm_spell_stats.csv').then((spells) => {
             // Cite: We used https://yangdanny97.github.io/blog/2019/03/01/D3-Spider-Chart to learn how to graph spider graphs
             let data = [];
             let features = ["Damage", "Range", "Cooldown", "Duration", "CD OOC"];
             
-            // Filter the data based on the selected spells
             for (let i = 0; i < spells.length; i++) {
                 if (spellsList.includes(spells[i]['Name'])) {
                     data.push({
@@ -1007,15 +1055,12 @@ const requestData = async function() {
             .range([0, 250]);
         let ticks = [.2, .4, .6, .8, 1.0];
 
-        // Remove any existing circles, labels, lines, and paths
         svg.selectAll("circle").remove();
         svg.selectAll(".ticklabel").remove();
         svg.selectAll("line").remove();
         svg.selectAll(".axislabel").remove();
         svg.selectAll("path").remove();
 
-        // Draw circles for the radial grid
-        // outer location
         svg.selectAll("circle")
             .data(ticks)
             .enter()
@@ -1075,8 +1120,6 @@ const requestData = async function() {
             .x(d => d.x)
             .y(d => d.y);
 
-        // let colors = ["#28A745", "#FF4500", "#48493E", "#DA3832", "#FBD748", "#FF6347", "#4782B4"];
-
         function getPathCoordinates(data_point) {
             let coordinates = [];
             for (let i = 0; i < features.length; i++) {
@@ -1087,11 +1130,10 @@ const requestData = async function() {
             return coordinates;
         }
 
-        // Properly join data for paths and handle enter, update, and exit
         const paths = svg.selectAll("path")
             .data(data, d => d.Name);
 
-        paths.exit().remove(); // Remove paths that are no longer in the data
+        paths.exit().remove(); 
 
         paths.enter()
             .append("path")
@@ -1102,23 +1144,20 @@ const requestData = async function() {
             .attr("fill", d => spellColors[d['Name']])
             .attr("stroke-opacity", 1)
             .attr("opacity", 0.5)
+            .style('cursor', "url('HP_WandH.png'), auto")
             .on('mouseover', function(event, d) {
-                // Append the tooltip text
-                tooltip.style("visibility", "visible")  // Make the tooltip visible
-                    .text(d['Name']);  // Set the tooltip content to d['Name']
+                tooltip.style("visibility", "visible")  
+                    .text(d['Name']);  
             })
             .on('mousemove', function(event) {
-                // Position the tooltip based on mouse movement
-                tooltip.style("top", `${event.pageY - 10}px`)  // Adjust Y position
-                    .style("left", `${event.pageX + 10}px`);  // Adjust X position
+                tooltip.style("top", `${event.pageY - 10}px`) 
+                    .style("left", `${event.pageX + 10}px`); 
             })
             .on('mouseout', function() {
-                // Hide the tooltip when mouse leaves the path
                 tooltip.style("visibility", "hidden");
             });
     });
 }
-
 
 drawSpiderChart(selectedSpells)
 
