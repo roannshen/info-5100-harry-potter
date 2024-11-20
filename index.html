@@ -758,7 +758,7 @@ Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, cha
             // Add axis labels
         barSvg.append("text")
             .attr("x", barWidth / 2)
-            .attr("y", barHeight + 80) // Adjusted position for the label
+            .attr("y", barHeight + 90) // Adjusted position for the label
             .attr("text-anchor", "middle")
             .attr("class", "axis-label")
             .text("Spell Name");
@@ -846,7 +846,7 @@ Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, cha
         // Add axis labels
         barSvg.append("text")
             .attr("x", barWidth / 2)
-            .attr("y", barHeight + 100) // Adjusted position for the label
+            .attr("y", barHeight + 90) // Adjusted position for the label
             .attr("text-anchor", "middle")
             .attr("class", "axis-label")
             .text("Spell Name");
@@ -957,7 +957,7 @@ const requestData = async function() {
     // Add axis labels
     barSvg.append("text")
         .attr("x", barWidth / 2)
-        .attr("y", barHeight + 100) // Adjusted position for the label
+        .attr("y", barHeight + 90) // Adjusted position for the label
         .attr("text-anchor", "middle")
         .attr("class", "axis-label")
         .text("Spell Name");
