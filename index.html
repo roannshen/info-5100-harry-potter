@@ -417,7 +417,7 @@
         "Peter Pettigrew": "character_node_svg/pettigrew.svg",
         "Ron Weasley": "character_node_svg/weasley.svg",
         "Albus Dumbledore": "character_node_svg/dumbledore.svg",
-        "Unnamed Character": "character_node_svg/unknown.svg"
+        "Unnamed Characters": "character_node_svg/unknown.svg"
         // "Otter": "character_node_svg/otter.gif",
         // "Stag": "character_node_svg/stag.gif"
     };
@@ -461,7 +461,7 @@ Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, cha
     // Process data into nodes and links
     data.forEach(({ caster, victim, spell_name }) => {
         const sourceNode = caster;
-        let targetNode = (validCharacters.has(victim) || casterImages[victim]) ? victim : "Unnamed Character";
+        let targetNode = (validCharacters.has(victim) || casterImages[victim]) ? victim : "Unnamed Characters";
         if (!nodeMap.has(sourceNode)) {
                 nodeMap.set(sourceNode, { id: sourceNode, isCentral: true });
                 nodes.push(nodeMap.get(sourceNode));
@@ -535,7 +535,7 @@ Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, cha
         });
 
     // Setup force simulation
-    const simulation = d3.forceSimulation(nodes)
+    const sim = d3.forceSimulation(nodes)
         .force("link", d3.forceLink(links).id(d => d.id).distance(100))
         .force("charge", d3.forceManyBody().strength(-300))
         .force("center", d3.forceCenter(graphWidth / 2, graphHeight / 2))
@@ -547,10 +547,10 @@ Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, cha
             graphHeight / 2)
             .strength(1))
         .force("collide", d3.forceCollide()
-            .radius(d => (d.id === "Unnamed Character" ? 70 : 50))
+            .radius(d => (d.id === "Unnamed Characters" ? 70 : 50))
             .iterations(4));
 
-    simulation.nodes(nodes).on("tick", () => {
+    sim.nodes(nodes).on("tick", () => {
         node.attr("transform", d => `translate(${d.x},${d.y})`);
         link.attr("d", d => {
             const dx = d.target.x - d.source.x;
@@ -560,7 +560,7 @@ Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, cha
         });
     });
 
-    simulation.force("link").links(links);
+    sim.force("link").links(links);
 
     // Tooltip setup
     const tooltip = d3.select("body")
