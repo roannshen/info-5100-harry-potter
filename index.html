@@ -613,7 +613,8 @@ Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, cha
             selectedNode = null;
             d3.select("#bar-chart-title").text("The Spells of the Harry Potter Universe"); // Reset title
             resetBarGraph(); 
-            d3.select("#summary-stat p").text("Click on a character node to learn more");
+            d3.select("#summary-stat").text("Click on a character node to learn more");
+            
             // Reset the bar graph highlighting
         } else {
             // const characterSpells = data.filter(row => row.caster === characterName);
@@ -626,7 +627,7 @@ Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, cha
             
             // Get the character's house from the houseMap
             const house = houseMap.get(characterName) || "Unknown House";
-            const summaryText = `${characterName} is a ${house} who cast ${totalSpells} spell${totalSpells !== 1 ? 's' : ''} in total, with ${mostUsedSpell} as the most used spell.`;
+            const summaryText = `${characterName} is a ${house} who cast ${totalSpells} spell${totalSpells !== 1 ? 's' : ''} in total, with ${mostUsedSpell} as their most used spell.`;
 
 
             // Update the #summary-stat element
@@ -878,7 +879,7 @@ Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, cha
         // Reset selectedNode to null
         selectedNode = null;
         d3.select("#bar-chart-title").text("The Spells of the Harry Potter Universe");
-        d3.select("#summary-stat p").text("Click on a character node to learn more");
+        d3.select("#summary-stat").text("Click on a character node to learn more");
 
         // Reset the graph
         resetHighlight();
