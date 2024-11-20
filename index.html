@@ -443,291 +443,479 @@
         "Unnamed Characters": "character_node_svg/unknown.svg"
     };
 
-// NODE GRAPH
-const svg = d3.select("svg#graph")
-    .attr("width", "100%")
-    .attr("height", "100%");
+    // NODE GRAPH
+    const svg = d3.select("svg#graph")
+        .attr("width", "100%")
+        .attr("height", "100%");
 
-const graphWidth = svg.node().getBoundingClientRect().width;
-const graphHeight = svg.node().getBoundingClientRect().height;
-const imageNodeRadius = 250;
-const circleNodeRadius = 350;
+    const graphWidth = svg.node().getBoundingClientRect().width;
+    const graphHeight = svg.node().getBoundingClientRect().height;
+    const imageNodeRadius = 250;
+    const circleNodeRadius = 350;
 
-const fixedPositions = {
-    "Stag": { fx: 1040, fy: 690 },
-    "Otter": { fx: 1100, fy: 660 }
-};
+    const fixedPositions = {
+        "Stag": { fx: 1040, fy: 690 },
+        "Otter": { fx: 1100, fy: 660 }
+    };
 
-let link, nodeGroup, selectedNode = null;
-let spellData = [];
-let spells = [];
-
-
-Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, characters]) => {
-    const nodes = [];
-    const links = [];
-    const validCharacters = new Set(characters.map(d => d.Character_Name));
-    const nodeMap = new Map();
-
-    const houseMap = new Map();
-    characters.forEach(character => {
-        houseMap.set(character.Character_Name, character.House);
-    });
+    let link, nodeGroup, selectedNode = null;
+    let spellData = [];
+    let spells = [];
 
 
-    data.forEach(({ caster, victim, spell_name }) => {
-        const sourceNode = caster;
-        let targetNode = (validCharacters.has(victim) || casterImages[victim]) ? victim : "Unnamed Characters";
-        if (!nodeMap.has(sourceNode)) {
-            nodeMap.set(sourceNode, { id: sourceNode, isCentral: true });
-            nodes.push(nodeMap.get(sourceNode));
-        }
-        if (!nodeMap.has(targetNode)) {
-            const isFixed = fixedPositions[targetNode];
-            nodeMap.set(targetNode, {
-                id: targetNode,
-                isCentral: false,
-                fx: isFixed?.fx || null,
-                fy: isFixed?.fy || null
-            }); 
-            nodes.push(nodeMap.get(targetNode));
-        }
+    Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, characters]) => {
+        const nodes = [];
+        const links = [];
+        const validCharacters = new Set(characters.map(d => d.Character_Name));
+        const nodeMap = new Map();
 
-        nodes.forEach(node => {
-            if (fixedPositions[node.id]) {
-                node.fx = fixedPositions[node.id].fx;
-                node.fy = fixedPositions[node.id].fy;
-        }});
+        const houseMap = new Map();
+        characters.forEach(character => {
+            houseMap.set(character.Character_Name, character.House);
+        });
 
-        links.push({ source: caster, target: targetNode, spell: spell_name });
-    });
 
-    links.forEach((link, index) => {
-        link.index = index;
-        const sameSourceTarget = links.filter(l => l.source === link.source && l.target === link.target);
-        const sameTargetSource = links.filter(l => l.source === link.target && l.target === link.source);
-        //Avoid overlapped links to the same person by separating the links for better visibility
-        link.spacing = sameSourceTarget.indexOf(link) - sameTargetSource.length / 2;
-    });
+        data.forEach(({ caster, victim, spell_name }) => {
+            const sourceNode = caster;
+            let targetNode = (validCharacters.has(victim) || casterImages[victim]) ? victim : "Unnamed Characters";
+            if (!nodeMap.has(sourceNode)) {
+                nodeMap.set(sourceNode, { id: sourceNode, isCentral: true });
+                nodes.push(nodeMap.get(sourceNode));
+            }
+            if (!nodeMap.has(targetNode)) {
+                const isFixed = fixedPositions[targetNode];
+                nodeMap.set(targetNode, {
+                    id: targetNode,
+                    isCentral: false,
+                    fx: isFixed?.fx || null,
+                    fy: isFixed?.fy || null
+                }); 
+                nodes.push(nodeMap.get(targetNode));
+            }
 
-    link = svg.append("g")
-        .attr("class", "links")
-        .selectAll("path")
-        .data(links)
-        .join("path")
-        .attr("stroke", d => spellColors[d.spell] || "#999")
-        .attr("stroke-width", 2)
-        .attr("fill", "none")
-        .attr("d", d => {
-        const dx = d.target.x - d.source.x;
-        const dy = d.target.y - d.source.y;
-        const dr = Math.sqrt(dx * dx + dy * dy) + d.spacing * 10; //source: https://stackoverflow.com/questions/13455510/curved-line-on-d3-force-directed-tree
-        return `M${d.source.x},${d.source.y}A${dr},${dr} 0 0,1 ${d.target.x},${d.target.y}`;
-    });
+            nodes.forEach(node => {
+                if (fixedPositions[node.id]) {
+                    node.fx = fixedPositions[node.id].fx;
+                    node.fy = fixedPositions[node.id].fy;
+            }});
 
-    nodeGroup = svg.append("g").attr("class", "nodes");
-    const node = nodeGroup.selectAll("g")
-        .data(nodes)
-        .join("g")
-        .each(function (d) {
-            const group = d3.select(this);
-            if (casterImages[d.id]) {
-                group.append("image")
-                    .attr("xlink:href", casterImages[d.id])
-                    .attr("width", 55)
-                    .attr("height", 55)
-                    .attr("x", -20)
-                    .attr("y", -20);
+            links.push({ source: caster, target: targetNode, spell: spell_name });
+        });
+
+        links.forEach((link, index) => {
+            link.index = index;
+            const sameSourceTarget = links.filter(l => l.source === link.source && l.target === link.target);
+            const sameTargetSource = links.filter(l => l.source === link.target && l.target === link.source);
+            //Avoid overlapped links to the same person by separating the links for better visibility
+            link.spacing = sameSourceTarget.indexOf(link) - sameTargetSource.length / 2;
+        });
+
+        link = svg.append("g")
+            .attr("class", "links")
+            .selectAll("path")
+            .data(links)
+            .join("path")
+            .attr("stroke", d => spellColors[d.spell] || "#999")
+            .attr("stroke-width", 2)
+            .attr("fill", "none")
+            .attr("d", d => {
+            const dx = d.target.x - d.source.x;
+            const dy = d.target.y - d.source.y;
+            const dr = Math.sqrt(dx * dx + dy * dy) + d.spacing * 10; //source: https://stackoverflow.com/questions/13455510/curved-line-on-d3-force-directed-tree
+            return `M${d.source.x},${d.source.y}A${dr},${dr} 0 0,1 ${d.target.x},${d.target.y}`;
+        });
+
+        nodeGroup = svg.append("g").attr("class", "nodes");
+        const node = nodeGroup.selectAll("g")
+            .data(nodes)
+            .join("g")
+            .each(function (d) {
+                const group = d3.select(this);
+                if (casterImages[d.id]) {
+                    group.append("image")
+                        .attr("xlink:href", casterImages[d.id])
+                        .attr("width", 55)
+                        .attr("height", 55)
+                        .attr("x", -20)
+                        .attr("y", -20);
+                } else {
+                    group.append("image")
+                        .attr("xlink:href", "character_node_svg/hat.svg")
+                        .attr("width", 40)
+                        .attr("height", 40)
+                        .attr("x", -15)
+                        .attr("y", -15);
+                }
+            });
+
+        const sim = d3.forceSimulation(nodes)
+            .force("link", d3.forceLink(links).id(d => d.id).distance(100))
+            .force("charge", d3.forceManyBody().strength(-300))
+            .force("center", d3.forceCenter(graphWidth / 2, graphHeight / 2))
+            .force("x", d3.forceX(graphWidth / 2).strength(0.5))
+            .force("y", d3.forceY(graphHeight / 2).strength(0.5))
+            .force("radial-image", d3.forceRadial(
+                d => d.isCentral ? imageNodeRadius : circleNodeRadius,
+                graphWidth / 2 - 100, 
+                graphHeight / 2)
+                .strength(1))
+            .force("collide", d3.forceCollide()
+                .radius(d => (d.id === "Unnamed Characters" ? 70 : 50))
+                .iterations(4));
+
+        sim.nodes(nodes).on("tick", () => {
+            node.attr("transform", d => `translate(${d.x},${d.y})`);
+            link.attr("d", d => {
+                const dx = d.target.x - d.source.x;
+                const dy = d.target.y - d.source.y;
+                const dr = Math.sqrt(dx * dx + dy * dy) + d.spacing * 10;
+                return `M${d.source.x},${d.source.y}A${dr},${dr} 0 0,1 ${d.target.x},${d.target.y}`;
+            });
+        });
+
+        sim.force("link").links(links);
+
+        const tooltip = d3.select("body")
+                            .append("div")
+                            .attr("class", "tooltip");
+
+        node.on("mouseover", (event, d) => {
+            tooltip.html(d.id)
+                .style("top", `${event.pageY - 20}px`)
+                .style("left", `${event.pageX + 20}px`)
+                .style("visibility", "visible");
+                d3.select("body")
+                    .style("cursor", "url('HP_WandH.png'), auto");
+                    const isCaster = data.some(row => row.caster === d.id);
+            if (!isCaster) {
+                d3.select("body").style("cursor", "url('HP_OnlyWand.png'), auto");
+                return;
+            }
+            if (!selectedNode) highlightNode(d);
+        }).on("mouseout", () => {
+            tooltip.style("visibility", "hidden");
+            d3.select("body").style("cursor", "url('HP_OnlyWand.png'), auto");
+            if (!selectedNode) resetHighlight();
+        });
+
+        node.on("click", (event, d) => {
+            const isCaster = data.some(row => row.caster === d.id);
+            const characterName = d.id;
+            const characterSpells = data.filter(row => row.caster === characterName);
+            const spellCounts = d3.rollup(characterSpells, v => v.length, d => d.spell_name);
+            const filteredSpellData = Array.from(spellCounts, ([spell, count]) => ({ spell, count }));
+            const totalSpells = d3.sum(Array.from(spellCounts.values()));
+
+            let mostUsedSpell = "";
+            let maxCount = 0;
+            spellCounts.forEach((count, spell) => {
+                if (count > maxCount) {
+                    maxCount = count;
+                    mostUsedSpell = spell;
+                }
+            });
+
+            if (!isCaster) {
+                    return;
+            }
+            if (selectedNode && selectedNode.id === characterName) {
+                selectedNode = null;
+                d3.select("#bar-chart-title").text("The Spells of the Harry Potter Universe"); 
+                resetBarGraph(); 
+                d3.select("#summary-stat").text("Click on a character node to learn more");
+            
             } else {
-                group.append("image")
-                    .attr("xlink:href", "character_node_svg/hat.svg")
-                    .attr("width", 40)
-                    .attr("height", 40)
-                    .attr("x", -15)
-                    .attr("y", -15);
+                selectedNode = d;
+                highlightNode(d);
+                d3.select("#bar-chart-title").text(`The Spells of ${d.id}`); 
+                updateBarChart(filteredSpellData); // Call the function to update the bar chart
+                
+                // Get the character's house from the houseMap
+                const house = houseMap.get(characterName) || "Unknown House";
+                const summaryText = `${characterName} is a ${house} who cast ${totalSpells} spell${totalSpells !== 1 ? 's' : ''} in total, with ${mostUsedSpell} as their most used spell.`;
+
+                // Update the #summary-stat element
+                d3.select('#summary-stat').text(summaryText);
             }
         });
 
-    const sim = d3.forceSimulation(nodes)
-        .force("link", d3.forceLink(links).id(d => d.id).distance(100))
-        .force("charge", d3.forceManyBody().strength(-300))
-        .force("center", d3.forceCenter(graphWidth / 2, graphHeight / 2))
-        .force("x", d3.forceX(graphWidth / 2).strength(0.5))
-        .force("y", d3.forceY(graphHeight / 2).strength(0.5))
-        .force("radial-image", d3.forceRadial(
-            d => d.isCentral ? imageNodeRadius : circleNodeRadius,
-            graphWidth / 2 - 100, 
-            graphHeight / 2)
-            .strength(1))
-        .force("collide", d3.forceCollide()
-            .radius(d => (d.id === "Unnamed Characters" ? 70 : 50))
-            .iterations(4));
+        // Highlighting and reset functions
+        function highlightNode(node) {
+            animateCurvePaths(node.id);
+            
+            link.attr("stroke-opacity", l =>
+            l.source.id === node.id || l.target.id === node.id ? 1 : 0.1)
+            .attr("stroke-width", l => l.source.id === node.id || l.target.id === node.id ? 3 : 1
+            );
 
-    sim.nodes(nodes).on("tick", () => {
-        node.attr("transform", d => `translate(${d.x},${d.y})`);
-        link.attr("d", d => {
-            const dx = d.target.x - d.source.x;
-            const dy = d.target.y - d.source.y;
-            const dr = Math.sqrt(dx * dx + dy * dy) + d.spacing * 10;
-            return `M${d.source.x},${d.source.y}A${dr},${dr} 0 0,1 ${d.target.x},${d.target.y}`;
-        });
-    });
+            // Highlight all related nodes (source or target of related links)
+            nodeGroup.selectAll("image").attr("opacity", n =>
+                n.id === node.id || links.some(l => l.source.id === n.id && l.target.id === node.id) || links.some(l => l.source.id === node.id && l.target.id === n.id)
+                    ? 1
+                    : 0.3
+            );
+        }
 
-    sim.force("link").links(links);
+        function resetHighlight() {
+            link.attr("stroke-opacity", 1).attr("stroke-width", 2);
+            nodeGroup.selectAll("image").attr("opacity", 1);
+        }
 
-    // Tooltip setup
-    const tooltip = d3.select("body")
+        //Animating spell casting and resetting animation
+        function animateCurvePaths(casterId) {
+            // Filter links where the caster is the source or the target
+            const casterLinks = links.filter(l => l.source.id === casterId || l.target.id === casterId);
+
+            casterLinks.forEach(linkData => {
+                const path = link.filter(d => d === linkData);
+                const pathElement = path.node();
+                const length = pathElement.getTotalLength();
+
+                // I learned to animate links from source: https://hackernoon.com/animating-line-charts-with-d3js
+                path.attr("stroke-dasharray", `${length} ${length}`)
+                    .attr("stroke-dashoffset", length)
+                    .transition()
+                    .duration(1500)
+                    .ease(d3.easeLinear)
+                    .attr("stroke-dashoffset", 0);
+            });
+        }   
+
+        function resetCurvePaths() {
+            link.attr("stroke-dasharray", null).attr("stroke-dashoffset", null);
+        }
+
+        function resetHighlight() {
+            link.attr("stroke-opacity", 1).attr("stroke-width", 2);
+            nodeGroup.selectAll("image").attr("opacity", 1);
+        }
+
+        function updateBarChart(filteredSpellData) {
+            const spellCountMap = new Map(filteredSpellData.map(d => [d.spell, d.count]));
+            const allSpellsData = spellData.map(d => ({
+                spell: d.spell,
+                count: spellCountMap.get(d.spell) || 0 
+            }));
+
+            d3.select("#bar-graph").selectAll("*").remove();
+
+            const barWidth = 400;
+            const barHeight = 200;
+            const margin = { top: 20, right: 30, bottom: 100, left: 50 };
+
+            const barSvg = d3.select("#bar-graph")
+                .attr("width", barWidth + margin.left + margin.right)
+                .attr("height", barHeight + margin.top + margin.bottom)
+                .append("g")
+                .attr("transform", `translate(${margin.left},${margin.top})`);
+
+            const x = d3.scaleBand()
+                .domain(allSpellsData.map(d => d.spell))
+                .range([0, barWidth])
+                .padding(0.1);
+
+            const y = d3.scaleLinear()
+                .domain([0, d3.max(allSpellsData, d => d.count)]) 
+                // .domain([0, 45]) //stays same entire time
+                .nice()
+                .range([barHeight, 0]);
+            
+            const tooltip = d3.select("body")
                         .append("div")
                         .attr("class", "tooltip");
 
-    node.on("mouseover", (event, d) => {
-        tooltip.html(d.id)
-            .style("top", `${event.pageY - 20}px`)
-            .style("left", `${event.pageX + 20}px`)
-            .style("visibility", "visible");
-            d3.select("body")
-                  .style("cursor", "url('HP_WandH.png'), auto");
-                  const isCaster = data.some(row => row.caster === d.id);
-        if (!isCaster) {
-            d3.select("body").style("cursor", "url('HP_OnlyWand.png'), auto");
-            return;
+            barSvg.selectAll("rect")
+                .data(allSpellsData)
+                .enter().append("rect")
+                .attr("x", d => x(d.spell))
+                .attr("y", d => y(d.count))
+                .attr("width", x.bandwidth())
+                .attr("height", d => barHeight - y(d.count))
+                .attr("fill", d => spellColors[d.spell])
+                .on("mouseover", (event, d) => {
+                tooltip.style("visibility", "visible")
+                    .text(`Usage: ${d.count}`);
+                d3.select(event.target).style("cursor", "url('HP_WandH.png'), auto"); 
+                })
+                .on("mousemove", event => {
+                    tooltip.style("top", `${event.pageY - 10}px`)
+                .style("left", `${event.pageX + 10}px`);
+                })
+                .on("mouseout", () => {
+                    tooltip.style("visibility", "hidden");
+                });
+
+            // Add X and Y axes
+            barSvg.append("g")
+                .attr("transform", `translate(0,${barHeight})`)
+                .call(d3.axisBottom(x))
+                .attr("class", "axis")
+                .selectAll("text")
+                .attr("dy", "0.75em") 
+                .attr("transform", "rotate(-45)")
+                .style("text-anchor", "end");
+
+            barSvg.append("g")
+                .call(d3.axisLeft(y))
+                .attr("dy", "0.35em") 
+                .attr("class", "axis");
+
+                // Add axis labels
+            barSvg.append("text")
+                .attr("x", barWidth / 2)
+                .attr("y", barHeight + 95) 
+                .attr("text-anchor", "middle")
+                .attr("class", "axis-label")
+                .text("Spell Name");
+
+            barSvg.append("text")
+                .attr("transform", "rotate(-90)")
+                .attr("x", -barHeight / 2)
+                .attr("y", -margin.left + 15) 
+                .attr("text-anchor", "middle")
+                .attr("class", "axis-label")
+                .text("Spell Usage");
+
         }
-        if (!selectedNode) highlightNode(d);
-    }).on("mouseout", () => {
-        tooltip.style("visibility", "hidden");
-        d3.select("body").style("cursor", "url('HP_OnlyWand.png'), auto");
-        if (!selectedNode) resetHighlight();
-    });
 
-    node.on("click", (event, d) => {
-        const isCaster = data.some(row => row.caster === d.id);
-        const characterName = d.id;
-        const characterSpells = data.filter(row => row.caster === characterName);
-        const spellCounts = d3.rollup(characterSpells, v => v.length, d => d.spell_name);
-        const filteredSpellData = Array.from(spellCounts, ([spell, count]) => ({ spell, count }));
-        const totalSpells = d3.sum(Array.from(spellCounts.values()));
+        function resetBarGraph() {
+            d3.select("#bar-graph").selectAll("*").remove();
 
-        let mostUsedSpell = "";
-        let maxCount = 0;
-        spellCounts.forEach((count, spell) => {
-            if (count > maxCount) {
-                maxCount = count;
-                mostUsedSpell = spell;
-            }
-        });
+            const barWidth = 400;
+            const barHeight = 200;
+            const margin = { top: 20, right: 30, bottom: 100, left: 50 };
 
-        if (!isCaster) {
-                return;
+            // Bar Chart Dimensions
+            const barSvg = d3.select("#bar-graph")
+                .attr("width", barWidth + margin.left + margin.right)
+                .attr("height", barHeight + margin.top + margin.bottom)
+                .append("g")
+                .attr("transform", `translate(${margin.left},${margin.top})`);
+
+            // Calculate spell usage
+            const spellUsage = d3.rollup(data, v => v.length, d => d.spell_name);
+            spellData = Array.from(spellUsage, ([spell, count]) => ({ spell, count })).sort((a, b) => a.count - b.count);
+
+            // Scales for the bar chart
+            const x = d3.scaleBand()
+                .domain(spellData.map(d => d.spell))
+                .range([0, barWidth])
+                .padding(0.1);
+            const y = d3.scaleLinear()
+                .domain([0, d3.max(spellData, d => d.count)])
+                .nice()
+                .range([barHeight, 0]);
+
+            const tooltip = d3.select("body")
+                .append("div")
+                .attr("class", "tooltip");
+
+            barSvg.append("g")
+                .selectAll("rect")
+                .data(spellData)
+                .enter().append("rect")
+                .attr("x", d => x(d.spell))
+                .attr("y", d => y(d.count))
+                .attr("width", x.bandwidth())
+                .attr("height", d => barHeight - y(d.count))
+                .attr("fill", d => spellColors[d.spell])
+                .on("mouseover", (event, d) => {
+                tooltip.style("visibility", "visible")
+                    .text(`Usage: ${d.count}`);
+                d3.select(event.target).style("cursor", "url('HP_WandH.png'), auto"); 
+                })
+                .on("mousemove", event => {
+                    tooltip.style("top", `${event.pageY - 10}px`)
+                .style("left", `${event.pageX + 10}px`);
+                })
+                .on("mouseout", () => {
+                    tooltip.style("visibility", "hidden");
+                });
+
+            barSvg.append("g")
+                .attr("transform", `translate(0,${barHeight})`)
+                .call(d3.axisBottom(x))
+                .attr("class", "axis")
+                .selectAll("text")
+                .attr("dy", "0.75em") 
+                .attr("transform", "rotate(-45)")
+                .style("text-anchor", "end");
+
+            barSvg.append("g")
+                .call(d3.axisLeft(y))
+                .attr("dy", "0.35em")
+                .attr("class", "axis");
+
+            barSvg.append("text")
+                .attr("x", barWidth / 2)
+                .attr("y", barHeight + 95)
+                .attr("text-anchor", "middle")
+                .attr("class", "axis-label")
+                .text("Spell Name");
+
+            barSvg.append("text")
+                .attr("transform", "rotate(-90)")
+                .attr("x", -barHeight / 2)
+                .attr("y", -margin.left + 15) 
+                .attr("text-anchor", "middle")
+                .attr("class", "axis-label")
+                .text("Spell Usage");
         }
-        if (selectedNode && selectedNode.id === characterName) {
+
+        //RESET 
+        document.getElementById("reset-button").addEventListener("click", resetVisualization);
+
+        function resetVisualization() {
+            // Reset selectedNode to null
             selectedNode = null;
-            d3.select("#bar-chart-title").text("The Spells of the Harry Potter Universe"); // Reset title
-            resetBarGraph(); 
+            d3.select("#bar-chart-title").text("The Spells of the Harry Potter Universe");
             d3.select("#summary-stat").text("Click on a character node to learn more");
-            
-        // Reset the bar graph highlighting
-        } else {
-            selectedNode = d;
-            highlightNode(d);
-            d3.select("#bar-chart-title").text(`The Spells of ${d.id}`); // Update title with character name
-            updateBarChart(filteredSpellData); // Call the function to update the bar chart
-            
-            // Get the character's house from the houseMap
-            const house = houseMap.get(characterName) || "Unknown House";
-            const summaryText = `${characterName} is a ${house} who cast ${totalSpells} spell${totalSpells !== 1 ? 's' : ''} in total, with ${mostUsedSpell} as their most used spell.`;
 
-            // Update the #summary-stat element
-            d3.select('#summary-stat').text(summaryText);
+            // Reset the graph
+            resetHighlight();
+            resetCurvePaths();
+
+            // Reset the bar chart
+            resetBarGraph();
         }
     });
 
-    // Highlighting and reset functions
-    function highlightNode(node) {
-        animateCurvePaths(node.id);
-        
-        link.attr("stroke-opacity", l =>
-        l.source.id === node.id || l.target.id === node.id ? 1 : 0.1)
-        .attr("stroke-width", l => l.source.id === node.id || l.target.id === node.id ? 3 : 1
-        );
-
-        // Highlight all related nodes (source or target of related links)
-        nodeGroup.selectAll("image").attr("opacity", n =>
-            n.id === node.id || links.some(l => l.source.id === n.id && l.target.id === node.id) || links.some(l => l.source.id === node.id && l.target.id === n.id)
-                ? 1
-                : 0.3
-        );
-    }
-
-    function resetHighlight() {
-        link.attr("stroke-opacity", 1).attr("stroke-width", 2);
-        nodeGroup.selectAll("image").attr("opacity", 1);
-    }
-
-    //Animating spell casting and resetting animation
-    function animateCurvePaths(casterId) {
-        // Filter links where the caster is the source or the target
-        const casterLinks = links.filter(l => l.source.id === casterId || l.target.id === casterId);
-
-        casterLinks.forEach(linkData => {
-            const path = link.filter(d => d === linkData);
-            const pathElement = path.node();
-            const length = pathElement.getTotalLength();
-
-            // I learned to animate links from source: https://hackernoon.com/animating-line-charts-with-d3js
-            path.attr("stroke-dasharray", `${length} ${length}`)
-                .attr("stroke-dashoffset", length)
-                .transition()
-                .duration(1500)
-                .ease(d3.easeLinear)
-                .attr("stroke-dashoffset", 0);
-        });
-    }   
-
-    function resetCurvePaths() {
-        link.attr("stroke-dasharray", null).attr("stroke-dashoffset", null);
-    }
-
-    function resetHighlight() {
-        link.attr("stroke-opacity", 1).attr("stroke-width", 2);
-        nodeGroup.selectAll("image").attr("opacity", 1);
-    }
-
-    function updateBarChart(filteredSpellData) {
-        const spellCountMap = new Map(filteredSpellData.map(d => [d.spell, d.count]));
-        const allSpellsData = spellData.map(d => ({
-            spell: d.spell,
-            count: spellCountMap.get(d.spell) || 0 
-        }));
-
-        d3.select("#bar-graph").selectAll("*").remove();
-
+    // BAR GRAPH
+    const requestData = async function() {
+        const spells = await d3.csv("megafile.csv");
         const barWidth = 400;
         const barHeight = 200;
         const margin = { top: 20, right: 30, bottom: 100, left: 50 };
 
+        // Bar Chart Dimensions
         const barSvg = d3.select("#bar-graph")
             .attr("width", barWidth + margin.left + margin.right)
             .attr("height", barHeight + margin.top + margin.bottom)
             .append("g")
             .attr("transform", `translate(${margin.left},${margin.top})`);
 
+        // Calculate spell usage
+        const spellUsage = d3.rollup(spells, v => v.length, d => d.spell_name);
+        spellData = Array.from(spellUsage, ([spell, count]) => ({ spell, count }));
+        spellData.sort((a, b) => a.count - b.count);
+        // Scales for the bar chart
         const x = d3.scaleBand()
-            .domain(allSpellsData.map(d => d.spell))
+            .domain(spellData.map(d => d.spell))
             .range([0, barWidth])
             .padding(0.1);
-
         const y = d3.scaleLinear()
-            .domain([0, d3.max(allSpellsData, d => d.count)]) 
-            // .domain([0, 45]) //stays same entire time
+            .domain([0, d3.max(spellData, d => d.count)])
             .nice()
             .range([barHeight, 0]);
         
         const tooltip = d3.select("body")
-                    .append("div")
-                    .attr("class", "tooltip");
+            .append("div")
+            .attr("class", "tooltip");
 
-        barSvg.selectAll("rect")
-            .data(allSpellsData)
+        // Add bars to the bar chart
+        barSvg.append("g")
+            .selectAll("rect")
+            .data(spellData)
             .enter().append("rect")
             .attr("x", d => x(d.spell))
             .attr("y", d => y(d.count))
@@ -735,25 +923,24 @@ Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, cha
             .attr("height", d => barHeight - y(d.count))
             .attr("fill", d => spellColors[d.spell])
             .on("mouseover", (event, d) => {
-            tooltip.style("visibility", "visible")
-                .text(`Usage: ${d.count}`);
-            d3.select(event.target).style("cursor", "url('HP_WandH.png'), auto"); 
-            })
-            .on("mousemove", event => {
-                tooltip.style("top", `${event.pageY - 10}px`)
-            .style("left", `${event.pageX + 10}px`);
-            })
-            .on("mouseout", () => {
-                tooltip.style("visibility", "hidden");
-            });
+                tooltip.style("visibility", "visible")
+                    .text(`Usage: ${d.count}`);
+                d3.select(event.target).style("cursor", "url('HP_WandH.png'), auto");
+                })
+                .on("mousemove", event => {
+                    tooltip.style("top", `${event.pageY - 10}px`)
+                .style("left", `${event.pageX + 10}px`);
+                })
+                .on("mouseout", () => {
+                    tooltip.style("visibility", "hidden");
+                });
 
-        // Add X and Y axes
         barSvg.append("g")
             .attr("transform", `translate(0,${barHeight})`)
             .call(d3.axisBottom(x))
             .attr("class", "axis")
             .selectAll("text")
-            .attr("dy", "0.75em") 
+            .attr("dy", "0.75em")
             .attr("transform", "rotate(-45)")
             .style("text-anchor", "end");
 
@@ -762,7 +949,7 @@ Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, cha
             .attr("dy", "0.35em") 
             .attr("class", "axis");
 
-            // Add axis labels
+        // Add axis labels
         barSvg.append("text")
             .attr("x", barWidth / 2)
             .attr("y", barHeight + 95) 
@@ -780,206 +967,8 @@ Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, cha
 
     }
 
-    function resetBarGraph() {
-        d3.select("#bar-graph").selectAll("*").remove();
-
-        const barWidth = 400;
-        const barHeight = 200;
-        const margin = { top: 20, right: 30, bottom: 100, left: 50 };
-
-        // Bar Chart Dimensions
-        const barSvg = d3.select("#bar-graph")
-            .attr("width", barWidth + margin.left + margin.right)
-            .attr("height", barHeight + margin.top + margin.bottom)
-            .append("g")
-            .attr("transform", `translate(${margin.left},${margin.top})`);
-
-        // Calculate spell usage
-        const spellUsage = d3.rollup(data, v => v.length, d => d.spell_name);
-        spellData = Array.from(spellUsage, ([spell, count]) => ({ spell, count })).sort((a, b) => a.count - b.count);
-
-        // Scales for the bar chart
-        const x = d3.scaleBand()
-            .domain(spellData.map(d => d.spell))
-            .range([0, barWidth])
-            .padding(0.1);
-        const y = d3.scaleLinear()
-            .domain([0, d3.max(spellData, d => d.count)])
-            .nice()
-            .range([barHeight, 0]);
-
-        const tooltip = d3.select("body")
-            .append("div")
-             .attr("class", "tooltip");
-
-        // Add bars to the bar chart
-        barSvg.append("g")
-            .selectAll("rect")
-            .data(spellData)
-            .enter().append("rect")
-            .attr("x", d => x(d.spell))
-            .attr("y", d => y(d.count))
-            .attr("width", x.bandwidth())
-            .attr("height", d => barHeight - y(d.count))
-            .attr("fill", d => spellColors[d.spell])
-            .on("mouseover", (event, d) => {
-            tooltip.style("visibility", "visible")
-                .text(`Usage: ${d.count}`);
-            d3.select(event.target).style("cursor", "url('HP_WandH.png'), auto"); // Change cursor on mouseover
-            })
-            .on("mousemove", event => {
-                tooltip.style("top", `${event.pageY - 10}px`)
-            .style("left", `${event.pageX + 10}px`);
-            })
-            .on("mouseout", () => {
-                tooltip.style("visibility", "hidden");
-            });
-
-        // Add X and Y axes
-        barSvg.append("g")
-            .attr("transform", `translate(0,${barHeight})`)
-            .call(d3.axisBottom(x))
-            .attr("class", "axis")
-            .selectAll("text")
-            .attr("dy", "0.75em") 
-            .attr("transform", "rotate(-45)")
-            .style("text-anchor", "end");
-
-        barSvg.append("g")
-            .call(d3.axisLeft(y))
-            .attr("dy", "0.35em")
-            .attr("class", "axis");
-
-        // Add axis labels
-        barSvg.append("text")
-            .attr("x", barWidth / 2)
-            .attr("y", barHeight + 95)
-            .attr("text-anchor", "middle")
-            .attr("class", "axis-label")
-            .text("Spell Name");
-
-        barSvg.append("text")
-            .attr("transform", "rotate(-90)")
-            .attr("x", -barHeight / 2)
-            .attr("y", -margin.left + 15) 
-            .attr("text-anchor", "middle")
-            .attr("class", "axis-label")
-            .text("Spell Usage");
-
-
-    }
-
-    //RESET 
-    document.getElementById("reset-button").addEventListener("click", resetVisualization);
-
-    function resetVisualization() {
-        // Reset selectedNode to null
-        selectedNode = null;
-        d3.select("#bar-chart-title").text("The Spells of the Harry Potter Universe");
-        d3.select("#summary-stat").text("Click on a character node to learn more");
-
-        // Reset the graph
-        resetHighlight();
-        resetCurvePaths();
-
-        // Reset the bar chart
-        resetBarGraph();
-    }
-
-
-    
-});
-
-// BAR GRAPH
-// Load the CSV file
-const requestData = async function() {
-    const spells = await d3.csv("megafile.csv");
-    const barWidth = 400;
-    const barHeight = 200;
-    const margin = { top: 20, right: 30, bottom: 100, left: 50 };
-
-    // Bar Chart Dimensions
-    const barSvg = d3.select("#bar-graph")
-        .attr("width", barWidth + margin.left + margin.right)
-        .attr("height", barHeight + margin.top + margin.bottom)
-        .append("g")
-        .attr("transform", `translate(${margin.left},${margin.top})`);
-
-    // Calculate spell usage
-    const spellUsage = d3.rollup(spells, v => v.length, d => d.spell_name);
-    spellData = Array.from(spellUsage, ([spell, count]) => ({ spell, count }));
-    spellData.sort((a, b) => a.count - b.count);
-    // Scales for the bar chart
-    const x = d3.scaleBand()
-        .domain(spellData.map(d => d.spell))
-        .range([0, barWidth])
-        .padding(0.1);
-    const y = d3.scaleLinear()
-        .domain([0, d3.max(spellData, d => d.count)])
-        .nice()
-        .range([barHeight, 0]);
-    
-    const tooltip = d3.select("body")
-        .append("div")
-        .attr("class", "tooltip");
-
-    // Add bars to the bar chart
-    barSvg.append("g")
-        .selectAll("rect")
-        .data(spellData)
-        .enter().append("rect")
-        .attr("x", d => x(d.spell))
-        .attr("y", d => y(d.count))
-        .attr("width", x.bandwidth())
-        .attr("height", d => barHeight - y(d.count))
-        .attr("fill", d => spellColors[d.spell])
-        .on("mouseover", (event, d) => {
-            tooltip.style("visibility", "visible")
-                .text(`Usage: ${d.count}`);
-            d3.select(event.target).style("cursor", "url('HP_WandH.png'), auto");
-            })
-            .on("mousemove", event => {
-                tooltip.style("top", `${event.pageY - 10}px`)
-            .style("left", `${event.pageX + 10}px`);
-            })
-            .on("mouseout", () => {
-                tooltip.style("visibility", "hidden");
-            });
-
-    barSvg.append("g")
-        .attr("transform", `translate(0,${barHeight})`)
-        .call(d3.axisBottom(x))
-        .attr("class", "axis")
-        .selectAll("text")
-        .attr("dy", "0.75em")
-        .attr("transform", "rotate(-45)")
-        .style("text-anchor", "end");
-
-    barSvg.append("g")
-        .call(d3.axisLeft(y))
-        .attr("dy", "0.35em") 
-        .attr("class", "axis");
-
-    // Add axis labels
-    barSvg.append("text")
-        .attr("x", barWidth / 2)
-        .attr("y", barHeight + 95) 
-        .attr("text-anchor", "middle")
-        .attr("class", "axis-label")
-        .text("Spell Name");
-
-    barSvg.append("text")
-        .attr("transform", "rotate(-90)")
-        .attr("x", -barHeight / 2)
-        .attr("y", -margin.left + 15) 
-        .attr("text-anchor", "middle")
-        .attr("class", "axis-label")
-        .text("Spell Usage");
-
-}
-
-    requestData();
-     
+        requestData();
+        
 </script>
 
 <!-- SPIDER GRAPH -->
