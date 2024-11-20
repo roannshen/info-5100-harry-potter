@@ -217,12 +217,12 @@
             @media (max-width: 768px) {
                 #row {
                     flex-direction: column;
-                    align-items: center; /* Center align items for better display */
+                    align-items: center; 
                 }
 
                 #left-col,
                 #right-col {
-                    width: 100%; /* Full width for each column */
+                    width: 100%; 
                 }
             }
 
@@ -274,22 +274,37 @@
                 align-items: center;
                 gap: 12px;
                 display: inline-flex;
-                /* align-items: center;  */
             }
 
             .spider-left {
                 width: 60%;
                 height: 100%;
                 padding: 10px;
-                /* justify-content: center; */
                 align-items: center;
                 gap: 10px;
-                /* display: inline-flex; */
                 margin-left: 50px;
             }
 
             .spider-left h3 {
                 text-align: center;
+            }
+
+            .checkbox-label {
+                width: 100px;
+                height: 50px;
+                padding: 10px;
+                color: 'white';
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-family: 'serif';
+                font-size: 10pt;
+                text-align: center;
+                border-radius: 5px;
+                background-size: contain;
+                background-repeat: no-repeat;
+                background-position: center;
+                cursor: "url('HP_WandH.png'), auto";
             }
 
             #stat-features {
@@ -324,9 +339,9 @@
             }
 
             #graph {
-            width: 100%; /* Keep the width responsive */
-            height: 500px; /* Set a fixed height, adjust as needed */
-            overflow: visible; /* Make sure elements within are not cut off */
+            width: 100%; 
+            height: 500px;
+            overflow: visible; 
             }
 
 
@@ -348,7 +363,6 @@
                 <svg id="bar-graph"></svg>
                 <div id="summary-stat"><p style="margin-top: 0;">Click on a character node to learn more</p></div>
                 <div id="legend-container">
-                    <!-- <h3>Legend: Spell Colors</h3> -->
                     <div class="legend-items">
                         <div class="legend-item" style="color: #FFD700;"><span class="legend-color" style="background-color: #FFD700;"></span>Confringo</div>
                         <div class="legend-item" style="color: #ff7d52;"><span class="legend-color" style="background-color: #ff8652;"></span>Confundo</div>
@@ -363,9 +377,7 @@
                         <div class="legend-item" style="color: #df3737;"><span class="legend-color" style="background-color: #df3737;"></span>Stupefy</div>
                     </div>            
                 </div>
-                
             </div>
-            
         </div>
     </div>
 
@@ -378,7 +390,7 @@
                 <h2>Spell Stats</h2>
                 <svg id="spider-graph" height="600" width="600"></svg>
                 <div id="stat-features">
-                    CD OOC: Cooldown Out-Of-Combat
+                    *CD OOC: Cooldown Out-Of-Combat
                 </div>
             </div>
             <div class = "spider-right">
@@ -391,7 +403,6 @@
 
 
 <script>
-    
     const spellColors = {
         "Avada Kedavra": "#39FF14",
         "Confringo": "#FFD700",
@@ -419,11 +430,7 @@
         "Ron Weasley": "character_node_svg/weasley.svg",
         "Albus Dumbledore": "character_node_svg/dumbledore.svg",
         "Unnamed Characters": "character_node_svg/unknown.svg"
-        // "Otter": "character_node_svg/otter.gif",
-        // "Stag": "character_node_svg/stag.gif"
     };
-
-
 
 // NODE GRAPH
 const svg = d3.select("svg#graph")
@@ -436,7 +443,6 @@ const imageNodeRadius = 250;
 const circleNodeRadius = 350;
 
 const fixedPositions = {
-    // "Dark Mark": { fx: -20, fy: -100 },
     "Stag": { fx: 1040, fy: 690 },
     "Otter": { fx: 1100, fy: 660 }
 };
@@ -452,29 +458,27 @@ Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, cha
     const validCharacters = new Set(characters.map(d => d.Character_Name));
     const nodeMap = new Map();
 
-    // Create a Map for character houses
     const houseMap = new Map();
     characters.forEach(character => {
         houseMap.set(character.Character_Name, character.House);
     });
 
 
-    // Process data into nodes and links
     data.forEach(({ caster, victim, spell_name }) => {
         const sourceNode = caster;
         let targetNode = (validCharacters.has(victim) || casterImages[victim]) ? victim : "Unnamed Characters";
         if (!nodeMap.has(sourceNode)) {
-                nodeMap.set(sourceNode, { id: sourceNode, isCentral: true });
-                nodes.push(nodeMap.get(sourceNode));
-            }
-            if (!nodeMap.has(targetNode)) {
+            nodeMap.set(sourceNode, { id: sourceNode, isCentral: true });
+            nodes.push(nodeMap.get(sourceNode));
+        }
+        if (!nodeMap.has(targetNode)) {
             const isFixed = fixedPositions[targetNode];
             nodeMap.set(targetNode, {
                 id: targetNode,
                 isCentral: false,
                 fx: isFixed?.fx || null,
                 fy: isFixed?.fy || null
-            }); //ignore. we are no longer including fixed positioned nodes.
+            }); 
             nodes.push(nodeMap.get(targetNode));
         }
 
@@ -482,21 +486,19 @@ Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, cha
             if (fixedPositions[node.id]) {
                 node.fx = fixedPositions[node.id].fx;
                 node.fy = fixedPositions[node.id].fy;
-            }});
+        }});
 
         links.push({ source: caster, target: targetNode, spell: spell_name });
     });
 
     links.forEach((link, index) => {
-            link.index = index;
-            const sameSourceTarget = links.filter(l => l.source === link.source && l.target === link.target);
-            const sameTargetSource = links.filter(l => l.source === link.target && l.target === link.source);
-            //Avoid overlapped links to the same person by separating the links for better visibility
-            link.spacing = sameSourceTarget.indexOf(link) - sameTargetSource.length / 2;
-        });
+        link.index = index;
+        const sameSourceTarget = links.filter(l => l.source === link.source && l.target === link.target);
+        const sameTargetSource = links.filter(l => l.source === link.target && l.target === link.source);
+        //Avoid overlapped links to the same person by separating the links for better visibility
+        link.spacing = sameSourceTarget.indexOf(link) - sameTargetSource.length / 2;
+    });
 
-
-    // Draw links
     link = svg.append("g")
         .attr("class", "links")
         .selectAll("path")
@@ -512,7 +514,6 @@ Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, cha
         return `M${d.source.x},${d.source.y}A${dr},${dr} 0 0,1 ${d.target.x},${d.target.y}`;
     });
 
-    // Draw nodes
     nodeGroup = svg.append("g").attr("class", "nodes");
     const node = nodeGroup.selectAll("g")
         .data(nodes)
@@ -536,7 +537,6 @@ Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, cha
             }
         });
 
-    // Setup force simulation
     const sim = d3.forceSimulation(nodes)
         .force("link", d3.forceLink(links).id(d => d.id).distance(100))
         .force("charge", d3.forceManyBody().strength(-300))
@@ -545,7 +545,7 @@ Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, cha
         .force("y", d3.forceY(graphHeight / 2).strength(0.5))
         .force("radial-image", d3.forceRadial(
             d => d.isCentral ? imageNodeRadius : circleNodeRadius,
-            graphWidth / 2 - 100, // Shift the graph 100px to the left
+            graphWidth / 2 - 100, 
             graphHeight / 2)
             .strength(1))
         .force("collide", d3.forceCollide()
@@ -569,7 +569,6 @@ Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, cha
                         .append("div")
                         .attr("class", "tooltip");
 
-    // Event listeners for interaction
     node.on("mouseover", (event, d) => {
         tooltip.html(d.id)
             .style("top", `${event.pageY - 20}px`)
@@ -608,18 +607,15 @@ Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, cha
 
         if (!isCaster) {
                 return;
-            }
+        }
         if (selectedNode && selectedNode.id === characterName) {
             selectedNode = null;
             d3.select("#bar-chart-title").text("The Spells of the Harry Potter Universe"); // Reset title
             resetBarGraph(); 
             d3.select("#summary-stat").text("Click on a character node to learn more");
             
-            // Reset the bar graph highlighting
+        // Reset the bar graph highlighting
         } else {
-            // const characterSpells = data.filter(row => row.caster === characterName);
-            // const spellCounts = d3.rollup(characterSpells, v => v.length, d => d.spell_name);
-            // const filteredSpellData = Array.from(spellCounts, ([spell, count]) => ({ spell, count }));
             selectedNode = d;
             highlightNode(d);
             d3.select("#bar-chart-title").text(`The Spells of ${d.id}`); // Update title with character name
@@ -629,12 +625,8 @@ Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, cha
             const house = houseMap.get(characterName) || "Unknown House";
             const summaryText = `${characterName} is a ${house} who cast ${totalSpells} spell${totalSpells !== 1 ? 's' : ''} in total, with ${mostUsedSpell} as their most used spell.`;
 
-
             // Update the #summary-stat element
             d3.select('#summary-stat').text(summaryText);
-
-
-
         }
     });
 
@@ -643,76 +635,71 @@ Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, cha
         animateCurvePaths(node.id);
         
         link.attr("stroke-opacity", l =>
-        l.source.id === node.id || l.target.id === node.id ? 1 : 0.1
-    ).attr("stroke-width", l =>
-        l.source.id === node.id || l.target.id === node.id ? 3 : 1
-    );
+        l.source.id === node.id || l.target.id === node.id ? 1 : 0.1)
+        .attr("stroke-width", l => l.source.id === node.id || l.target.id === node.id ? 3 : 1
+        );
 
-    // Highlight all related nodes (source or target of related links)
-    nodeGroup.selectAll("image").attr("opacity", n =>
-        n.id === node.id || links.some(l => l.source.id === n.id && l.target.id === node.id) || links.some(l => l.source.id === node.id && l.target.id === n.id)
-            ? 1
-            : 0.3
-    );
-}
+        // Highlight all related nodes (source or target of related links)
+        nodeGroup.selectAll("image").attr("opacity", n =>
+            n.id === node.id || links.some(l => l.source.id === n.id && l.target.id === node.id) || links.some(l => l.source.id === node.id && l.target.id === n.id)
+                ? 1
+                : 0.3
+        );
+    }
+
     function resetHighlight() {
         link.attr("stroke-opacity", 1).attr("stroke-width", 2);
         nodeGroup.selectAll("image").attr("opacity", 1);
     }
 
-     //Animating spell casting and resetting animation
-     function animateCurvePaths(casterId) {
-            // Filter links where the caster is the source or the target
-            const casterLinks = links.filter(l => l.source.id === casterId || l.target.id === casterId);
+    //Animating spell casting and resetting animation
+    function animateCurvePaths(casterId) {
+        // Filter links where the caster is the source or the target
+        const casterLinks = links.filter(l => l.source.id === casterId || l.target.id === casterId);
 
-            casterLinks.forEach(linkData => {
-                const path = link.filter(d => d === linkData);
-                const pathElement = path.node();
-                const length = pathElement.getTotalLength();
+        casterLinks.forEach(linkData => {
+            const path = link.filter(d => d === linkData);
+            const pathElement = path.node();
+            const length = pathElement.getTotalLength();
 
-                 //I learned to animate links from source: https://hackernoon.com/animating-line-charts-with-d3js
-                path.attr("stroke-dasharray", `${length} ${length}`)
-                    .attr("stroke-dashoffset", length)
-                    .transition()
-                    .duration(1500)
-                    .ease(d3.easeLinear)
-                    .attr("stroke-dashoffset", 0);
-                });
+            // I learned to animate links from source: https://hackernoon.com/animating-line-charts-with-d3js
+            path.attr("stroke-dasharray", `${length} ${length}`)
+                .attr("stroke-dashoffset", length)
+                .transition()
+                .duration(1500)
+                .ease(d3.easeLinear)
+                .attr("stroke-dashoffset", 0);
+        });
     }   
 
     function resetCurvePaths() {
-            link.attr("stroke-dasharray", null).attr("stroke-dashoffset", null);
-        }
+        link.attr("stroke-dasharray", null).attr("stroke-dashoffset", null);
+    }
 
     function resetHighlight() {
         link.attr("stroke-opacity", 1).attr("stroke-width", 2);
         nodeGroup.selectAll("image").attr("opacity", 1);
     }
-
 
     function updateBarChart(filteredSpellData) {
         const spellCountMap = new Map(filteredSpellData.map(d => [d.spell, d.count]));
         const allSpellsData = spellData.map(d => ({
-        spell: d.spell,
-        count: spellCountMap.get(d.spell) || 0 // Use the count from the map, or 0 if not cast
+            spell: d.spell,
+            count: spellCountMap.get(d.spell) || 0 
         }));
 
-        // Clear the existing bars
         d3.select("#bar-graph").selectAll("*").remove();
 
-        // Bar chart dimensions
         const barWidth = 400;
         const barHeight = 200;
         const margin = { top: 20, right: 30, bottom: 100, left: 50 };
 
-        // Set up the SVG
         const barSvg = d3.select("#bar-graph")
             .attr("width", barWidth + margin.left + margin.right)
             .attr("height", barHeight + margin.top + margin.bottom)
             .append("g")
             .attr("transform", `translate(${margin.left},${margin.top})`);
 
-        // Set up scales
         const x = d3.scaleBand()
             .domain(allSpellsData.map(d => d.spell))
             .range([0, barWidth])
@@ -728,7 +715,6 @@ Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, cha
                     .append("div")
                     .attr("class", "tooltip");
 
-        // Add the bars
         barSvg.selectAll("rect")
             .data(allSpellsData)
             .enter().append("rect")
@@ -740,7 +726,7 @@ Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, cha
             .on("mouseover", (event, d) => {
             tooltip.style("visibility", "visible")
                 .text(`Usage: ${d.count}`);
-            d3.select(event.target).style("cursor", "url('HP_WandH.png'), auto"); // Change cursor on mouseover
+            d3.select(event.target).style("cursor", "url('HP_WandH.png'), auto"); 
             })
             .on("mousemove", event => {
                 tooltip.style("top", `${event.pageY - 10}px`)
@@ -762,13 +748,13 @@ Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, cha
 
         barSvg.append("g")
             .call(d3.axisLeft(y))
-            .attr("dy", "0.35em") // Adjusts the vertical position of tick labels
+            .attr("dy", "0.35em") 
             .attr("class", "axis");
 
             // Add axis labels
         barSvg.append("text")
             .attr("x", barWidth / 2)
-            .attr("y", barHeight + 95) // Adjusted position for the label
+            .attr("y", barHeight + 95) 
             .attr("text-anchor", "middle")
             .attr("class", "axis-label")
             .text("Spell Name");
@@ -844,19 +830,19 @@ Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, cha
             .call(d3.axisBottom(x))
             .attr("class", "axis")
             .selectAll("text")
-            .attr("dy", "0.75em") // Adjusts the vertical position of tick labels
+            .attr("dy", "0.75em") 
             .attr("transform", "rotate(-45)")
             .style("text-anchor", "end");
 
         barSvg.append("g")
             .call(d3.axisLeft(y))
-            .attr("dy", "0.35em") // Adjusts the vertical position of tick labels
+            .attr("dy", "0.35em")
             .attr("class", "axis");
 
         // Add axis labels
         barSvg.append("text")
             .attr("x", barWidth / 2)
-            .attr("y", barHeight + 95) // Adjusted position for the label
+            .attr("y", barHeight + 95)
             .attr("text-anchor", "middle")
             .attr("class", "axis-label")
             .text("Spell Name");
@@ -864,7 +850,7 @@ Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, cha
         barSvg.append("text")
             .attr("transform", "rotate(-90)")
             .attr("x", -barHeight / 2)
-            .attr("y", -margin.left + 15) // Adjusted position for the label
+            .attr("y", -margin.left + 15) 
             .attr("text-anchor", "middle")
             .attr("class", "axis-label")
             .text("Spell Usage");
@@ -939,7 +925,7 @@ const requestData = async function() {
         .on("mouseover", (event, d) => {
             tooltip.style("visibility", "visible")
                 .text(`Usage: ${d.count}`);
-            d3.select(event.target).style("cursor", "url('HP_WandH.png'), auto"); // Change cursor on mouseover
+            d3.select(event.target).style("cursor", "url('HP_WandH.png'), auto");
             })
             .on("mousemove", event => {
                 tooltip.style("top", `${event.pageY - 10}px`)
@@ -949,25 +935,24 @@ const requestData = async function() {
                 tooltip.style("visibility", "hidden");
             });
 
-    // Add X and Y axes
     barSvg.append("g")
         .attr("transform", `translate(0,${barHeight})`)
         .call(d3.axisBottom(x))
         .attr("class", "axis")
         .selectAll("text")
-        .attr("dy", "0.75em") // Adjusts the vertical position of tick labels
+        .attr("dy", "0.75em")
         .attr("transform", "rotate(-45)")
         .style("text-anchor", "end");
 
     barSvg.append("g")
         .call(d3.axisLeft(y))
-        .attr("dy", "0.35em") // Adjusts the vertical position of tick labels
+        .attr("dy", "0.35em") 
         .attr("class", "axis");
 
     // Add axis labels
     barSvg.append("text")
         .attr("x", barWidth / 2)
-        .attr("y", barHeight + 95) // Adjusted position for the label
+        .attr("y", barHeight + 95) 
         .attr("text-anchor", "middle")
         .attr("class", "axis-label")
         .text("Spell Name");
@@ -975,7 +960,7 @@ const requestData = async function() {
     barSvg.append("text")
         .attr("transform", "rotate(-90)")
         .attr("x", -barHeight / 2)
-        .attr("y", -margin.left + 15) // Adjusted position for the label
+        .attr("y", -margin.left + 15) 
         .attr("text-anchor", "middle")
         .attr("class", "axis-label")
         .text("Spell Usage");
@@ -991,7 +976,7 @@ const requestData = async function() {
 <script>
     const maxSelected = 8;
     let selectedSpells = ['Avada Kedavra', 'Confringo'];
-    const spellsNames = ['Avada Kedavra', 'Confringo', 'Crucio', 'Imperio', 'Incendio', 'Expelliarmus', 'Petrificus Totalus']// filterSpellsByCharacter(character);
+    const spellsNames = ['Avada Kedavra', 'Confringo', 'Crucio', 'Imperio', 'Incendio', 'Expelliarmus', 'Petrificus Totalus']
     let spellDataMap = {};
 
     const tooltip = d3.select("body")
@@ -1034,7 +1019,7 @@ const requestData = async function() {
                     descriptionBox.style("visibility", "visible") 
                         .style('width', '400px') 
                         .style('height', '380px')
-                        .html(`<span style="font-weight: bold;">${d}:</span> <span style="font-weight: normal;">${spellDataMap[d]}</span>`);  
+                        .html(`<span style="font-weight: bold;">${d}:</span> <span>${spellDataMap[d]}</span>`);  
                 })
             .on('mouseout', function() {
                 if (!this.checked) {
@@ -1049,36 +1034,22 @@ const requestData = async function() {
                     .style('background-color', this.checked ? accentColor : 'white')
             });
 
-            checkboxes.append('label')
-                .attr('for', d => d)
-                .text(d => d)
-                .style('color', 'white')
-                .style('font-family', 'serif')
-                .style('font-size', '10pt')
-                .style('width', '100px')
-                .style('height', '50px')
-                .style('text-align', 'center')
-                .style('display', 'flex')
-                .style('align-items', 'center')
-                .style('justify-content', 'center')
-                .style('border-radius', '5px')
-                .style('background-image', d => `url('button.svg')`)
-                .style('background-size', 'contain')
-                .style('background-repeat', 'no-repeat')
-                .style('background-position', 'center')
-                .style('padding', '10px')
-                .style('cursor', "url('HP_WandH.png'), auto")
-                .on('mouseover', function(event, d) {
-                    descriptionBox.style("visibility", "visible") 
-                        .style('width', '400px') 
-                        .style('height', '380px')
-                        .html(`<span style="font-weight: bold;">${d} Spell:</span> <span style="font-weight: normal;">${spellDataMap[d]}</span>`);  
-                })
-                .on('mouseout', function() {
-                    descriptionBox.style("visibility", "visible").text("Hover on a spell to learn about its abilities")
-                    .style('justify-content', 'center');
-                });
-        }
+        checkboxes.append('label')
+            .attr('for', d => d)
+            .attr('class', 'checkbox-label')
+            .style('background-image', d => `url('button.svg')`)
+            .text(d => d)
+            .on('mouseover', function(event, d) {
+                descriptionBox.style("visibility", "visible") 
+                    .style('width', '400px') 
+                    .style('height', '380px')
+                    .html(`<span style="font-weight: bold;">${d} Spell:</span> <span style="font-weight: normal;">${spellDataMap[d]}</span>`);  
+            })
+            .on('mouseout', function() {
+                descriptionBox.style("visibility", "visible").text("Hover on a spell to learn about its abilities")
+                .style('justify-content', 'center');
+            });
+    }
 
     function handleCheckboxChange(event) {
         const spellName = event.target.value;
@@ -1146,14 +1117,11 @@ const requestData = async function() {
             svg.selectAll("path").remove();
             svg.selectAll("*").remove();
             
-
-            // Dynamic radial scale with padding
             let radialScale = d3.scaleLinear()
                 .domain([0, 1])
-                .range([0, Math.min(width, height) / 2 - 100]); // Adjust padding for better centering
+                .range([0, Math.min(width, height) / 2 - 100]); 
             let ticks = [.2, .4, .6, .8, 1.0];
 
-            // Draw radial circles
             svg.selectAll("circle")
                 .data(ticks)
                 .enter()
@@ -1164,7 +1132,6 @@ const requestData = async function() {
                 .attr("stroke", "gray")
                 .attr("r", d => radialScale(d));
 
-            // Draw axis labels
             svg.selectAll(".ticklabel")
                 .data(ticks)
                 .enter()
@@ -1174,14 +1141,12 @@ const requestData = async function() {
                 .text(d => d.toString())
                 .style("fill", "white");
 
-            // Function to convert angle and value to coordinates
             function angleToCoordinate(angle, value) {
                 let x = Math.cos(angle) * radialScale(value);
                 let y = Math.sin(angle) * radialScale(value);
-                return { "x": width / 2 + x, "y": height / 2 - y }; // Adjusted for vertical centering
+                return { "x": width / 2 + x, "y": height / 2 - y }; 
             }
 
-            // Create feature data for axis lines and labels
             let featureData = features.map((f, i) => {
                 let angle = (Math.PI / 2) + (2 * Math.PI * i / features.length);
                 return {
@@ -1230,38 +1195,36 @@ const requestData = async function() {
                 return coordinates;
             }
 
-// Draw data paths
-const paths = svg.selectAll("path")
-    .data(data, d => d.Name);
+            const paths = svg.selectAll("path")
+                .data(data, d => d.Name);
 
-paths.exit().remove();
+            paths.exit().remove();
 
-paths.enter()
-    .append("path")
-    .merge(paths)
-    .attr("d", d => line(getPathCoordinates(d)))
-    .attr("stroke-width", 3)
-    .attr("stroke", d => spellColors[d['Name']])
-    .attr("fill", d => spellColors[d['Name']])
-    .attr("stroke-opacity", 1)
-    .attr("opacity", 0.5)
-    .style('cursor', "url('HP_WandH.png'), auto")
-    .on('mouseover', function(event, d) {
-        tooltip.style("visibility", "visible")  
-            .text(d['Name']);
-    })
-    .on('mousemove', function(event) {
-        tooltip.style("top", `${event.pageY - 10}px`) 
-            .style("left", `${event.pageX + 10}px`);
-    })
-    .on('mouseout', function() {
-        tooltip.style("visibility", "hidden");
-    });
+            paths.enter()
+                .append("path")
+                .merge(paths)
+                .attr("d", d => line(getPathCoordinates(d)))
+                .attr("stroke-width", 3)
+                .attr("stroke", d => spellColors[d['Name']])
+                .attr("fill", d => spellColors[d['Name']])
+                .attr("stroke-opacity", 1)
+                .attr("opacity", 0.5)
+                .style('cursor', "url('HP_WandH.png'), auto")
+                .on('mouseover', function(event, d) {
+                    tooltip.style("visibility", "visible")  
+                        .text(d['Name']);
+                })
+                .on('mousemove', function(event) {
+                    tooltip.style("top", `${event.pageY - 10}px`) 
+                        .style("left", `${event.pageX + 10}px`);
+                })
+                .on('mouseout', function() {
+                    tooltip.style("visibility", "hidden");
+                });
+        });
+    }
 
-    });
-}
-
-drawSpiderChart(selectedSpells)
+    drawSpiderChart(selectedSpells)
 
 </script>
 </body>
