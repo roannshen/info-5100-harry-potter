@@ -1178,7 +1178,7 @@
                 .append("text")
                 .attr("x", width / 2 + 5)
                 .attr("y", d => height / 2 - radialScale(d))
-                .text(d => d.toString())
+                .text(d => (d*10).toString())
                 .style("fill", "white");
 
             function angleToCoordinate(angle, value) {
