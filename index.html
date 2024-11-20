@@ -176,7 +176,9 @@
             #row {
                 width: 100%;
                 display: flex;
-                flex-direction: row;
+                /* flex-direction: row; */
+                /* flex-wrap: wrap; */
+                flex-flow: row wrap;
                 justify-content: space-around;
                 align-items: flex-start;
                 gap: 24px;
@@ -185,19 +187,20 @@
 
             #left-col {
                 width: 60%;
-                min-width: 300px;
+                min-width: 300px; 
                 height: 100%;
-                padding: 10px;
+                /* padding: 10px; */
                 justify-content: center;
                 align-items: center;
                 gap: 10px;
-                display: inline-flex;
+                /* display: inline-flex; */
                 flex-direction: column;
+                display: flex;
                 margin-left: 50px;
             }
 
             #right-col {
-                margin-right: 50px;
+                /* margin-right: 50px; */
                 min-width: 200px;
                 width: 40%;
                 height: 100%;
@@ -212,9 +215,14 @@
             .svg {
                 width: 100%;
                 height: auto;
+                margin-bottom: 5%;
+                padding-bottom: 15%;
+                /* margin-right: 5%; */
+                align-self: center;
             }
 
-            @media (max-width: 768px) {
+            @media (max-width: 768px) { 
+                /* 768 */
                 #row {
                     flex-direction: column;
                     align-items: center; 
@@ -309,7 +317,7 @@
 
             #stat-features {
                 text-align: center;
-                padding-bottom: 10px;
+                padding-bottom: 30px;
             }
 
             #reset-button {
@@ -335,6 +343,7 @@
                 display:flex;
                 flex-direction: column;  
                 align-items: center; 
+                margin-bottom: 3%;
             
             }
 
@@ -354,10 +363,12 @@
             <button id="reset-button">Reset Visualization</button>
         </div>
         <div id="row">
-            <div id = "left-col">
+            <!-- <div id = "left-col"> -->
+            <div class="spider-left">
                 <svg id="graph" class="svg" height="1200" width="800"></svg>
             </div>    
-            <div id="right-col">
+            <!-- <div id="right-col"> -->
+            <div class="spider-right">
                 <h2 id="bar-chart-title">The Spells of the Harry Potter Universe <h2>
 
                 <svg id="bar-graph"></svg>
