@@ -294,6 +294,7 @@
 
             #stat-features {
                 text-align: center;
+                padding-bottom: 10px;
             }
 
             #reset-button {
@@ -473,7 +474,7 @@ Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, cha
                 isCentral: false,
                 fx: isFixed?.fx || null,
                 fy: isFixed?.fy || null
-            });
+            }); //ignore. we are no longer including fixed positioned nodes.
             nodes.push(nodeMap.get(targetNode));
         }
 
@@ -490,7 +491,8 @@ Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, cha
             link.index = index;
             const sameSourceTarget = links.filter(l => l.source === link.source && l.target === link.target);
             const sameTargetSource = links.filter(l => l.source === link.target && l.target === link.source);
-            link.offsetIndex = sameSourceTarget.indexOf(link) - sameTargetSource.length / 2;
+            //Avoid overlapped links to the same person by separating the links for better visibility
+            link.spacing = sameSourceTarget.indexOf(link) - sameTargetSource.length / 2;
         });
 
 
@@ -506,7 +508,7 @@ Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, cha
         .attr("d", d => {
         const dx = d.target.x - d.source.x;
         const dy = d.target.y - d.source.y;
-        const dr = Math.sqrt(dx * dx + dy * dy) + d.offsetIndex * 10; // Add offset to prevent overlap
+        const dr = Math.sqrt(dx * dx + dy * dy) + d.spacing * 10; //source: https://stackoverflow.com/questions/13455510/curved-line-on-d3-force-directed-tree
         return `M${d.source.x},${d.source.y}A${dr},${dr} 0 0,1 ${d.target.x},${d.target.y}`;
     });
 
@@ -555,7 +557,7 @@ Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, cha
         link.attr("d", d => {
             const dx = d.target.x - d.source.x;
             const dy = d.target.y - d.source.y;
-            const dr = Math.sqrt(dx * dx + dy * dy) + d.offsetIndex * 10;
+            const dr = Math.sqrt(dx * dx + dy * dy) + d.spacing * 10;
             return `M${d.source.x},${d.source.y}A${dr},${dr} 0 0,1 ${d.target.x},${d.target.y}`;
         });
     });
@@ -638,13 +640,20 @@ Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, cha
     // Highlighting and reset functions
     function highlightNode(node) {
         animateCurvePaths(node.id);
-        link.attr("stroke-opacity", l => (l.source.id === node.id || l.target.id === node.id ? 1 : 0.1))
-            .attr("stroke-width", l => (l.source.id === node.id || l.target.id === node.id ? 3 : 1));
-        nodeGroup.selectAll("image").attr("opacity", n => (
-            n.id === node.id || links.some(l => l.source.id === node.id && l.target.id === n.id)
-        ) ? 1 : 0.3);
-    }
+        
+        link.attr("stroke-opacity", l =>
+        l.source.id === node.id || l.target.id === node.id ? 1 : 0.1
+    ).attr("stroke-width", l =>
+        l.source.id === node.id || l.target.id === node.id ? 3 : 1
+    );
 
+    // Highlight all related nodes (source or target of related links)
+    nodeGroup.selectAll("image").attr("opacity", n =>
+        n.id === node.id || links.some(l => l.source.id === n.id && l.target.id === node.id) || links.some(l => l.source.id === node.id && l.target.id === n.id)
+            ? 1
+            : 0.3
+    );
+}
     function resetHighlight() {
         link.attr("stroke-opacity", 1).attr("stroke-width", 2);
         nodeGroup.selectAll("image").attr("opacity", 1);
@@ -656,12 +665,12 @@ Promise.all([d3.csv("megafile.csv"), d3.csv("characters.csv")]).then(([data, cha
             const casterLinks = links.filter(l => l.source.id === casterId || l.target.id === casterId);
 
             casterLinks.forEach(linkData => {
-                const path = link.filter(d => d === linkData); // Select the specific path
+                const path = link.filter(d => d === linkData);
                 const pathElement = path.node();
                 const length = pathElement.getTotalLength();
 
-                // Set up the stroke-dasharray and stroke-dashoffset for animation
-                path.attr("stroke-dasharray", `${length} ${length}`) //source: https://hackernoon.com/animating-line-charts-with-d3js
+                 //I learned to animate links from source: https://hackernoon.com/animating-line-charts-with-d3js
+                path.attr("stroke-dasharray", `${length} ${length}`)
                     .attr("stroke-dashoffset", length)
                     .transition()
                     .duration(1500)
